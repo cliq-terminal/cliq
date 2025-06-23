@@ -1,0 +1,65 @@
+app:
+  external-url: \${EXTERNAL_URL}
+  info:
+    name: ${rootProject.name}
+    version: ${version}
+    description: ${description}
+  email:
+    enabled: true
+    from-address: noreply@cliq.app
+    from-name: CLIq
+
+spring:
+  config:
+    import: optional:file:.env[.properties],optional:file:.env.local[.properties]
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: true
+  datasource:
+    url: jdbc:postgresql://\${POSTGRES_HOST}:\${POSTGRES_PORT}/\${POSTGRES_DB}
+    username: \${POSTGRES_USER}
+    password: \${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+  application:
+    name: \${app.info.name}
+    version: \${app.info.version}
+  mail:
+    host: \${MAIL_HOST:localhost}
+    port: \${MAIL_PORT:25}
+    username: \${MAIL_USERNAME:}
+    password: \${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: \${MAIL_AUTH:false}
+          starttls:
+            enable: \${MAIL_STARTTLS:false}
+    default-encoding: UTF-8
+  threads:
+    virtual:
+      enabled: true
+  thymeleaf:
+    prefix: classpath:/templates/
+    encoding: UTF-8
+  messages:
+    basename: messages/messages
+    encoding: UTF-8
+
+springdoc:
+  api-docs:
+    path: /api/openapi
+    version: openapi_3_1
+  swagger-ui:
+    path: /api/swagger-ui
+    disable-swagger-default-url: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+
+management:
+  health:
+    mail:
+      enabled: \${app.email.enabled}
