@@ -12,14 +12,16 @@ group = "app.cliq"
 version = "0.1.0"
 description = "Open source SSH & SFTP client with focus on security and portability"
 
+val targetJvmVersion = 24
+
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
+        languageVersion = JavaLanguageVersion.of(targetJvmVersion)
     }
 }
 
 kotlin {
-    jvmToolchain(24)
+    jvmToolchain(targetJvmVersion)
 }
 
 configurations {
