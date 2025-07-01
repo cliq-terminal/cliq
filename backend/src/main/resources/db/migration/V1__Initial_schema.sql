@@ -49,3 +49,19 @@ CREATE TABLE sessions
 
 CREATE INDEX idx_sessions_user_id ON sessions (user_id);
 CREATE INDEX idx_sessions_api_key ON sessions (api_key);
+
+-- ############################################################
+-- #                                                          #
+-- #                   Configurations                         #
+-- #                                                          #
+-- ############################################################
+
+
+CREATE TABLE user_configurations
+(
+    "id"               BIGINT PRIMARY KEY,
+    "user_id"          BIGINT REFERENCES "users" (id) ON DELETE CASCADE UNIQUE NOT NULL,
+    "encrypted_config" TEXT                                                    NOT NULL,
+    "created_at"       timestamp with time zone                                NOT NULL,
+    "updated_at"       timestamp with time zone                                NOT NULL
+);
