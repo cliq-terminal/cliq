@@ -15,6 +15,6 @@ class SettingsPage extends StatefulHookConsumerWidget {
 class _DashboardPageState extends ConsumerState<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('TODO: Settings')));
+    return Center(child: Text('TODO: Settings'));
   }
 }

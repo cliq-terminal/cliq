@@ -79,6 +79,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.0"
+  drift:
+    dependency: "direct main"
+    description:
+      name: drift
+      sha256: e60c715f045dd33624fc533efb0075e057debec9f39e83843e518f488a0e21fb
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.27.0"
   fake_async:
     dependency: transitive
     description:
@@ -371,6 +379,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.1"
+  sqlite3:
+    dependency: transitive
+    description:
+      name: sqlite3
+      sha256: c0503c69b44d5714e6abbf4c1f51a3c3cc42b75ce785f44404765e4635481d38
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.7.6"
   stack_trace:
     dependency: transitive
     description:

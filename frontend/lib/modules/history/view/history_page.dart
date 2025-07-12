@@ -15,6 +15,6 @@ class HistoryPage extends StatefulHookConsumerWidget {
 class _DashboardPageState extends ConsumerState<HistoryPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('TODO: History')));
+    return Center(child: Text('TODO: History'));
   }
 }

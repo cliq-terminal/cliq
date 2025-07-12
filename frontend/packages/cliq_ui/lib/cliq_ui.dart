@@ -1,5 +1,7 @@
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+library;
+
+export 'theme.dart';
+
+export 'widgets/bottom_navigation_bar.dart';
+export 'widgets/scaffold.dart';
+export 'widgets/interactable.dart';

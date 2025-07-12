@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +36,8 @@ class ScaffoldNavBarShellState extends ConsumerState<NavigationShell> {
         kIsWeb
             ? SelectionArea(child: widget.navigationShell)
             : widget.navigationShell;
-    return Scaffold(
+    return CliqScaffold(
+        extendBehindAppBar: false,
         body:
             isMobile
                 ? shell
@@ -67,7 +69,7 @@ class ScaffoldNavBarShellState extends ConsumerState<NavigationShell> {
                     Expanded(child: Container(child: shell)),
                   ],
                 ),
-        bottomNavigationBar:
+        footer:
             isMobile
                 ? AppNavigationBar(
                   onDestinationSelected: (index) => goToBranch(index),

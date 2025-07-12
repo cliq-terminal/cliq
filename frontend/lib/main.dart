@@ -1,5 +1,6 @@
 import 'package:cliq/routing/router.provider.dart';
 import 'package:cliq/shared/store.dart';
+import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,11 +48,11 @@ class _CliqAppState extends ConsumerState<CliqApp> {
   @override
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
-    // final theme = ref.watch(themeProvider);
 
     return MaterialApp.router(
       routerConfig: router.goRouter,
       debugShowCheckedModeBanner: false,
+      builder: (context, child) => CliqTheme(data: CliqThemes.standard.dark, child: child!)
     );
   }
 }

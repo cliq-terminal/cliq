@@ -15,6 +15,6 @@ class HostsPage extends StatefulHookConsumerWidget {
 class _DashboardPageState extends ConsumerState<HostsPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('TODO: Hosts')));
+    return Center(child: Text('TODO: Hosts'));
   }
 }
