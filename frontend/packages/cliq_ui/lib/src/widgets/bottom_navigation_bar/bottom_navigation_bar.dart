@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:cliq_ui/cliq_ui.dart';
+import 'package:cliq_ui/src/widgets/blur_background.dart';
 import 'package:flutter/material.dart';
 
 class CliqBottomNavigationBar extends StatelessWidget {
@@ -9,12 +8,13 @@ class CliqBottomNavigationBar extends StatelessWidget {
   final Function(int)? onItemSelected;
   final CliqBottomNavigationBarStyle? style;
 
-  const CliqBottomNavigationBar(
-      {super.key,
-        required this.items,
-        required this.currentIndex,
-        required this.onItemSelected,
-        this.style});
+  const CliqBottomNavigationBar({
+    super.key,
+    required this.items,
+    required this.currentIndex,
+    required this.onItemSelected,
+    this.style,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,44 +34,45 @@ class CliqBottomNavigationBar extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Row(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 10, children: [
-              ?item.icon,
-              if (isSelected) Text(item.label),
-            ]),
+              mainAxisSize: MainAxisSize.min,
+              spacing: 8,
+              children: [
+                if (item.icon != null)
+                  ExcludeSemantics(
+                    child: IconTheme(
+                      data: isSelected
+                          ? style.selectedIconStyle
+                          : style.iconStyle,
+                      child: item.icon!,
+                    ),
+                  ),
+                if (isSelected) Text(item.label),
+              ],
+            ),
           ),
         ),
       );
     }
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.only(bottom: style.bottomPadding),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  color: style.color.withValues(alpha: 0.5),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: DefaultTextStyle(
-                    style: textStyle.base.copyWith(color: style.textColor),
-                    child: Row(
-                      spacing: 10,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        for (final item in items)
-                          buildItemButton(item, items.indexOf(item)),
-                      ],
-                    ),
-                  ),
+          CliqBlurBackground(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: DefaultTextStyle(
+                style: textStyle.base.copyWith(color: style.textColor),
+                child: Row(
+                  spacing: 8,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (final item in items)
+                      buildItemButton(item, items.indexOf(item)),
+                  ],
                 ),
               ),
             ),
@@ -85,14 +86,34 @@ class CliqBottomNavigationBar extends StatelessWidget {
 final class CliqBottomNavigationBarStyle {
   final Color color;
   final Color textColor;
+  final IconThemeData iconStyle;
+  final IconThemeData selectedIconStyle;
+  final double bottomPadding;
 
-  const CliqBottomNavigationBarStyle({required this.color, required this.textColor});
+  const CliqBottomNavigationBarStyle({
+    required this.color,
+    required this.textColor,
+    required this.iconStyle,
+    required this.selectedIconStyle,
+    required this.bottomPadding,
+  });
 
-  factory CliqBottomNavigationBarStyle.inherit(
-      {required CliqColorScheme colorScheme}) {
+  factory CliqBottomNavigationBarStyle.inherit({
+    required CliqStyle style,
+    required CliqColorScheme colorScheme,
+  }) {
     return CliqBottomNavigationBarStyle(
-        color: colorScheme.secondaryBackground,
-        textColor: colorScheme.onSecondaryBackground
+      color: colorScheme.secondaryBackground,
+      textColor: colorScheme.onSecondaryBackground,
+      iconStyle: IconThemeData(
+        color: colorScheme.onSecondaryBackground,
+        size: 24,
+      ),
+      selectedIconStyle: IconThemeData(
+        color: colorScheme.onSecondaryBackground,
+        size: 24,
+      ),
+      bottomPadding: style.pagePadding.bottom,
     );
   }
 }

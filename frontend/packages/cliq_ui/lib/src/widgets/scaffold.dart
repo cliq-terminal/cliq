@@ -1,5 +1,6 @@
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CliqScaffold extends StatelessWidget {
   final Widget body;
@@ -39,11 +40,15 @@ class CliqScaffold extends StatelessWidget {
                 Positioned.fill(child: body),
                 if (header != null)
                   Positioned(
+                    left: 0,
+                    right: 0,
                     top: 0,
                     child: header!,
                   ),
                 if (footer != null)
                   Positioned(
+                    left: 0,
+                    right: 0,
                     bottom: 0,
                     child: footer!,
                   ),
@@ -60,7 +65,6 @@ class CliqScaffold extends StatelessWidget {
       child: ColoredBox(
         color: style.backgroundColor,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             ...(extendBehindAppBar
                 ? buildExtendedLayout()
@@ -78,6 +82,8 @@ final class CliqScaffoldStyle {
   const CliqScaffoldStyle({required this.backgroundColor});
 
   factory CliqScaffoldStyle.inherit({required CliqColorScheme colorScheme}) {
-    return CliqScaffoldStyle(backgroundColor: colorScheme.background);
+    return CliqScaffoldStyle(
+        backgroundColor: colorScheme.background,
+    );
   }
 }

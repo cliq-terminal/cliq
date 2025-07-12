@@ -37,7 +37,7 @@ class ScaffoldNavBarShellState extends ConsumerState<NavigationShell> {
             ? SelectionArea(child: widget.navigationShell)
             : widget.navigationShell;
     return CliqScaffold(
-        extendBehindAppBar: false,
+        extendBehindAppBar: true,
         body:
             isMobile
                 ? shell
@@ -69,6 +69,13 @@ class ScaffoldNavBarShellState extends ConsumerState<NavigationShell> {
                     Expanded(child: Container(child: shell)),
                   ],
                 ),
+        header: CliqAppBar(
+          title: Text('Test'),
+          right: [
+            CliqIconButton(icon: Icon(Icons.search)),
+            CliqIconButton(icon: Icon(Icons.settings))
+          ],
+        ),
         footer:
             isMobile
                 ? AppNavigationBar(

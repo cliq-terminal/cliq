@@ -15,6 +15,38 @@ class HostsPage extends StatefulHookConsumerWidget {
 class _DashboardPageState extends ConsumerState<HostsPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('TODO: Hosts'));
+    return ListView(children: [
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+      Text('TODO: Hosts'),
+    ],);
   }
 }
