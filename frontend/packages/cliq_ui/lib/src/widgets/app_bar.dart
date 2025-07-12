@@ -24,39 +24,26 @@ class CliqAppBar extends StatelessWidget {
         right: style.pagePadding.horizontal,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          left != null
-              ? Row(
-                  spacing: 8,
-                  mainAxisSize: MainAxisSize.min,
-                  children: left!,
-                )
-              : const SizedBox.shrink(),
+          if (left != null)
+            Row(spacing: 8, mainAxisSize: MainAxisSize.min, children: left!),
           if (title != null)
-            Expanded(
-              child: Center(
-                child: CliqBlurBackground(
-                  child: DefaultTextStyle.merge(
-                    style: textStyle.xl.copyWith(
-                        fontFamily: CliqFontFamily.secondary.fontFamily,
-                        color: style.textColor),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: title ?? const SizedBox.shrink(),
-                    ),
-                  ),
+            CliqBlurBackground(
+              child: DefaultTextStyle.merge(
+                style: textStyle.xl.copyWith(
+                  fontFamily: CliqFontFamily.secondary.fontFamily,
+                  color: style.textColor,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: title ?? const SizedBox.shrink(),
                 ),
               ),
             ),
-          right != null
-              ? Row(
-                  spacing: 8,
-                  mainAxisSize: MainAxisSize.min,
-                  children: right!,
-                )
-              : const SizedBox.shrink(),
+          if (right != null)
+            Row(spacing: 8, mainAxisSize: MainAxisSize.min, children: right!),
         ],
       ),
     );
