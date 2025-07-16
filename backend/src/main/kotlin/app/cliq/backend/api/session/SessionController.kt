@@ -9,6 +9,7 @@ import app.cliq.backend.api.user.MAX_PASSWORD_LENGTH
 import app.cliq.backend.api.user.MIN_PASSWORD_LENGTH
 import app.cliq.backend.api.user.UserRepository
 import app.cliq.backend.api.user.UserService
+import app.cliq.backend.auth.Authenticated
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
@@ -22,6 +23,7 @@ import jakarta.validation.constraints.Size
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -68,6 +70,13 @@ class SessionController(
         val response = SessionResponse.fromSession(session)
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
+    }
+
+    @Authenticated
+    @PostMapping("/protection-test")
+    @Operation
+    fun protectionTest(@AuthenticationPrincipal session: Session): ResponseEntity<String> {
+        return ResponseEntity.ok("Protected endpoint accessed successfully. Session ID: ${session.id}")
     }
 }
 
