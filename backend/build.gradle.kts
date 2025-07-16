@@ -21,6 +21,7 @@ java {
 }
 
 kotlin {
+    compilerOptions.freeCompilerArgs.add("-Xannotation-default-target=param-property")
     jvmToolchain(targetJvmVersion)
 }
 
@@ -59,6 +60,11 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql:11.10.3")
     runtimeOnly("org.postgresql:postgresql")
 
+    // Security
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.security:spring-security-crypto")
+    implementation("org.bouncycastle:bcprov-jdk18on:1.81")
+
     // E-Mail
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -68,11 +74,6 @@ dependencies {
 
     // OpenAPI
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
-
-    // Security
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.security:spring-security-crypto")
-    implementation("org.bouncycastle:bcprov-jdk18on:1.81")
 
     // Annotations
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
