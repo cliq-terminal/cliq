@@ -5,16 +5,17 @@ import 'package:flutter/cupertino.dart';
 
 class CliqBlurBackground extends StatelessWidget {
   final Widget? child;
+  final BorderRadiusGeometry? borderRadius;
   final CliqBlurBackgroundStyle? style;
 
-  const CliqBlurBackground({super.key, this.child, this.style});
+  const CliqBlurBackground({super.key, this.child, this.borderRadius, this.style});
 
   @override
   Widget build(BuildContext context) {
     final style = this.style ?? context.theme.blurBackgroundStyle;
 
     return ClipRRect(
-      borderRadius: style.borderRadius,
+      borderRadius: borderRadius ?? style.borderRadius,
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: style.blur, sigmaY: style.blur),
         child: ColoredBox(color: style.color, child: child),

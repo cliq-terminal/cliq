@@ -56,12 +56,12 @@ class CliqBottomNavigationBar extends StatelessWidget {
       );
     }
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: style.bottomPadding),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CliqBlurBackground(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: CliqBlurBackground(
+            borderRadius: BorderRadius.zero,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: DefaultTextStyle(
@@ -77,8 +77,8 @@ class CliqBottomNavigationBar extends StatelessWidget {
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -88,18 +88,15 @@ final class CliqBottomNavigationBarStyle {
   final Color textColor;
   final IconThemeData iconStyle;
   final IconThemeData selectedIconStyle;
-  final double bottomPadding;
 
   const CliqBottomNavigationBarStyle({
     required this.color,
     required this.textColor,
     required this.iconStyle,
     required this.selectedIconStyle,
-    required this.bottomPadding,
   });
 
   factory CliqBottomNavigationBarStyle.inherit({
-    required CliqStyle style,
     required CliqColorScheme colorScheme,
   }) {
     return CliqBottomNavigationBarStyle(
@@ -113,7 +110,6 @@ final class CliqBottomNavigationBarStyle {
         color: colorScheme.onSecondaryBackground,
         size: 24,
       ),
-      bottomPadding: style.pagePadding.bottom,
     );
   }
 }

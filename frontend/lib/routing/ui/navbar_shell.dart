@@ -28,47 +28,50 @@ class ScaffoldNavBarShellState extends ConsumerState<NavigationShell> {
 
   @override
   Widget build(BuildContext context) {
-    // final theme = ref.watch(themeProvider);
+    final breakpoints = context.theme.breakpoints;
+    final width = MediaQuery.sizeOf(context).width;
 
-    // final isMobile = context.isMobile;
-    final isMobile = true;
-    final Widget shell =
-        kIsWeb
-            ? SelectionArea(child: widget.navigationShell)
-            : widget.navigationShell;
+    buildNavigationRail() {
+      return Row(
+        children: [
+          StatefulBuilder(
+            builder: (context, setState) {
+              return MouseRegion(
+                onEnter:
+                    (event) =>
+                _hoverTimer = Timer(
+                  const Duration(milliseconds: 1000),
+                      () => setState(() => _isHovered = true),
+                ),
+                onExit: (event) {
+                  _hoverTimer?.cancel();
+                  setState(() => _isHovered = false);
+                },
+                child: AppNavigationRail(
+                  destinations: _getDestinations(),
+                  extended: width > breakpoints.md || _isHovered,
+                  onDestinationSelected: (index) => goToBranch(index),
+                  selectedIndex: widget.navigationShell.currentIndex,
+                ),
+              );
+            },
+          ),
+          Expanded(child: Container(child: widget.navigationShell)),
+        ],
+      );
+    }
+
+    buildNavigationBar() {
+      return AppNavigationBar(
+        onDestinationSelected: (index) => goToBranch(index),
+        selectedIndex: widget.navigationShell.currentIndex,
+        destinations: _getDestinations(),
+      );
+    }
+
     return CliqScaffold(
         extendBehindAppBar: true,
-        body:
-            isMobile
-                ? shell
-                : Row(
-                  children: [
-                    StatefulBuilder(
-                      builder: (context, setState) {
-                        return MouseRegion(
-                          onEnter:
-                              (event) =>
-                                  _hoverTimer = Timer(
-                                    const Duration(milliseconds: 1000),
-                                    () => setState(() => _isHovered = true),
-                                  ),
-                          onExit: (event) {
-                            _hoverTimer?.cancel();
-                            setState(() => _isHovered = false);
-                          },
-                          child: AppNavigationRail(
-                            destinations: _getDestinations(),
-                            // extended: context.isWidescreen || _isHovered,
-                            extended: true,
-                            onDestinationSelected: (index) => goToBranch(index),
-                            selectedIndex: widget.navigationShell.currentIndex,
-                          ),
-                        );
-                      },
-                    ),
-                    Expanded(child: Container(child: shell)),
-                  ],
-                ),
+        body: width < breakpoints.sm ? widget.navigationShell : buildNavigationRail(),
         header: CliqAppBar(
           title: Text('Test'),
           right: [
@@ -76,14 +79,7 @@ class ScaffoldNavBarShellState extends ConsumerState<NavigationShell> {
             CliqIconButton(icon: Icon(Icons.settings))
           ],
         ),
-        footer:
-            isMobile
-                ? AppNavigationBar(
-                  onDestinationSelected: (index) => goToBranch(index),
-                  selectedIndex: widget.navigationShell.currentIndex,
-                  destinations: _getDestinations(),
-                )
-                : null,
+        footer: width < breakpoints.sm ? buildNavigationBar() : null,
     );
   }
 
