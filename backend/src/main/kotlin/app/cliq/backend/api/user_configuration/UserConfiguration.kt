@@ -8,20 +8,14 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
-import jakarta.persistence.UniqueConstraint
 import java.time.OffsetDateTime
 
 @Entity
 @Table(
     name = "user_configurations",
-    uniqueConstraints = [
-        UniqueConstraint(columnNames = ["user_id"])
-    ]
 )
 class UserConfiguration(
     @Id
-    var id: Long = 0,
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     var user: User,

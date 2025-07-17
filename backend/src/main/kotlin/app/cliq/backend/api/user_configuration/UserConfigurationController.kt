@@ -1,24 +1,69 @@
 package app.cliq.backend.api.user_configuration
 
-import app.cliq.backend.api.user.User
+import app.cliq.backend.api.session.Session
+import app.cliq.backend.api.user_configuration.view.ConfigurationView
+import app.cliq.backend.auth.Authenticated
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.time.OffsetDateTime
 
 @RestController
 @RequestMapping("/api/v1/user/configuration")
 @Tag(name = "User Configuration", description = "User configuration management")
-class UserConfigurationController {
+class UserConfigurationController(
+    private val userConfigurationFactory: UserConfigurationFactory,
+    private val repository: UserConfigurationRepository,
+) {
 
+    @Authenticated
     @PutMapping
     @Operation(summary = "Insert or update user configuration")
     fun put(
-        @AuthenticationPrincipal user: User,
+        @AuthenticationPrincipal session: Session,
+        @RequestBody configurationParams: ConfigurationParams
     ): ResponseEntity<Void> {
+        val config = userConfigurationFactory.createFromParams(configurationParams, session.user)
+
+        repository.save(config)
+
+        return ResponseEntity.ok().build()
+    }
+
+    @Authenticated
+    @GetMapping
+    @Operation(summary = "Get's you the current configuration.")
+    fun get(
+        @AuthenticationPrincipal session: Session
+    ): ResponseEntity<ConfigurationView> {
+        val config = repository.getByUser(session.user)
+
+        if (null == config) {
+            return ResponseEntity.notFound().build()
+        }
+
+        val view = ConfigurationView(config.encryptedConfig, config.updatedAt, config.updatedAt)
+
+        return ResponseEntity.ok(view)
+    }
+
+    @Authenticated
+    @GetMapping("/last-updated")
+    @Operation(summary = "Get's you when the config was last updated")
+    fun getUpdatedAt(@AuthenticationPrincipal session: Session): ResponseEntity<OffsetDateTime> {
         TODO()
     }
 }
+
+@Schema
+data class ConfigurationParams(
+    @Schema(description = "The encrypted user configuration")
+    val configuration: String,
+)
