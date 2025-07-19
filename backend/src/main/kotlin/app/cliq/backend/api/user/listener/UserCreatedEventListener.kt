@@ -19,7 +19,8 @@ class UserCreatedEventListener(
     @EventListener(UserCreatedEvent::class)
     fun sendVerificationEmail(event: UserCreatedEvent) {
         val user = userRepository.findById(event.userId).orElseThrow {
-            logger.error("User with ID ${event.userId} not found")
+            logger.warn("User with ID ${event.userId} not found")
+
             IllegalArgumentException("User not found")
         }
 
