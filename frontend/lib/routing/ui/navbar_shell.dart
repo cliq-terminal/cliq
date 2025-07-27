@@ -6,9 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class NavigationShell extends StatefulHookConsumerWidget {
-  final StatefulNavigationShell navigationShell;
+  final StatefulNavigationShell shell;
 
-  const NavigationShell({super.key, required this.navigationShell});
+  const NavigationShell({super.key, required this.shell});
 
   static NavigationShellState? maybeOf(BuildContext context) =>
       context.findAncestorStateOfType<NavigationShellState>();
@@ -22,7 +22,7 @@ class NavigationShellState extends ConsumerState<NavigationShell> {
   Widget build(BuildContext context) {
     return CliqScaffold(
       extendBehindAppBar: true,
-      body: widget.navigationShell,
+      body: widget.shell,
       header: CliqAppBar(
         right: [
           CliqIconButton(icon: Icon(Icons.search)),
@@ -48,17 +48,17 @@ class NavigationShellState extends ConsumerState<NavigationShell> {
 
   /// Resets the current branch. Useful for popping an unknown amount of pages.
   void resetLocation({int? index}) {
-    widget.navigationShell.goBranch(
-      index ?? widget.navigationShell.currentIndex,
+    widget.shell.goBranch(
+      index ?? widget.shell.currentIndex,
       initialLocation: true,
     );
   }
 
   /// Jumps to the corresponding [StatefulShellBranch], based on the specified index.
   void goToBranch(int index) {
-    widget.navigationShell.goBranch(
+    widget.shell.goBranch(
       index,
-      initialLocation: widget.navigationShell.currentIndex == index,
+      initialLocation: widget.shell.currentIndex == index,
     );
   }
 }

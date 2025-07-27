@@ -22,9 +22,7 @@ class AppRouter {
     navigatorKey: rootNavigatorKey,
     routes: [
       ..._noShellRoutes(),
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, shell) =>
-            NavigationShell(navigationShell: shell),
+      StatefulShellRoute.indexedStack(builder: (_, _, shell) => NavigationShell(shell: shell),
         branches: [
           StatefulShellBranch(
             navigatorKey: shellNavigatorKey,
