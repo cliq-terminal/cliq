@@ -10,8 +10,9 @@ class PagePathBuilder {
     Map<String, String>? params,
     Map<String, dynamic>? queryParams,
   }) {
-    String compiled =
-    parent == null ? path : '${parent!.build().fullPath}/$path';
+    String compiled = parent == null
+        ? path
+        : '${parent!.build().fullPath}/$path';
     if (params == null && queryParams == null) {
       return PagePath._(compiled);
     }

@@ -24,7 +24,9 @@ class CliqAppBar extends StatelessWidget {
         right: style.pagePadding.horizontal,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: (left != null && left!.isNotEmpty) || title != null
+            ? MainAxisAlignment.spaceBetween
+            : MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (left != null)

@@ -1,93 +1,39 @@
-import 'dart:async';
-
+import 'package:cliq/modules/settings/view/settings_page.dart';
+import 'package:cliq/routing/router.extension.dart';
 import 'package:cliq_ui/cliq_ui.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'nav_destination.dart';
-import 'navigation_bar.dart';
-import 'navigation_rail.dart';
 
 class NavigationShell extends StatefulHookConsumerWidget {
   final StatefulNavigationShell navigationShell;
 
   const NavigationShell({super.key, required this.navigationShell});
 
-  static ScaffoldNavBarShellState? maybeOf(BuildContext context) =>
-      context.findAncestorStateOfType<ScaffoldNavBarShellState>();
+  static NavigationShellState? maybeOf(BuildContext context) =>
+      context.findAncestorStateOfType<NavigationShellState>();
 
   @override
-  ConsumerState<NavigationShell> createState() =>
-      ScaffoldNavBarShellState();
+  ConsumerState<NavigationShell> createState() => NavigationShellState();
 }
 
-class ScaffoldNavBarShellState extends ConsumerState<NavigationShell> {
-  bool _isHovered = false;
-  Timer? _hoverTimer;
-
+class NavigationShellState extends ConsumerState<NavigationShell> {
   @override
   Widget build(BuildContext context) {
-    final breakpoints = context.theme.breakpoints;
-    final width = MediaQuery.sizeOf(context).width;
-
-    buildNavigationRail() {
-      return Row(
-        children: [
-          StatefulBuilder(
-            builder: (context, setState) {
-              return MouseRegion(
-                onEnter:
-                    (event) =>
-                _hoverTimer = Timer(
-                  const Duration(milliseconds: 1000),
-                      () => setState(() => _isHovered = true),
-                ),
-                onExit: (event) {
-                  _hoverTimer?.cancel();
-                  setState(() => _isHovered = false);
-                },
-                child: AppNavigationRail(
-                  destinations: _getDestinations(),
-                  extended: width > breakpoints.md || _isHovered,
-                  onDestinationSelected: (index) => goToBranch(index),
-                  selectedIndex: widget.navigationShell.currentIndex,
-                ),
-              );
-            },
-          ),
-          Expanded(child: Container(child: widget.navigationShell)),
-        ],
-      );
-    }
-
-    buildNavigationBar() {
-      return AppNavigationBar(
-        onDestinationSelected: (index) => goToBranch(index),
-        selectedIndex: widget.navigationShell.currentIndex,
-        destinations: _getDestinations(),
-      );
-    }
-
     return CliqScaffold(
-        extendBehindAppBar: true,
-        body: width < breakpoints.sm ? widget.navigationShell : buildNavigationRail(),
-        header: CliqAppBar(
-          title: Text('Test'),
-          right: [
-            CliqIconButton(icon: Icon(Icons.search)),
-            CliqIconButton(icon: Icon(Icons.settings))
-          ],
-        ),
-        footer: width < breakpoints.sm ? buildNavigationBar() : null,
+      extendBehindAppBar: true,
+      body: widget.navigationShell,
+      header: CliqAppBar(
+        right: [
+          CliqIconButton(icon: Icon(Icons.search)),
+          CliqIconButton(
+            icon: Icon(Icons.settings),
+            onTap: () => context.pushPath(SettingsPage.pagePath.build()),
+          ),
+        ],
+      ),
     );
   }
-
-  List<NavDestination> _getDestinations() => [
-    NavDestination(iconData: Icons.dashboard, label: 'Hosts'),
-    NavDestination(iconData: Icons.access_time_outlined, label: 'History'),
-    NavDestination(iconData: Icons.settings, label: 'Settings'),
-  ];
 
   void refresh() => setState(() {});
 
@@ -100,7 +46,7 @@ class ScaffoldNavBarShellState extends ConsumerState<NavigationShell> {
         2;
   }
 
-  // Resets the current branch. Useful for popping an unknown amount of pages.
+  /// Resets the current branch. Useful for popping an unknown amount of pages.
   void resetLocation({int? index}) {
     widget.navigationShell.goBranch(
       index ?? widget.navigationShell.currentIndex,

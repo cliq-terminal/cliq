@@ -19,12 +19,13 @@ class AppRouter {
   );
 
   late GoRouter goRouter = GoRouter(
-    initialLocation: '/hosts',
+    initialLocation: '/',
     navigatorKey: rootNavigatorKey,
     routes: [
       ..._noShellRoutes(),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, shell) => NavigationShell(navigationShell: shell),
+        builder: (context, state, shell) =>
+            NavigationShell(navigationShell: shell),
         branches: [
           StatefulShellBranch(
             navigatorKey: shellNavigatorKey,
@@ -36,31 +37,18 @@ class AppRouter {
               ..._shellRoutes(),
             ],
           ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: HistoryPage.pagePath.path,
-                pageBuilder: _defaultBranchPageBuilder(const HistoryPage()),
-              ),
-              ..._shellRoutes(),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: SettingsPage.pagePath.path,
-                pageBuilder: _defaultBranchPageBuilder(const SettingsPage()),
-              ),
-              ..._shellRoutes(),
-            ],
-          ),
         ],
       ),
     ],
   );
 
   List<GoRoute> _noShellRoutes() {
-    return [];
+    return [
+      GoRoute(
+        path: SettingsPage.pagePath.path,
+        pageBuilder: _defaultPageBuilder(const SettingsPage()),
+      ),
+    ];
   }
 
   static List<GoRoute> _shellRoutes() {
@@ -68,16 +56,16 @@ class AppRouter {
   }
 
   static Page<T> _buildDefaultPageTransition<T>(
-      BuildContext context,
-      GoRouterState state,
-      Widget child,
-      ) {
+    BuildContext context,
+    GoRouterState state,
+    Widget child,
+  ) {
     return CupertinoPage(child: child);
   }
 
   static Page<T> Function(BuildContext, GoRouterState) _defaultPageBuilder<T>(
-      Widget child,
-      ) {
+    Widget child,
+  ) {
     return (context, state) =>
         _buildDefaultPageTransition(context, state, child);
   }

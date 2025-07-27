@@ -32,18 +32,30 @@ final class CliqThemeData {
     CliqStyle? style,
   }) {
     typography ??= CliqTypography.inherit(colorScheme: colorScheme);
-    style ??=
-        CliqStyle.inherit(colorScheme: colorScheme, typography: typography);
+    style ??= CliqStyle.inherit(
+      colorScheme: colorScheme,
+      typography: typography,
+    );
     return CliqThemeData(
       breakpoints: breakpoints ?? const CliqBreakpoints(),
       colorScheme: colorScheme,
       typography: typography,
       style: style,
-      bottomNavigationBarStyle:
-      CliqBottomNavigationBarStyle.inherit(colorScheme: colorScheme),
-      appBarStyle: CliqAppBarStyle.inherit(style: style, colorScheme: colorScheme),
-      blurBackgroundStyle: CliqBlurBackgroundStyle.inherit(style: style, colorScheme: colorScheme),
-      iconButtonStyle: CliqIconButtonStyle.inherit(style: style, colorScheme: colorScheme),
+      bottomNavigationBarStyle: CliqBottomNavigationBarStyle.inherit(
+        colorScheme: colorScheme,
+      ),
+      appBarStyle: CliqAppBarStyle.inherit(
+        style: style,
+        colorScheme: colorScheme,
+      ),
+      blurBackgroundStyle: CliqBlurBackgroundStyle.inherit(
+        style: style,
+        colorScheme: colorScheme,
+      ),
+      iconButtonStyle: CliqIconButtonStyle.inherit(
+        style: style,
+        colorScheme: colorScheme,
+      ),
       scaffoldStyle: CliqScaffoldStyle.inherit(colorScheme: colorScheme),
     );
   }

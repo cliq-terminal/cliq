@@ -8,7 +8,12 @@ class CliqBlurBackground extends StatelessWidget {
   final BorderRadiusGeometry? borderRadius;
   final CliqBlurBackgroundStyle? style;
 
-  const CliqBlurBackground({super.key, this.child, this.borderRadius, this.style});
+  const CliqBlurBackground({
+    super.key,
+    this.child,
+    this.borderRadius,
+    this.style,
+  });
 
   @override
   Widget build(BuildContext context) {

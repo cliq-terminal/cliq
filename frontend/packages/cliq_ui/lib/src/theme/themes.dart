@@ -10,7 +10,7 @@ extension CliqThemes on Never {
         background: Color(0xFFFFFFFF),
         onBackground: Color(0xFF000000),
         secondaryBackground: Color(0xFFCBCBCB),
-        onSecondaryBackground: Color(0xFF000000)
+        onSecondaryBackground: Color(0xFF000000),
       ),
     ),
     dark: CliqThemeData.inherit(

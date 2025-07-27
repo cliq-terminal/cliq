@@ -10,9 +10,10 @@ class CliqTerminal {
 
   const CliqTerminal._internal(this.client, this.session);
 
-  static Future<CliqTerminal> connect(CliqSSHConfig config, {
-    Function (Uint8List)? onStdout,
-    Function (Uint8List)? onStderr,
+  static Future<CliqTerminal> connect(
+    CliqSSHConfig config, {
+    Function(Uint8List)? onStdout,
+    Function(Uint8List)? onStderr,
   }) async {
     final client = await _createClient(config);
     final shell = await client.shell();
@@ -32,13 +33,16 @@ class CliqTerminal {
 
   void write(dynamic data) {
     switch (data) {
-      case String s: session.write(utf8.encode(s));
-      case Uint8List bytes: session.write(bytes);
+      case String s:
+        session.write(utf8.encode(s));
+      case Uint8List bytes:
+        session.write(bytes);
     }
   }
 
   /* TODO: check kill signals */
-  void kill({SSHSignal killSignal = SSHSignal.KILL}) => session.kill(killSignal);
+  void kill({SSHSignal killSignal = SSHSignal.KILL}) =>
+      session.kill(killSignal);
 
   void resize(int width, int height) {
     session.resizeTerminal(width, height);

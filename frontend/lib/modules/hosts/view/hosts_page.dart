@@ -1,10 +1,11 @@
+import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../routing/page_path.dart';
 
 class HostsPage extends StatefulHookConsumerWidget {
-  static const PagePathBuilder pagePath = PagePathBuilder('/hosts');
+  static const PagePathBuilder pagePath = PagePathBuilder('/');
 
   const HostsPage({super.key});
 
@@ -15,38 +16,12 @@ class HostsPage extends StatefulHookConsumerWidget {
 class _DashboardPageState extends ConsumerState<HostsPage> {
   @override
   Widget build(BuildContext context) {
-    return ListView(children: [
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-      Text('TODO: Hosts'),
-    ],);
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          CliqIconButton(icon: Icon(Icons.add), label: Text('Add Host')),
+        ],
+      ),
+    );
   }
 }

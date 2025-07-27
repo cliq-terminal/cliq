@@ -11,19 +11,20 @@ class CliqInteractable extends StatefulWidget {
 
   final Curve beginCurve, endCurve;
 
-  const CliqInteractable(
-      {super.key,
-        required this.child,
-        this.onTap,
-        this.begin = 1.0,
-        this.end = 0.93,
-        this.beginDuration = const Duration(milliseconds: 20),
-        this.endDuration = const Duration(milliseconds: 120),
-        this.longTapRepeatDuration = const Duration(milliseconds: 100),
-        this.beginCurve = Curves.decelerate,
-        this.endCurve = Curves.fastOutSlowIn,
-        this.onLongTap,
-        this.enableLongTapRepeatEvent = false});
+  const CliqInteractable({
+    super.key,
+    required this.child,
+    this.onTap,
+    this.begin = 1.0,
+    this.end = 0.93,
+    this.beginDuration = const Duration(milliseconds: 20),
+    this.endDuration = const Duration(milliseconds: 120),
+    this.longTapRepeatDuration = const Duration(milliseconds: 100),
+    this.beginCurve = Curves.decelerate,
+    this.endCurve = Curves.fastOutSlowIn,
+    this.onLongTap,
+    this.enableLongTapRepeatEvent = false,
+  });
 
   @override
   State<StatefulWidget> createState() => _CliqInteractableState();
@@ -40,16 +41,19 @@ class _CliqInteractableState extends State<CliqInteractable>
   void initState() {
     super.initState();
     _controller = AnimationController(
-        vsync: this,
-        duration: widget.endDuration,
-        value: 1.0,
-        reverseDuration: widget.beginDuration);
+      vsync: this,
+      duration: widget.endDuration,
+      value: 1.0,
+      reverseDuration: widget.beginDuration,
+    );
 
     _animation = Tween(begin: widget.end, end: widget.begin).animate(
-        CurvedAnimation(
-            parent: _controller!,
-            curve: widget.beginCurve,
-            reverseCurve: widget.endCurve));
+      CurvedAnimation(
+        parent: _controller!,
+        curve: widget.beginCurve,
+        reverseCurve: widget.endCurve,
+      ),
+    );
 
     _controller?.forward();
   }
@@ -75,23 +79,24 @@ class _CliqInteractableState extends State<CliqInteractable>
           ? onLongPress
           : null,
       child: Listener(
-          onPointerDown: (c) async {
-            _isOnTap = true;
-            _controller?.reverse();
-            if (widget.enableLongTapRepeatEvent) {
-              await Future.delayed(widget.longTapRepeatDuration);
-              while (_isOnTap) {
-                await Future.delayed(widget.longTapRepeatDuration, () async {
-                  await (widget.onLongTap ?? widget.onTap)?.call();
-                });
-              }
+        onPointerDown: (c) async {
+          _isOnTap = true;
+          _controller?.reverse();
+          if (widget.enableLongTapRepeatEvent) {
+            await Future.delayed(widget.longTapRepeatDuration);
+            while (_isOnTap) {
+              await Future.delayed(widget.longTapRepeatDuration, () async {
+                await (widget.onLongTap ?? widget.onTap)?.call();
+              });
             }
-          },
-          onPointerUp: (c) async {
-            _isOnTap = false;
-            await _controller?.forward();
-          },
-          child: ScaleTransition(scale: _animation, child: widget.child)),
+          }
+        },
+        onPointerUp: (c) async {
+          _isOnTap = false;
+          await _controller?.forward();
+        },
+        child: ScaleTransition(scale: _animation, child: widget.child),
+      ),
     );
   }
 }

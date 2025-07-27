@@ -4,12 +4,14 @@ import 'package:flutter/cupertino.dart';
 
 class CliqIconButton extends StatelessWidget {
   final Widget icon;
+  final Widget? label;
   final Function()? onTap;
   final CliqIconButtonStyle? style;
 
   const CliqIconButton({
     super.key,
     required this.icon,
+    this.label,
     this.onTap,
     this.style,
   });
@@ -19,10 +21,17 @@ class CliqIconButton extends StatelessWidget {
     final style = this.style ?? context.theme.iconButtonStyle;
 
     return CliqInteractable(
+      onTap: onTap,
       child: CliqBlurBackground(
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: IconTheme(data: style.iconTheme, child: icon),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconTheme(data: style.iconTheme, child: icon),
+              ?label,
+            ],
+          ),
         ),
       ),
     );
@@ -33,10 +42,7 @@ final class CliqIconButtonStyle {
   final IconThemeData iconTheme;
   final EdgeInsetsGeometry padding;
 
-  const CliqIconButtonStyle({
-    required this.iconTheme,
-    required this.padding,
-  });
+  const CliqIconButtonStyle({required this.iconTheme, required this.padding});
 
   factory CliqIconButtonStyle.inherit({
     required CliqStyle style,

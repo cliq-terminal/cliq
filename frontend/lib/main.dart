@@ -52,7 +52,8 @@ class _CliqAppState extends ConsumerState<CliqApp> {
     return MaterialApp.router(
       routerConfig: router.goRouter,
       debugShowCheckedModeBanner: false,
-      builder: (context, child) => CliqTheme(data: CliqThemes.standard.dark, child: child!)
+      builder: (context, child) =>
+          CliqTheme(data: CliqThemes.standard.dark, child: child!),
     );
   }
 }

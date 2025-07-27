@@ -25,9 +25,8 @@ class CliqTheme extends StatelessWidget {
   Widget build(BuildContext context) => _InheritedTheme(
     data: data,
     child: Directionality(
-      textDirection: textDirection ??
-          Directionality.maybeOf(context) ??
-          TextDirection.ltr,
+      textDirection:
+          textDirection ?? Directionality.maybeOf(context) ?? TextDirection.ltr,
       child: DefaultTextStyle(
         style: data.typography.base.copyWith(
           fontFamily: CliqFontFamily.primary.fontFamily,

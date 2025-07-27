@@ -25,35 +25,22 @@ class CliqScaffold extends StatelessWidget {
     final style = this.style ?? context.theme.scaffoldStyle;
 
     buildDefaultLayout() {
-      return [
-        ?header,
-        Expanded(child: body),
-        ?footer
-      ];
+      return [?header, Expanded(child: body), ?footer];
     }
 
     buildExtendedLayout() {
       return [
         Expanded(
-            child: Stack(
-              children: [
-                Positioned.fill(child: body),
-                if (header != null)
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    child: header!,
-                  ),
-                if (footer != null)
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: footer!,
-                  ),
-              ],
-            )),
+          child: Stack(
+            children: [
+              Positioned.fill(child: body),
+              if (header != null)
+                Positioned(left: 0, right: 0, top: 0, child: header!),
+              if (footer != null)
+                Positioned(left: 0, right: 0, bottom: 0, child: footer!),
+            ],
+          ),
+        ),
       ];
     }
 
@@ -82,8 +69,6 @@ final class CliqScaffoldStyle {
   const CliqScaffoldStyle({required this.backgroundColor});
 
   factory CliqScaffoldStyle.inherit({required CliqColorScheme colorScheme}) {
-    return CliqScaffoldStyle(
-        backgroundColor: colorScheme.background,
-    );
+    return CliqScaffoldStyle(backgroundColor: colorScheme.background);
   }
 }
