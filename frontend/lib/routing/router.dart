@@ -1,5 +1,4 @@
 import 'package:cliq/modules/hosts/view/hosts_page.dart';
-import 'package:cliq/modules/history/view/history_page.dart';
 import 'package:cliq/modules/settings/view/settings_page.dart';
 import 'package:cliq/routing/ui/navbar_shell.dart';
 import 'package:flutter/cupertino.dart';
