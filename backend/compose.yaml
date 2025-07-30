@@ -1,3 +1,4 @@
+name: CLIq Backend
 services:
   db:
     image: postgres:17.5-alpine3.22
@@ -16,22 +17,6 @@ services:
       interval: 10s
       timeout: 3s
       retries: 3
-
-  dragonfly:
-    image: ghcr.io/dragonflydb/dragonfly:v1.31.2
-    init: true
-    restart: unless-stopped
-    ulimits:
-      memlock: -1
-    ports:
-      - "127.0.0.1:6379:6379"
-    healthcheck:
-      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
-      interval: 10s
-      timeout: 3s
-      retries: 3
-    volumes:
-      - dragonfly-data:/data
 
   mailpit:
     image: axllent/mailpit
@@ -52,4 +37,3 @@ services:
 volumes:
   postgres-data: ~
   mailpit-data: ~
-  dragonfly-data: ~

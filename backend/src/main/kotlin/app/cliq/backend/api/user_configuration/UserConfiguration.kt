@@ -13,25 +13,18 @@ import java.time.OffsetDateTime
 
 @Entity
 @Table(
-    name = "user_configurations",
-    uniqueConstraints = [
-        UniqueConstraint(columnNames = ["user_id"])
-    ]
+    name = "user_configurations", uniqueConstraints = [UniqueConstraint(columnNames = ["user_id"])]
 )
 class UserConfiguration(
-    @Id
-    var id: Long = 0,
+    @Id var id: Long = 0,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     var user: User,
 
-    @Column
-    var encryptedConfig: String,
+    @Column var encryptedConfig: String,
 
-    @Column(nullable = false)
-    var createdAt: OffsetDateTime,
+    @Column(nullable = false) var createdAt: OffsetDateTime,
 
-    @Column(nullable = false)
-    var updatedAt: OffsetDateTime
+    @Column(nullable = false) var updatedAt: OffsetDateTime
 )

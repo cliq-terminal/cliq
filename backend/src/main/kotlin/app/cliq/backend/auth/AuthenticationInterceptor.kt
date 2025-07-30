@@ -1,38 +1,48 @@
 package app.cliq.backend.auth
 
-import app.cliq.backend.api.error.ErrorResponseFactory
+import app.cliq.backend.api.error.ErrorResponse
 import app.cliq.backend.api.error.exception.ApiException
 import app.cliq.backend.api.error.exception.InvalidAuthTokenException
 import app.cliq.backend.api.session.SessionRepository
 import app.cliq.backend.api.session.event.SessionUsedEvent
-import com.fasterxml.jackson.databind.ObjectMapper
-import jakarta.servlet.FilterChain
+import app.cliq.backend.utils.HttpUtils
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
-import org.springframework.web.filter.OncePerRequestFilter
+import org.springframework.web.method.HandlerMethod
+import org.springframework.web.servlet.HandlerInterceptor
 
 private const val AUTHORIZATION_HEADER = "Authorization"
 private const val BEARER_PREFIX = "Bearer "
 
 @Component
-class BearerTokenAuthenticationFilter(
+class AuthenticationInterceptor(
     private val sessionRepository: SessionRepository,
     private val eventPublisher: ApplicationEventPublisher,
-    private val objectMapper: ObjectMapper,
-    private val errorResponseFactory: ErrorResponseFactory
-) : OncePerRequestFilter() {
+    private val httpUtils: HttpUtils
+) : HandlerInterceptor {
 
-    override fun doFilterInternal(
-        request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain
-    ) {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
+    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+        if (handler !is HandlerMethod) {
+            return true // Not a handler method, continue processing
+        }
+
+        val isAnnotated = handler.method.isAnnotationPresent(Authenticated::class.java)
+        if (!isAnnotated) {
+            return true // No authentication required for this method
+        }
+
         val token = extractBearerToken(request)
         if (token == null) {
-            filterChain.doFilter(request, response)
+            val error = ErrorResponse.fromApiException(InvalidAuthTokenException())
+            httpUtils.setErrorResponse(response, error)
 
-            return
+            return false
         }
 
         try {
@@ -42,15 +52,17 @@ class BearerTokenAuthenticationFilter(
 
             eventPublisher.publishEvent(SessionUsedEvent(session.id))
         } catch (e: ApiException) {
-            val errorResponse = errorResponseFactory.handleApiException(e)
-            response.writer.write(objectMapper.writeValueAsString(errorResponse))
+            val error = ErrorResponse.fromApiException(e)
+            httpUtils.setErrorResponse(response, error)
+
+            return false
         } catch (e: Exception) {
             logger.error("Failed to authenticate with Bearer token", e)
 
             throw e
         }
 
-        filterChain.doFilter(request, response)
+        return true
     }
 
     private fun extractBearerToken(request: HttpServletRequest): String? {

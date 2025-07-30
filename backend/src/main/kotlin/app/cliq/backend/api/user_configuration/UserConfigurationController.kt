@@ -57,8 +57,10 @@ class UserConfigurationController(
     @Authenticated
     @GetMapping("/last-updated")
     @Operation(summary = "Get's you when the config was last updated")
-    fun getUpdatedAt(@AuthenticationPrincipal session: Session): ResponseEntity<OffsetDateTime> {
-        TODO()
+    fun getUpdatedAt(@AuthenticationPrincipal session: Session): ResponseEntity<OffsetDateTime?> {
+        val updatedAt = repository.getUpdatedAtByUser(session.user)
+
+        return ResponseEntity.ok(updatedAt)
     }
 }
 
