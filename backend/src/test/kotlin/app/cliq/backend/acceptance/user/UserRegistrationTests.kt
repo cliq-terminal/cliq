@@ -1,72 +1,28 @@
 package app.cliq.backend.acceptance.user
 
+import app.cliq.backend.acceptance.AcceptanceTest
+import app.cliq.backend.acceptance.AcceptanceTester
 import app.cliq.backend.api.user.UserRepository
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.icegreen.greenmail.configuration.GreenMailConfiguration
-import com.icegreen.greenmail.junit5.GreenMailExtension
-import com.icegreen.greenmail.util.ServerSetupTest
 import org.apache.commons.mail2.jakarta.util.MimeMessageParser
-import org.flywaydb.core.Flyway
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.RegisterExtension
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import kotlin.test.assertContains
 import kotlin.test.assertTrue
 
-
-const val EMAIL = "cliq@localhost"
-const val EMAIL_PWD = "cliq"
-const val SMTP_HOST = "127.0.0.1"
-const val SMTP_PORT = 3025
-
-@SpringBootTest(
-    properties = [
-        "spring.flyway.clean-disabled=false",
-        "spring.mail.host=${SMTP_HOST}",
-        "spring.mail.port=${SMTP_PORT}",
-        "spring.mail.username=${EMAIL}",
-        "spring.mail.password=${EMAIL_PWD}",
-        "spring.mail.protocol=smtp",
-        "spring.mail.properties.mail.smtp.auth=true",
-        "spring.mail.properties.mail.smtp.starttls.enable=false",
-        "app.email.enabled=true",
-        "app.email.from-address=${EMAIL}"
-    ]
-)
-@AutoConfigureMockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@AcceptanceTest
 class UserRegistrationTests(
     @Autowired
     private val mockMvc: MockMvc,
     @Autowired
     private val userRepository: UserRepository,
-) {
-    companion object {
-        @JvmField
-        @RegisterExtension
-        val greenMail: GreenMailExtension = GreenMailExtension(ServerSetupTest.SMTP_IMAP)
-            .withConfiguration(
-                GreenMailConfiguration
-                    .aConfig()
-                    .withUser(EMAIL, EMAIL_PWD)
-            )
-    }
-
-    private val objectMapper = ObjectMapper()
-
-    @BeforeEach
-    fun clearDatabase(@Autowired flyway: Flyway) {
-        flyway.clean()
-        flyway.migrate()
-    }
+    @Autowired
+    private val objectMapper: ObjectMapper
+) : AcceptanceTester() {
 
     @Test
     fun `user can register`() {
