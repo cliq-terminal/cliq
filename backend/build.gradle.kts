@@ -5,7 +5,7 @@ plugins {
     kotlin("plugin.allopen") version "2.2.0"
     id("org.springframework.boot") version "3.5.4"
     id("io.spring.dependency-management") version "1.1.7"
-    id("org.flywaydb.flyway") version "11.10.4"
+    id("org.flywaydb.flyway") version "11.10.5"
 }
 
 group = "app.cliq"
@@ -43,7 +43,7 @@ repositories {
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.10.4")
+        classpath("org.flywaydb:flyway-database-postgresql:11.10.5")
     }
 }
 
@@ -56,8 +56,8 @@ dependencies {
 
     // JPA/SQL
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.flywaydb:flyway-core:11.10.4")
-    implementation("org.flywaydb:flyway-database-postgresql:11.10.4")
+    implementation("org.flywaydb:flyway-core:11.10.5")
+    implementation("org.flywaydb:flyway-database-postgresql:11.10.5")
     runtimeOnly("org.postgresql:postgresql")
 
     // Security
