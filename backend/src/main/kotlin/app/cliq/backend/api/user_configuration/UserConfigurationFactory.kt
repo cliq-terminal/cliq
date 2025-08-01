@@ -15,6 +15,20 @@ class UserConfigurationFactory(
         return create(configurationParams.configuration, user)
     }
 
+    fun updateFromParams(
+        existingConfig: UserConfiguration,
+        configurationParams: ConfigurationParams,
+        user: User
+    ): UserConfiguration {
+        return UserConfiguration(
+            existingConfig.id,
+            user,
+            configurationParams.configuration,
+            existingConfig.createdAt,
+            OffsetDateTime.now(clock)
+        )
+    }
+
     fun create(encryptedConfig: String, user: User): UserConfiguration {
         return UserConfiguration(
             snowflakeGenerator.nextId().getOrThrow(),

@@ -30,9 +30,21 @@ class UserConfigurationController(
         @AuthenticationPrincipal session: Session,
         @RequestBody configurationParams: ConfigurationParams
     ): ResponseEntity<Void> {
-        val config = userConfigurationFactory.createFromParams(configurationParams, session.user)
+        val existingConfig = repository.getByUser(session.user)
 
-        repository.save(config)
+        if (existingConfig == null) {
+            val config = userConfigurationFactory.createFromParams(configurationParams, session.user)
+
+            repository.save(config)
+        } else {
+            val config = userConfigurationFactory.updateFromParams(
+                existingConfig,
+                configurationParams,
+                session.user
+            )
+
+            repository.save(config)
+        }
 
         return ResponseEntity.ok().build()
     }
