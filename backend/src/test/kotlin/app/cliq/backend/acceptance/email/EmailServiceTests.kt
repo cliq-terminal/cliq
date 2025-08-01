@@ -1,54 +1,21 @@
 package app.cliq.backend.acceptance.email
 
+import app.cliq.backend.acceptance.AcceptanceTest
+import app.cliq.backend.acceptance.AcceptanceTester
 import app.cliq.backend.service.EmailService
-import com.icegreen.greenmail.configuration.GreenMailConfiguration
-import com.icegreen.greenmail.junit5.GreenMailExtension
-import com.icegreen.greenmail.util.ServerSetupTest
 import jakarta.mail.internet.MimeMessage
 import org.apache.commons.mail2.jakarta.util.MimeMessageParser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.RegisterExtension
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.annotation.DirtiesContext
 import java.util.*
 import kotlin.test.assertTrue
 
-const val EMAIL = "cliq@localhost"
-const val EMAIL_PWD = "cliq"
-const val SMTP_HOST = "127.0.0.1"
-const val SMTP_PORT = 3025
-
-@SpringBootTest(
-    properties = [
-        "spring.mail.host=${SMTP_HOST}",
-        "spring.mail.port=${SMTP_PORT}",
-        "spring.mail.username=${EMAIL}",
-        "spring.mail.password=${EMAIL_PWD}",
-        "spring.mail.protocol=smtp",
-        "spring.mail.properties.mail.smtp.auth=true",
-        "spring.mail.properties.mail.smtp.starttls.enable=false",
-        "app.email.enabled=true",
-        "app.email.from-address=${EMAIL}"
-    ]
-)
-@DirtiesContext
+@AcceptanceTest
 class EmailServiceTests(
     @Autowired
     private val emailService: EmailService
-) {
-    companion object {
-        @JvmField
-        @RegisterExtension
-        val greenMail: GreenMailExtension = GreenMailExtension(ServerSetupTest.SMTP_IMAP)
-            .withConfiguration(
-                GreenMailConfiguration
-                    .aConfig()
-                    .withUser(EMAIL, EMAIL_PWD)
-            )
-    }
-
+) : AcceptanceTester() {
     @Test
     fun `isEnabled should return true`() {
         assertTrue(emailService.isEnabled())
