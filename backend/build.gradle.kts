@@ -144,6 +144,16 @@ tasks.withType<Test> {
     doFirst {
         jvmArgs("-javaagent:${classpath.filter { it.name.contains("byte-buddy-agent") }.asPath}")
     }
+
+    reports {
+        junitXml.required.set(true)
+        html.required.set(true)
+    }
+
+    testLogging {
+        events("passed", "skipped", "failed")
+        showStandardStreams = false
+    }
 }
 
 // tasks.withType<ProcessResources> {
