@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.security.access.prepost.PreAuthorize
 
-//TODO:
+// TODO:
 //  - better error documentation
 
 // Features
@@ -17,4 +17,4 @@ import org.springframework.security.access.prepost.PreAuthorize
 // Annotation config
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Authenticated()
+annotation class Authenticated

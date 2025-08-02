@@ -16,14 +16,11 @@ data class ErrorResponse(
     val details: Any? = null,
 ) {
     companion object {
-        fun fromApiException(
-            apiException: ApiException
-        ): ErrorResponse {
-            return ErrorResponse(
+        fun fromApiException(apiException: ApiException): ErrorResponse =
+            ErrorResponse(
                 statusCode = apiException.statusCode,
                 errorCode = apiException.errorCode,
-                details = apiException.details
+                details = apiException.details,
             )
-        }
     }
 }

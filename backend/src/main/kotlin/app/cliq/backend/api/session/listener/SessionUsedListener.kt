@@ -17,11 +17,12 @@ class SessionUsedListener(
 
     @EventListener(SessionUsedEvent::class)
     fun updateSessionUsage(event: SessionUsedEvent) {
-        val session = sessionRepository.findById(event.sessionId).orElseThrow {
-            logger.warn("Session with ID ${event.sessionId} not found")
+        val session =
+            sessionRepository.findById(event.sessionId).orElseThrow {
+                logger.warn("Session with ID ${event.sessionId} not found")
 
-            IllegalArgumentException("Session with ID ${event.sessionId} not found")
-        }
+                IllegalArgumentException("Session with ID ${event.sessionId} not found")
+            }
 
         session.lastAccessedAt = OffsetDateTime.now(clock)
 

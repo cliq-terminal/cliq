@@ -11,7 +11,7 @@ const val SNOWFLAKE_EPOCH: Long = 1_705_247_483_000L
 const val NODE_ID_BITS: Int = 10
 const val SEQUENCE_BITS: Int = 12
 
-//const val TIMESTAMP_SHIFT: Int = NODE_ID_BITS + SEQUENCE_BITS -> Not used at the moment
+// const val TIMESTAMP_SHIFT: Int = NODE_ID_BITS + SEQUENCE_BITS -> Not used at the moment
 
 const val MAX_NODE_ID: Long = (1L shl NODE_ID_BITS) - 1
 
@@ -32,7 +32,11 @@ class SnowflakeGenerator(
             val lastTimestamp = lastTimestamp.load()
 
             if (currentTimestamp < lastTimestamp) {
-                return Result.failure(IllegalStateException("Clock moved backwards. Refusing to generate id for ${lastTimestamp - currentTimestamp} milliseconds"))
+                return Result.failure(
+                    IllegalStateException(
+                        "Clock moved backwards. Refusing to generate id for ${lastTimestamp - currentTimestamp} milliseconds",
+                    ),
+                )
             }
 
             var sequence = sequence.load()
@@ -65,7 +69,5 @@ class SnowflakeGenerator(
         return currentTimestamp
     }
 
-    private fun getTimestamp(): Long {
-        return clock.millis() - SNOWFLAKE_EPOCH
-    }
+    private fun getTimestamp(): Long = clock.millis() - SNOWFLAKE_EPOCH
 }

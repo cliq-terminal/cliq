@@ -11,5 +11,5 @@ import kotlin.reflect.KClass
 annotation class EmailOccupiedConstraint(
     val message: String = "E-Mail is already occupied",
     val groups: Array<KClass<*>> = [],
-    val payload: Array<KClass<out Payload>> = []
+    val payload: Array<KClass<out Payload>> = [],
 )

@@ -14,16 +14,15 @@ class UserResponse(
     @field:Schema(example = "John Doe")
     val name: String,
     @field:Schema(example = "2025-05-22T12:31:28.274923603+02:00")
-    val createdAt: OffsetDateTime
+    val createdAt: OffsetDateTime,
 ) : Serializable {
     companion object {
-        fun fromUser(user: User): UserResponse {
-            return UserResponse(
+        fun fromUser(user: User): UserResponse =
+            UserResponse(
                 id = user.id,
                 email = user.email,
                 name = user.name,
-                createdAt = user.createdAt
+                createdAt = user.createdAt,
             )
-        }
     }
 }

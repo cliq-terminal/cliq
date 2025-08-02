@@ -8,13 +8,13 @@ import org.apache.commons.mail2.jakarta.util.MimeMessageParser
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.*
+import java.util.Locale
 import kotlin.test.assertTrue
 
 @AcceptanceTest
 class EmailServiceTests(
     @Autowired
-    private val emailService: EmailService
+    private val emailService: EmailService,
 ) : AcceptanceTester() {
     @Test
     fun `isEnabled should return true`() {
@@ -30,11 +30,12 @@ class EmailServiceTests(
         val toEmail = "test@example.com"
         val subject = "Test Email"
         val templateName = "test-email"
-        val context = mapOf(
-            "subject" to subject,
-            "userName" to "John Doe",
-            "message" to "Hello World"
-        )
+        val context =
+            mapOf(
+                "subject" to subject,
+                "userName" to "John Doe",
+                "message" to "Hello World",
+            )
         val locale = Locale.ENGLISH
 
         // Send email
@@ -43,7 +44,7 @@ class EmailServiceTests(
             subject = subject,
             context = context,
             locale = locale,
-            templateName = templateName
+            templateName = templateName,
         )
 
         assertTrue(greenMail.waitForIncomingEmail(1))
@@ -58,8 +59,9 @@ class EmailServiceTests(
         // Verify content types exist (both HTML and text)
         assertTrue(message.contentType.contains("multipart/mixed"))
 
-        val parser = MimeMessageParser(message as MimeMessage)
-            .parse()
+        val parser =
+            MimeMessageParser(message as MimeMessage)
+                .parse()
 
         assertTrue(parser.hasHtmlContent())
         assertTrue(parser.hasPlainContent())

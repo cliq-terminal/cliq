@@ -1,11 +1,19 @@
 plugins {
+    // Kotlin
     kotlin("jvm") version "2.2.0"
     kotlin("plugin.spring") version "2.2.0"
     kotlin("plugin.jpa") version "2.2.0"
     kotlin("plugin.allopen") version "2.2.0"
+
+    // Spring / Spring Boot
     id("org.springframework.boot") version "3.5.4"
     id("io.spring.dependency-management") version "1.1.7"
+
+    // Database Migrations
     id("org.flywaydb.flyway") version "11.10.5"
+
+    // Linter and Formatter
+    id("org.jlleitschuh.gradle.ktlint") version "13.0.0"
 }
 
 group = "app.cliq"
@@ -28,6 +36,20 @@ kotlin {
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
+    }
+}
+
+ktlint {
+    version.set("1.7.1")
+    android.set(false)
+    ignoreFailures.set(false)
+    reporters {
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+    }
+    filter {
+        exclude("**/generated/**")
+        include("**/kotlin/**")
     }
 }
 
@@ -92,7 +114,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    //Greenmail
+    // Greenmail
     implementation("com.icegreen:greenmail-spring:$greenmailVersion")
     testImplementation("com.icegreen:greenmail:$greenmailVersion")
     testImplementation("com.icegreen:greenmail-junit5:$greenmailVersion")
@@ -124,19 +146,21 @@ tasks.withType<Test> {
     }
 }
 
-//tasks.withType<ProcessResources> {
+// tasks.withType<ProcessResources> {
 //    filesMatching("application.yaml") {
 //        expand(project.properties)
 //    }
-//}
+// }
 
 tasks.processResources {
     // work around IDEA-296490
     // use above when fixed
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    with(copySpec {
-        from("src/main/resources/application.yaml") {
-            expand(project.properties)
-        }
-    })
+    with(
+        copySpec {
+            from("src/main/resources/application.yaml") {
+                expand(project.properties)
+            }
+        },
+    )
 }

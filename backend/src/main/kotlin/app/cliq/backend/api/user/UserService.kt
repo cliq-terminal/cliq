@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.Clock
 import java.time.OffsetDateTime
-import java.util.*
+import java.util.Locale
 
 @Service
 class UserService(
@@ -19,7 +19,7 @@ class UserService(
     private val appProperties: AppProperties,
     private val emailService: EmailService,
     private val messageSource: MessageSource,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -43,10 +43,11 @@ class UserService(
 
         val locale = Locale.forLanguageTag(user.locale)
 
-        val context = mapOf(
-            "name" to user.name,
-            "verificationUrl" to buildVerificationUrl(token),
-        )
+        val context =
+            mapOf(
+                "name" to user.name,
+                "verificationUrl" to buildVerificationUrl(token),
+            )
 
         try {
             emailService.sendEmail(
@@ -54,7 +55,7 @@ class UserService(
                 messageSource.getMessage("email.verification.subject", null, locale),
                 context,
                 locale,
-                "verification-email"
+                "verification-email",
             )
         } catch (e: Throwable) {
             user.emailVerificationSentAt = null
@@ -66,11 +67,10 @@ class UserService(
         }
     }
 
-    fun isPasswordValid(user: User, password: String): Boolean {
-        return passwordEncoder.matches(password, user.password)
-    }
+    fun isPasswordValid(
+        user: User,
+        password: String,
+    ): Boolean = passwordEncoder.matches(password, user.password)
 
-    private fun buildVerificationUrl(token: String): String {
-        return "${appProperties.externalUrl}/api/v1/users/verify/$token"
-    }
+    private fun buildVerificationUrl(token: String): String = "${appProperties.externalUrl}/api/v1/users/verify/$token"
 }

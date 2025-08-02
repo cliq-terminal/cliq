@@ -17,14 +17,13 @@ class SessionResponse(
     val createdAt: OffsetDateTime,
 ) : Serializable {
     companion object {
-        fun fromSession(session: Session): SessionResponse {
-            return SessionResponse(
+        fun fromSession(session: Session): SessionResponse =
+            SessionResponse(
                 session.id,
                 session.apiKey,
                 session.name,
                 session.userAgent,
-                session.createdAt
+                session.createdAt,
             )
-        }
     }
 }

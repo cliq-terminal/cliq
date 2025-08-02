@@ -14,7 +14,10 @@ class SessionFactory(
     private val tokenGenerator: TokenGenerator,
     private val clock: Clock,
 ) {
-    fun createFromCreationParams(params: SessionCreationParams, user: User): Session {
+    fun createFromCreationParams(
+        params: SessionCreationParams,
+        user: User,
+    ): Session {
         val session = createSession(user, params.name, params.userAgent)
 
         sessionRepository.save(session)
@@ -23,8 +26,12 @@ class SessionFactory(
         return session
     }
 
-    private fun createSession(user: User, name: String? = null, userAgent: String? = null): Session {
-        return Session(
+    private fun createSession(
+        user: User,
+        name: String? = null,
+        userAgent: String? = null,
+    ): Session =
+        Session(
             snowflakeGenerator.nextId().getOrThrow(),
             user,
             tokenGenerator.generateAuthVerificationToken(),
@@ -34,5 +41,4 @@ class SessionFactory(
             OffsetDateTime.now(clock),
             OffsetDateTime.now(clock),
         )
-    }
 }

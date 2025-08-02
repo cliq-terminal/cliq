@@ -12,38 +12,35 @@ class ErrorResponseFactory {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     fun handleMethodArgumentNotValidException(
-        exception: MethodArgumentNotValidException
-    ): ResponseEntity<ErrorResponse> {
-        return mapErrorResponseToResponseEntity(mapMethodArgumentNotValidExceptionToErrorResponse(exception))
-    }
+        exception: MethodArgumentNotValidException,
+    ): ResponseEntity<ErrorResponse> =
+        mapErrorResponseToResponseEntity(mapMethodArgumentNotValidExceptionToErrorResponse(exception))
 
-    fun handleApiException(
-        apiException: ApiException
-    ): ResponseEntity<ErrorResponse> {
-        return mapErrorResponseToResponseEntity(ErrorResponse.fromApiException(apiException))
-    }
+    fun handleApiException(apiException: ApiException): ResponseEntity<ErrorResponse> =
+        mapErrorResponseToResponseEntity(ErrorResponse.fromApiException(apiException))
 
-    fun mapMethodArgumentNotValidExceptionToErrorResponse(
-        exception: MethodArgumentNotValidException
-    ): ErrorResponse {
-        val fieldErrors = exception.bindingResult.fieldErrors.map { error ->
-            mapOf(
-                "field" to error.field,
-                "message" to (error.defaultMessage ?: "Invalid value"),
-                "rejectedValue" to error.rejectedValue
-            )
-        }
+    fun mapMethodArgumentNotValidExceptionToErrorResponse(exception: MethodArgumentNotValidException): ErrorResponse {
+        val fieldErrors =
+            exception.bindingResult.fieldErrors.map { error ->
+                mapOf(
+                    "field" to error.field,
+                    "message" to (error.defaultMessage ?: "Invalid value"),
+                    "rejectedValue" to error.rejectedValue,
+                )
+            }
 
         return ErrorResponse(
-            statusCode = HttpStatus.BAD_REQUEST, errorCode = ErrorCode.VALIDATION_ERROR, details = mapOf(
-                "validationErrors" to fieldErrors, "totalErrors" to exception.bindingResult.errorCount
-            )
+            statusCode = HttpStatus.BAD_REQUEST,
+            errorCode = ErrorCode.VALIDATION_ERROR,
+            details =
+                mapOf(
+                    "validationErrors" to fieldErrors,
+                    "totalErrors" to exception.bindingResult.errorCount,
+                ),
         )
     }
 
-    fun mapErrorResponseToResponseEntity(
-        errorResponse: ErrorResponse
-    ): ResponseEntity<ErrorResponse> {
+    fun mapErrorResponseToResponseEntity(errorResponse: ErrorResponse): ResponseEntity<ErrorResponse> {
         if (errorResponse.statusCode.is2xxSuccessful) {
             logger.warn("Returning error with a successful status code. {}", errorResponse)
         }

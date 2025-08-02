@@ -1,4 +1,4 @@
-package app.cliq.backend.api.user_configuration.view
+package app.cliq.backend.api.userconfig.view
 
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.OffsetDateTime

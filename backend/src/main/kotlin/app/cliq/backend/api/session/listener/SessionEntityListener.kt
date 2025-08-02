@@ -8,9 +8,8 @@ import java.time.OffsetDateTime
 
 @Component
 class SessionEntityListener(
-    private val clock: Clock
+    private val clock: Clock,
 ) {
-
     @PreUpdate
     private fun updateUpdatedAt(session: Session) {
         session.updatedAt = OffsetDateTime.now(clock)

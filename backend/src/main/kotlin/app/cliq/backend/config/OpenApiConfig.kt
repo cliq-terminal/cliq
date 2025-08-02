@@ -17,22 +17,20 @@ const val API_TOKEN_SECURITY_SCHEME_NAME = "API Token"
     type = SecuritySchemeType.HTTP,
     bearerFormat = "API_KEY",
     scheme = "bearer",
-    `in` = SecuritySchemeIn.HEADER
+    `in` = SecuritySchemeIn.HEADER,
 )
 class OpenApiConfig(
     @Value($$"${app.info.name}") private val name: String,
     @Value($$"${app.info.version}") private val version: String,
     @Value($$"${app.info.description}") private val description: String,
 ) {
-
     @Bean
-    fun apiDocConfig(): OpenAPI {
-        return OpenAPI()
+    fun apiDocConfig(): OpenAPI =
+        OpenAPI()
             .info(
                 Info()
                     .title(name)
                     .version(version)
-                    .description(description)
+                    .description(description),
             )
-    }
 }

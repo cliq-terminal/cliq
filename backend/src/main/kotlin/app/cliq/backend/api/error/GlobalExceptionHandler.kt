@@ -8,16 +8,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class GlobalExceptionHandler(
-    private val errorResponseFactory: ErrorResponseFactory
+    private val errorResponseFactory: ErrorResponseFactory,
 ) {
-
     @ExceptionHandler(ApiException::class)
-    fun handleApiException(apiException: ApiException): ResponseEntity<ErrorResponse> {
-        return errorResponseFactory.handleApiException(apiException)
-    }
+    fun handleApiException(apiException: ApiException): ResponseEntity<ErrorResponse> =
+        errorResponseFactory.handleApiException(apiException)
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleValidationException(exception: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
-        return errorResponseFactory.handleMethodArgumentNotValidException(exception)
-    }
+    fun handleValidationException(exception: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> =
+        errorResponseFactory.handleMethodArgumentNotValidException(exception)
 }

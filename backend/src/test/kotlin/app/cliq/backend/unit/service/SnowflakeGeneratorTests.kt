@@ -24,7 +24,6 @@ import kotlin.test.assertTrue
 
 @ExtendWith(MockitoExtension::class)
 class SnowflakeGeneratorTests {
-
     @Mock
     private lateinit var instanceHandler: InstanceHandler
 
@@ -133,16 +132,18 @@ class SnowflakeGeneratorTests {
         val executor = Executors.newFixedThreadPool(threads)
 
         repeat(threads) {
-            futures.add(CompletableFuture.runAsync({
-                repeat(idsPerThread) {
-                    val id = snowflakeGenerator.nextId().getOrThrow()
-                    if (allIds.contains(id)) {
-                        throw IllegalStateException("Duplicate ID generated: $id")
-                    }
+            futures.add(
+                CompletableFuture.runAsync({
+                    repeat(idsPerThread) {
+                        val id = snowflakeGenerator.nextId().getOrThrow()
+                        if (allIds.contains(id)) {
+                            throw IllegalStateException("Duplicate ID generated: $id")
+                        }
 
-                    allIds.add(id)
-                }
-            }, executor))
+                        allIds.add(id)
+                    }
+                }, executor),
+            )
         }
 
         CompletableFuture.allOf(*futures.toTypedArray()).join()

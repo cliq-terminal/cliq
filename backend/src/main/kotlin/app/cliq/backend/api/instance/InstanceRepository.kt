@@ -22,6 +22,6 @@ interface InstanceRepository : JpaRepository<Instance, Short> {
 
     @Query("SELECT i FROM Instance i WHERE i.updatedAt > :cutoffTime")
     fun getAllOccupied(
-        cutoffTime: OffsetDateTime = OffsetDateTime.now().minusSeconds(INSTANCE_HEARTBEAT_TOLERANCE_SECONDS)
+        cutoffTime: OffsetDateTime = OffsetDateTime.now().minusSeconds(INSTANCE_HEARTBEAT_TOLERANCE_SECONDS),
     ): List<Instance>
 }

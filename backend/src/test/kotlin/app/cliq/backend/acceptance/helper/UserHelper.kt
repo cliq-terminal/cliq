@@ -21,7 +21,7 @@ class UserHelper(
     fun createRandomUser(
         email: String = "user${Random.nextInt(0, 9999)}@cliq.test",
         password: String = "Cliq${Random.nextInt(0, 9999)}!",
-        username: String = "CliqUser${Random.nextInt(0, 9999)}!"
+        username: String = "CliqUser${Random.nextInt(0, 9999)}!",
     ): User {
         val params = UserRegistrationParams(email, password, username)
         val user = userFactory.createFromRegistrationParams(params)
@@ -32,7 +32,7 @@ class UserHelper(
     fun createRandomAuthenticatedUser(
         email: String = "user${Random.nextInt(0, 9999)}@cliq.test",
         password: String = "Cliq${Random.nextInt(0, 9999)}!",
-        username: String = "CliqUser${Random.nextInt(0, 9999)}!"
+        username: String = "CliqUser${Random.nextInt(0, 9999)}!",
     ): Session {
         val user = createRandomUser(email, password, username)
 

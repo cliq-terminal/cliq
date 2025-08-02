@@ -14,20 +14,18 @@ class UserFactory(
     private val snowflakeGenerator: SnowflakeGenerator,
     private val clock: Clock,
     private val eventPublisher: ApplicationEventPublisher,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) {
-
-    fun createFromRegistrationParams(
-        registrationParams: UserRegistrationParams,
-    ): User {
+    fun createFromRegistrationParams(registrationParams: UserRegistrationParams): User {
         val hashedPassword = passwordEncoder.encode(registrationParams.password)
 
-        var user = createUser(
-            email = registrationParams.email,
-            password = hashedPassword,
-            name = registrationParams.username,
-            locale = registrationParams.locale,
-        )
+        var user =
+            createUser(
+                email = registrationParams.email,
+                password = hashedPassword,
+                name = registrationParams.username,
+                locale = registrationParams.locale,
+            )
 
         user = userRepository.save(user)
         userRepository.flush()

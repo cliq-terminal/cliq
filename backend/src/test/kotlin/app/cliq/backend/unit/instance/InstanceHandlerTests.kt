@@ -24,7 +24,6 @@ import kotlin.test.assertTrue
 
 @ExtendWith(MockitoExtension::class)
 class InstanceHandlerTests {
-
     @Mock
     private lateinit var instanceRepository: InstanceRepository
 
@@ -51,11 +50,14 @@ class InstanceHandlerTests {
         Mockito.`when`(transactionManager.getTransaction(any())).thenReturn(mockTransaction)
 
         // Create max instances
-        val maxInstances = (0..MAX_NODE_ID).map {
-            Instance(
-                nodeId = it.toUShort(), createdAt = OffsetDateTime.now(), updatedAt = OffsetDateTime.now()
-            )
-        }
+        val maxInstances =
+            (0..MAX_NODE_ID).map {
+                Instance(
+                    nodeId = it.toUShort(),
+                    createdAt = OffsetDateTime.now(),
+                    updatedAt = OffsetDateTime.now(),
+                )
+            }
 
         // Mocks
         Mockito.`when`(instanceRepository.findAllAndLock()).thenReturn(maxInstances)
@@ -71,9 +73,12 @@ class InstanceHandlerTests {
     fun `sendHeartbeat should update instance timestamp`() {
         // Arrange
         val now = OffsetDateTime.now()
-        val instance = Instance(
-            nodeId = 0U, createdAt = now, updatedAt = now
-        )
+        val instance =
+            Instance(
+                nodeId = 0U,
+                createdAt = now,
+                updatedAt = now,
+            )
 
         // Set the currentInstance field using reflection
         ReflectionTestUtils.setField(instanceHandler, "currentInstance", instance)

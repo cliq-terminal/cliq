@@ -1,4 +1,4 @@
-package app.cliq.backend.api.user_configuration
+package app.cliq.backend.api.userconfig
 
 import app.cliq.backend.api.user.User
 import app.cliq.backend.service.SnowflakeGenerator
@@ -11,31 +11,33 @@ class UserConfigurationFactory(
     private val snowflakeGenerator: SnowflakeGenerator,
     private val clock: Clock,
 ) {
-    fun createFromParams(configurationParams: ConfigurationParams, user: User): UserConfiguration {
-        return create(configurationParams.configuration, user)
-    }
+    fun createFromParams(
+        configurationParams: ConfigurationParams,
+        user: User,
+    ): UserConfiguration = create(configurationParams.configuration, user)
 
     fun updateFromParams(
         existingConfig: UserConfiguration,
         configurationParams: ConfigurationParams,
-        user: User
-    ): UserConfiguration {
-        return UserConfiguration(
+        user: User,
+    ): UserConfiguration =
+        UserConfiguration(
             existingConfig.id,
             user,
             configurationParams.configuration,
             existingConfig.createdAt,
-            OffsetDateTime.now(clock)
+            OffsetDateTime.now(clock),
         )
-    }
 
-    fun create(encryptedConfig: String, user: User): UserConfiguration {
-        return UserConfiguration(
+    fun create(
+        encryptedConfig: String,
+        user: User,
+    ): UserConfiguration =
+        UserConfiguration(
             snowflakeGenerator.nextId().getOrThrow(),
             user,
             encryptedConfig,
             OffsetDateTime.now(clock),
-            OffsetDateTime.now(clock)
+            OffsetDateTime.now(clock),
         )
-    }
 }

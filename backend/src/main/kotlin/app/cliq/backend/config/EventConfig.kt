@@ -9,9 +9,8 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor
 
 @Configuration
 class EventConfig(
-    @Qualifier("applicationTaskExecutor") private val simpleAsyncTaskExecutor: SimpleAsyncTaskExecutor
+    @Qualifier("applicationTaskExecutor") private val simpleAsyncTaskExecutor: SimpleAsyncTaskExecutor,
 ) {
-
     /**
      * This bean is used to handle application events asynchronously.
      * It uses a SimpleAsyncTaskExecutor to execute the events in a separate thread.

@@ -21,16 +21,14 @@ const val ITERATIONS = 3
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
-class SecurityConfig() {
+class SecurityConfig {
+    @Bean
+    fun passwordEncoder(): PasswordEncoder =
+        Argon2PasswordEncoder(SALT_LENGTH, HASH_LENGTH, PARALLELISM, MEMORY, ITERATIONS)
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return Argon2PasswordEncoder(SALT_LENGTH, HASH_LENGTH, PARALLELISM, MEMORY, ITERATIONS)
-    }
-
-    @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        return http
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
+        http
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .formLogin { it.disable() }
@@ -40,10 +38,7 @@ class SecurityConfig() {
              */
             .authorizeHttpRequests { auth -> auth.anyRequest().permitAll() }
             .build()
-    }
 
     @Bean
-    fun userDetailsService(): UserDetailsService {
-        return InMemoryUserDetailsManager()
-    }
+    fun userDetailsService(): UserDetailsService = InMemoryUserDetailsManager()
 }

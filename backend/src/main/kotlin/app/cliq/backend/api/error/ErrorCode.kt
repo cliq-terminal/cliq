@@ -23,8 +23,9 @@ data class ErrorCode private constructor(
         val AUTH_TOKEN_MISSING = of(2003U, "Authentication token is missing")
         val INVALID_AUTH_TOKEN = of(2004U, "Invalid authentication token")
 
-        private fun of(code: UShort, description: String): ErrorCode {
-            return ErrorCode(code, description)
-        }
+        private fun of(
+            code: UShort,
+            description: String,
+        ): ErrorCode = ErrorCode(code, description)
     }
 }
