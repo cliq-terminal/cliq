@@ -39,6 +39,12 @@ configurations {
     }
 }
 
+flyway {
+    url = "jdbc:postgresql://localhost:5432/cliq"
+    user = "cliq"
+    password = "cliq"
+}
+
 ktlint {
     version.set("1.7.1")
     android.set(false)
@@ -51,12 +57,6 @@ ktlint {
         exclude("**/generated/**")
         include("**/kotlin/**")
     }
-}
-
-flyway {
-    url = "jdbc:postgresql://localhost:5432/cliq"
-    user = "cliq"
-    password = "cliq"
 }
 
 repositories {
