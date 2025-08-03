@@ -37,30 +37,33 @@ class SessionController(
     private val userService: UserService,
     private val sessionFactory: SessionFactory,
 ) {
-
     @PostMapping
     @Operation(summary = "Login/Create a session")
     @ApiResponses(
         value = [
-            ApiResponse
-                (
+            ApiResponse(
                 responseCode = "201",
                 description = "Session successfully created",
-                content = [Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = Schema(implementation = SessionResponse::class)
-                )]
+                content = [
+                    Content(
+                        mediaType = MediaType.APPLICATION_JSON_VALUE,
+                        schema = Schema(implementation = SessionResponse::class),
+                    ),
+                ],
             ),
             ApiResponse(
-                responseCode = "400", description = "Invalid input", content = [Content()]
-            )
-        ]
+                responseCode = "400",
+                description = "Invalid input",
+                content = [Content()],
+            ),
+        ],
     )
     fun createSession(
-        @Valid @RequestBody sessionCreationParams: SessionCreationParams
+        @Valid @RequestBody sessionCreationParams: SessionCreationParams,
     ): ResponseEntity<SessionResponse> {
-        val user = userRepository.findUserByEmail(sessionCreationParams.email)
-            ?: throw InvalidEmailOrPasswordException()
+        val user =
+            userRepository.findUserByEmail(sessionCreationParams.email)
+                ?: throw InvalidEmailOrPasswordException()
 
         if (!user.isEmailVerified()) throw EmailNotVerifiedException()
 
@@ -75,9 +78,9 @@ class SessionController(
     @Authenticated
     @PostMapping("/protection-test")
     @Operation
-    fun protectionTest(@AuthenticationPrincipal session: Session): ResponseEntity<String> {
-        return ResponseEntity.ok("Protected endpoint accessed successfully. Session ID: ${session.id}")
-    }
+    fun protectionTest(
+        @AuthenticationPrincipal session: Session,
+    ): ResponseEntity<String> = ResponseEntity.ok("Protected endpoint accessed successfully. Session ID: ${session.id}")
 }
 
 @Schema
@@ -86,9 +89,9 @@ data class SessionCreationParams(
     @field:Email
     @field:NotEmpty
     val email: String,
-
     @field:Schema(example = EXAMPLE_PASSWORD)
-    @field:NotEmpty @field:Size(min = MIN_PASSWORD_LENGTH, max = MAX_PASSWORD_LENGTH)
+    @field:NotEmpty
+    @field:Size(min = MIN_PASSWORD_LENGTH, max = MAX_PASSWORD_LENGTH)
     val password: String,
     val name: String? = null,
     val userAgent: String? = null,

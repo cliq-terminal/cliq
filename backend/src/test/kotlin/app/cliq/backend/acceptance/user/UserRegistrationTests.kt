@@ -21,24 +21,26 @@ class UserRegistrationTests(
     @Autowired
     private val userRepository: UserRepository,
     @Autowired
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
 ) : AcceptanceTester() {
-
     @Test
     fun `user can register`() {
         val email = "test@example.lan"
 
-        val userDetails = mapOf(
-            "email" to email,
-            "password" to "SecurePassword123",
-            "username" to "testuser",
-        )
+        val userDetails =
+            mapOf(
+                "email" to email,
+                "password" to "SecurePassword123",
+                "username" to "testuser",
+            )
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/v1/user/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userDetails))
-        ).andExpect(status().isCreated)
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(userDetails)),
+            ).andExpect(status().isCreated)
 
         assertTrue(greenMail.waitForIncomingEmail(1))
 
@@ -58,9 +60,10 @@ class UserRegistrationTests(
         assertContains(parser.htmlContent, user.emailVerificationToken!!)
         assertContains(parser.plainContent, user.emailVerificationToken!!)
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/v1/user/verify/{token}", user.emailVerificationToken!!)
-        ).andExpect(status().isOk)
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders.get("/api/v1/user/verify/{token}", user.emailVerificationToken!!),
+            ).andExpect(status().isOk)
 
         user = userRepository.findUserByEmail(email)
         assertTrue(user != null)
@@ -74,23 +77,28 @@ class UserRegistrationTests(
     fun `cannot register twice with the same email`() {
         val email = "test@example.lan"
 
-        val userDetails = mapOf(
-            "email" to email,
-            "password" to "SecurePassword123",
-            "username" to "testuser",
-        )
+        val userDetails =
+            mapOf(
+                "email" to email,
+                "password" to "SecurePassword123",
+                "username" to "testuser",
+            )
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/v1/user/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userDetails))
-        ).andExpect(status().isCreated)
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(userDetails)),
+            ).andExpect(status().isCreated)
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/v1/user/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userDetails))
-        ).andExpect(status().isBadRequest)
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(userDetails)),
+            ).andExpect(status().isBadRequest)
 
         assertTrue(greenMail.waitForIncomingEmail(1))
     }
@@ -98,21 +106,25 @@ class UserRegistrationTests(
     @Test
     fun `cannot verify with an invalid token`() {
         val email = "test@example.lan"
-        val userDetails = mapOf(
-            "email" to email,
-            "password" to "SecurePassword123",
-            "username" to "testuser",
-        )
+        val userDetails =
+            mapOf(
+                "email" to email,
+                "password" to "SecurePassword123",
+                "username" to "testuser",
+            )
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/v1/user/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userDetails))
-        ).andExpect(status().isCreated)
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(userDetails)),
+            ).andExpect(status().isCreated)
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/v1/user/verify/{token}", "invalid-token")
-        ).andExpect(status().isNotFound)
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders.get("/api/v1/user/verify/{token}", "invalid-token"),
+            ).andExpect(status().isNotFound)
 
         assertTrue(greenMail.waitForIncomingEmail(10_000, 1))
 
@@ -125,36 +137,41 @@ class UserRegistrationTests(
     @Test
     fun `cannot verify twice`() {
         val email = "test@example.lan"
-        val userDetails = mapOf(
-            "email" to email,
-            "password" to "SecurePassword123",
-            "username" to "testuser",
-        )
+        val userDetails =
+            mapOf(
+                "email" to email,
+                "password" to "SecurePassword123",
+                "username" to "testuser",
+            )
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/v1/user/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userDetails))
-        ).andExpect(status().isCreated)
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(userDetails)),
+            ).andExpect(status().isCreated)
 
         assertTrue(greenMail.waitForIncomingEmail(1))
 
         var user = userRepository.findUserByEmail(email)
         assertTrue(user != null)
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.get(
-                "/api/v1/user/verify/{token}",
-                user.emailVerificationToken!!
-            )
-        ).andExpect(status().isOk)
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders.get(
+                    "/api/v1/user/verify/{token}",
+                    user.emailVerificationToken!!,
+                ),
+            ).andExpect(status().isOk)
 
-        mockMvc.perform(
-            MockMvcRequestBuilders.get(
-                "/api/v1/user/verify/{token}",
-                user.emailVerificationToken!!
-            )
-        ).andExpect(status().isNotFound)
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders.get(
+                    "/api/v1/user/verify/{token}",
+                    user.emailVerificationToken!!,
+                ),
+            ).andExpect(status().isNotFound)
 
         user = userRepository.findUserByEmail(email)
         assertTrue(user != null)

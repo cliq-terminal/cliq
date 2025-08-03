@@ -22,14 +22,14 @@ const val SMTP_PORT = 3025
         "spring.flyway.clean-disabled=false",
         "spring.mail.host=${SMTP_HOST}",
         "spring.mail.port=${SMTP_PORT}",
-        "spring.mail.username=${EMAIL}",
+        "spring.mail.username=$EMAIL",
         "spring.mail.password=${EMAIL_PWD}",
         "spring.mail.protocol=smtp",
         "spring.mail.properties.mail.smtp.auth=true",
         "spring.mail.properties.mail.smtp.starttls.enable=false",
         "app.email.enabled=true",
-        "app.email.from-address=${EMAIL}"
-    ]
+        "app.email.from-address=$EMAIL",
+    ],
 )
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -41,16 +41,19 @@ abstract class AcceptanceTester {
     companion object {
         @JvmField
         @RegisterExtension
-        val greenMail: GreenMailExtension = GreenMailExtension(ServerSetupTest.SMTP_IMAP)
-            .withConfiguration(
-                GreenMailConfiguration
-                    .aConfig()
-                    .withUser(EMAIL, EMAIL_PWD)
-            )
+        val greenMail: GreenMailExtension =
+            GreenMailExtension(ServerSetupTest.SMTP_IMAP)
+                .withConfiguration(
+                    GreenMailConfiguration
+                        .aConfig()
+                        .withUser(EMAIL, EMAIL_PWD),
+                )
     }
 
     @AfterEach
-    fun clearDatabase(@Autowired flyway: Flyway) {
+    fun clearDatabase(
+        @Autowired flyway: Flyway,
+    ) {
         flyway.clean()
         flyway.migrate()
     }

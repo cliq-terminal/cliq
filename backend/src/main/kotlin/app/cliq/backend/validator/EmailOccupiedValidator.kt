@@ -8,10 +8,9 @@ import jakarta.validation.ConstraintValidatorContext
 class EmailOccupiedValidator(
     private val userRepository: UserRepository,
 ) : ConstraintValidator<EmailOccupiedConstraint, String> {
-
     override fun isValid(
         value: String?,
-        context: ConstraintValidatorContext?
+        context: ConstraintValidatorContext?,
     ): Boolean {
         if (value.isNullOrEmpty()) {
             return true
@@ -19,5 +18,4 @@ class EmailOccupiedValidator(
 
         return !userRepository.existsUserByEmail(value)
     }
-
 }

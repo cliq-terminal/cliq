@@ -12,48 +12,34 @@ const val DEFAULT_LOCALE = "en"
 
 @Entity
 @Table(
-    name = "users", uniqueConstraints = [
+    name = "users",
+    uniqueConstraints = [
         UniqueConstraint(columnNames = ["email", "email_verification_token"]),
-        UniqueConstraint(columnNames = ["email", "reset_token"])
-    ]
+        UniqueConstraint(columnNames = ["email", "reset_token"]),
+    ],
 )
 class User(
     @Id
     var id: Long = 0,
-
     @Column(nullable = false, unique = true)
     var email: String,
-
     @Column(nullable = false)
     var name: String,
-
     @Column(nullable = false)
     var locale: String = DEFAULT_LOCALE,
-
     @Column(nullable = false)
     var password: String,
-
     var resetToken: String? = null,
-
     var resetSentAt: OffsetDateTime? = null,
-
     var emailVerificationToken: String? = null,
-
     var emailVerificationSentAt: OffsetDateTime? = null,
-
     var emailVerifiedAt: OffsetDateTime? = null,
-
     @Column(nullable = false)
     var createdAt: OffsetDateTime,
-
     @Column(nullable = false)
     var updatedAt: OffsetDateTime,
 ) {
-    fun isEmailVerified(): Boolean {
-        return null != emailVerifiedAt
-    }
+    fun isEmailVerified(): Boolean = null != emailVerifiedAt
 
-    fun getUserLocale(): Locale {
-        return Locale.forLanguageTag(locale)
-    }
+    fun getUserLocale(): Locale = Locale.forLanguageTag(locale)
 }

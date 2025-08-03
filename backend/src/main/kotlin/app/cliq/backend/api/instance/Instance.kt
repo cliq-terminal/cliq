@@ -10,8 +10,6 @@ import java.time.OffsetDateTime
 @Table(name = "instances")
 class Instance(
     @Id val nodeId: UShort,
-
     @Column(nullable = false) val createdAt: OffsetDateTime,
-
-    @Column(nullable = false) var updatedAt: OffsetDateTime
+    @Column(nullable = false) var updatedAt: OffsetDateTime,
 )

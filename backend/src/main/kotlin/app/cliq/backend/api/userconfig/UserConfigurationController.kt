@@ -1,7 +1,7 @@
-package app.cliq.backend.api.user_configuration
+package app.cliq.backend.api.userconfig
 
 import app.cliq.backend.api.session.Session
-import app.cliq.backend.api.user_configuration.view.ConfigurationView
+import app.cliq.backend.api.userconfig.view.ConfigurationView
 import app.cliq.backend.auth.Authenticated
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Schema
@@ -22,13 +22,12 @@ class UserConfigurationController(
     private val userConfigurationFactory: UserConfigurationFactory,
     private val repository: UserConfigurationRepository,
 ) {
-
     @Authenticated
     @PutMapping
     @Operation(summary = "Insert or update user configuration")
     fun put(
         @AuthenticationPrincipal session: Session,
-        @RequestBody configurationParams: ConfigurationParams
+        @RequestBody configurationParams: ConfigurationParams,
     ): ResponseEntity<Void> {
         val existingConfig = repository.getByUser(session.user)
 
@@ -37,11 +36,12 @@ class UserConfigurationController(
 
             repository.save(config)
         } else {
-            val config = userConfigurationFactory.updateFromParams(
-                existingConfig,
-                configurationParams,
-                session.user
-            )
+            val config =
+                userConfigurationFactory.updateFromParams(
+                    existingConfig,
+                    configurationParams,
+                    session.user,
+                )
 
             repository.save(config)
         }
@@ -53,7 +53,7 @@ class UserConfigurationController(
     @GetMapping
     @Operation(summary = "Get's you the current configuration.")
     fun get(
-        @AuthenticationPrincipal session: Session
+        @AuthenticationPrincipal session: Session,
     ): ResponseEntity<ConfigurationView> {
         val config = repository.getByUser(session.user)
 
@@ -69,7 +69,9 @@ class UserConfigurationController(
     @Authenticated
     @GetMapping("/last-updated")
     @Operation(summary = "Get's you when the config was last updated")
-    fun getUpdatedAt(@AuthenticationPrincipal session: Session): ResponseEntity<OffsetDateTime?> {
+    fun getUpdatedAt(
+        @AuthenticationPrincipal session: Session,
+    ): ResponseEntity<OffsetDateTime?> {
         val updatedAt = repository.getUpdatedAtByUser(session.user)
 
         return ResponseEntity.ok(updatedAt)

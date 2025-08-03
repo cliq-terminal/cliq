@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service
 import org.thymeleaf.TemplateEngine
 import org.thymeleaf.context.Context
 import java.nio.charset.StandardCharsets
-import java.util.*
+import java.util.Locale
 
 @Service
 class EmailService(
     private val emailProperties: EmailProperties,
     private val templateEngine: TemplateEngine,
-    private val mailSender: JavaMailSender?
+    private val mailSender: JavaMailSender?,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -43,7 +43,7 @@ class EmailService(
         subject: String,
         context: Map<String, Any>,
         locale: Locale,
-        templateName: String
+        templateName: String,
     ) {
         if (!isEnabled()) {
             logger.warn("Email service is disabled. Not sending email to $to with subject '$subject'.")
@@ -51,15 +51,18 @@ class EmailService(
         }
 
         try {
-            val fromAddress = emailProperties.fromAddress
-                ?: throw IllegalStateException("From address is not configured")
+            val fromAddress =
+                emailProperties.fromAddress
+                    ?: throw IllegalStateException("From address is not configured")
             val fromName = emailProperties.fromName
 
             val htmlContent = renderTemplate("emails/$templateName.html", context, locale)
             val textContent = renderTemplate("emails/$templateName.txt", context, locale)
 
             if (htmlContent.isBlank() && textContent.isBlank()) {
-                logger.error("Both HTML and text content are empty for email to $to with subject '$subject'. Not sending email.")
+                logger.error(
+                    "Both HTML and text content are empty for email to $to with subject '$subject'. Not sending email.",
+                )
                 return
             }
 
@@ -88,7 +91,9 @@ class EmailService(
      * @param context Variables to be passed to the template
      * @return The rendered template as a string
      */
-    private fun renderTemplate(templatePath: String, context: Map<String, Any>, locale: Locale): String {
-        return templateEngine.process(templatePath, Context(locale, context))
-    }
+    private fun renderTemplate(
+        templatePath: String,
+        context: Map<String, Any>,
+        locale: Locale,
+    ): String = templateEngine.process(templatePath, Context(locale, context))
 }

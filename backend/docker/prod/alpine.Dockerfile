@@ -1,9 +1,10 @@
-ARG JDK_VERSION=23
+ARG JDK_VERSION=24
 ARG JRE_VERSION=24
+ARG TEMURIN_ALPINE_VERSION=3.21
 ARG ALPINE_VERSION=3.22
 
 # Stage 1: Build the application
-FROM eclipse-temurin:${JDK_VERSION}-jdk-alpine-${ALPINE_VERSION} AS builder
+FROM eclipse-temurin:${JDK_VERSION}-jdk-alpine-${TEMURIN_ALPINE_VERSION} AS builder
 
 WORKDIR /app
 
@@ -29,7 +30,7 @@ RUN cp build/libs/*.jar application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
 
 # Stage 2: Create cliq jre with jlink
-FROM eclipse-temurin:${JRE_VERSION}-jdk-alpine-${ALPINE_VERSION} AS jre-builder
+FROM eclipse-temurin:${JRE_VERSION}-jdk-alpine-${TEMURIN_ALPINE_VERSION} AS jre-builder
 
 WORKDIR /jre-build
 COPY --from=builder /app/application.jar .

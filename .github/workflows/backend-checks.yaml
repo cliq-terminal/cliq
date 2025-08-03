@@ -1,0 +1,63 @@
+name: Backend Checks
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Sets a default working directory
+defaults:
+  run:
+    working-directory: ./backend  # Change the working directory to /backend
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      checks: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Java 24
+        uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Install project
+        run: bash ./app/install
+      - name: Start Docker services
+        run: docker compose up -d --wait
+      - name: Run Gradle build
+        run: ./gradlew bootJar
+      - name: Run tests
+        run: ./gradlew test
+      # Publish Test Results are summary
+      - name: Publish Test Results
+        uses: dorny/test-reporter@v2
+        if: ${{ !cancelled() }}       # run this step even if the previous step failed
+        with:
+          name: Backend Tests
+          path: backend/**/build/test-results/test/TEST-*.xml
+          reporter: java-junit
+          working-directory: ./
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Java 24
+        uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Run ktlint
+        run: ./gradlew ktlintCheck

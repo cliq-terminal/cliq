@@ -21,10 +21,12 @@ class InstanceHandlerTests(
     @Autowired
     private val instanceRepository: InstanceRepository,
     @Autowired
-    private val applicationContext: ApplicationContext
+    private val applicationContext: ApplicationContext,
 ) : AcceptanceTester() {
     @Test
-    fun `initialize should register with smallest available ID when no instances exist`(@Autowired instanceHandler: InstanceHandler) {
+    fun `initialize should register with smallest available ID when no instances exist`(
+        @Autowired instanceHandler: InstanceHandler,
+    ) {
         val nodeId = instanceHandler.getCurrentNodeId()
 
         assertEquals(0U, nodeId)
@@ -53,11 +55,12 @@ class InstanceHandlerTests(
     @Test
     fun `initialize should reuse existing inactive instance`() {
         val now = OffsetDateTime.now()
-        val oldInstance = Instance(
-            nodeId = 1U,
-            createdAt = now.minusDays(1),
-            updatedAt = now.minusDays(1)
-        )
+        val oldInstance =
+            Instance(
+                nodeId = 1U,
+                createdAt = now.minusDays(1),
+                updatedAt = now.minusDays(1),
+            )
         instanceRepository.save(oldInstance)
 
         val newHandler = createNewInstanceHandler()
@@ -69,12 +72,11 @@ class InstanceHandlerTests(
         assertEquals(1U, instances[1].nodeId)
     }
 
-    private fun createNewInstanceHandler(): InstanceHandler {
-        return InstanceHandler(
+    private fun createNewInstanceHandler(): InstanceHandler =
+        InstanceHandler(
             instanceRepository,
             Clock.systemDefaultZone(),
             applicationContext.getBean<PlatformTransactionManager>(),
-            applicationContext.getBean<EntityManager>()
+            applicationContext.getBean<EntityManager>(),
         )
-    }
 }

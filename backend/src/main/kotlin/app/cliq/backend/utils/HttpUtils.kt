@@ -10,7 +10,7 @@ const val UTF8_ENCODING = "UTF-8"
 
 @Service
 class HttpUtils(
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
 ) {
     fun setErrorResponse(
         response: HttpServletResponse,

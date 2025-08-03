@@ -1,4 +1,4 @@
-package app.cliq.backend.api.user_configuration
+package app.cliq.backend.api.userconfig
 
 import app.cliq.backend.api.user.User
 import org.springframework.data.jpa.repository.JpaRepository

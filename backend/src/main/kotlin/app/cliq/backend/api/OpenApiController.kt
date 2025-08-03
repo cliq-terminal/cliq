@@ -21,21 +21,21 @@ class OpenApiController(
 
     @GetMapping("/scalar")
     @Hidden
-    fun scalarUi(): ResponseEntity<String> {
-        return ResponseEntity.ok(getScalarUiContent())
-    }
+    fun scalarUi(): ResponseEntity<String> = ResponseEntity.ok(getScalarUiContent())
 
     @GetMapping
     @Hidden
-    fun apiRedirect(): RedirectView {
-        return RedirectView("/api/scalar")
-    }
+    fun apiRedirect(): RedirectView = RedirectView("/api/scalar")
 
     private fun getScalarUiContent(): String {
         if (null !== content) return content!!
 
-        content = resourceLoader.getResource(SCALAR_RESOURCE_PATH).inputStream.bufferedReader()
-            .use { it.readText() }
+        content =
+            resourceLoader
+                .getResource(SCALAR_RESOURCE_PATH)
+                .inputStream
+                .bufferedReader()
+                .use { it.readText() }
 
         return content!!
     }

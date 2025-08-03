@@ -22,12 +22,15 @@ private const val BEARER_PREFIX = "Bearer "
 class AuthenticationInterceptor(
     private val sessionRepository: SessionRepository,
     private val eventPublisher: ApplicationEventPublisher,
-    private val httpUtils: HttpUtils
+    private val httpUtils: HttpUtils,
 ) : HandlerInterceptor {
-
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+    override fun preHandle(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+    ): Boolean {
         if (handler !is HandlerMethod) {
             return true // Not a handler method, continue processing
         }
@@ -69,6 +72,8 @@ class AuthenticationInterceptor(
         val header = request.getHeader(AUTHORIZATION_HEADER)
         return if (header?.startsWith(BEARER_PREFIX) == true) {
             header.removePrefix(BEARER_PREFIX)
-        } else null
+        } else {
+            null
+        }
     }
 }

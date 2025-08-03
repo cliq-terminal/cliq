@@ -24,7 +24,7 @@ class InstanceHandler(
     private val instanceRepository: InstanceRepository,
     private val clock: Clock,
     private val transactionManager: PlatformTransactionManager,
-    private val entityManager: EntityManager
+    private val entityManager: EntityManager,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
     private lateinit var currentInstance: Instance
@@ -49,19 +49,21 @@ class InstanceHandler(
             // Check if this node ID already exists but is inactive
             val existingInstance = allInstances.find { it.nodeId == nextId }
 
-            currentInstance = if (existingInstance != null) {
-                // Delete inactive instances
-                existingInstance.updatedAt = OffsetDateTime.now(clock)
-                instanceRepository.save(existingInstance)
-            } else {
-                // Create new instance
-                val newInstance = Instance(
-                    nodeId = nextId,
-                    createdAt = OffsetDateTime.now(),
-                    updatedAt = OffsetDateTime.now()
-                )
-                instanceRepository.save(newInstance)
-            }
+            currentInstance =
+                if (existingInstance != null) {
+                    // Delete inactive instances
+                    existingInstance.updatedAt = OffsetDateTime.now(clock)
+                    instanceRepository.save(existingInstance)
+                } else {
+                    // Create new instance
+                    val newInstance =
+                        Instance(
+                            nodeId = nextId,
+                            createdAt = OffsetDateTime.now(),
+                            updatedAt = OffsetDateTime.now(),
+                        )
+                    instanceRepository.save(newInstance)
+                }
 
             logger.info("Instance initialized with ID: ${currentInstance.nodeId}")
 

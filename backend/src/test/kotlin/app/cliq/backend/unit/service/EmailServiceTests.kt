@@ -14,14 +14,13 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.springframework.mail.javamail.JavaMailSender
 import org.thymeleaf.TemplateEngine
-import java.util.*
+import java.util.Locale
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @ExtendWith(MockitoExtension::class)
 class EmailServiceTests {
-
     @Mock
     private lateinit var emailProperties: EmailProperties
 
@@ -86,7 +85,7 @@ class EmailServiceTests {
             subject = "Test Subject",
             context = mapOf("key" to "value"),
             templateName = "test",
-            locale = Locale.ENGLISH
+            locale = Locale.ENGLISH,
         )
 
         // Assert
@@ -106,7 +105,7 @@ class EmailServiceTests {
                 subject = "Test Subject",
                 context = mapOf("key" to "value"),
                 templateName = "test",
-                locale = Locale.ENGLISH
+                locale = Locale.ENGLISH,
             )
         } catch (e: IllegalStateException) {
             assertEquals("From address is not configured", e.message)

@@ -8,5 +8,5 @@ open class ApiException(
     val statusCode: HttpStatus,
     val errorCode: ErrorCode,
     val details: Any? = null,
-    cause: Throwable? = null
+    cause: Throwable? = null,
 ) : ResponseStatusException(statusCode, errorCode.description, cause)
