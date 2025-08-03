@@ -5,6 +5,7 @@ import app.cliq.backend.acceptance.AcceptanceTester
 import app.cliq.backend.api.user.UserRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.mail2.jakarta.util.MimeMessageParser
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -183,7 +184,14 @@ class UserRegistrationTests(
     }
 
     @Test
+    @Disabled
     fun `cannot verify with an expired token`() {
+        // TODO!
+    }
+
+    @Test
+    @Disabled
+    fun `test resend verification email`() {
         // TODO!
     }
 }
