@@ -48,7 +48,8 @@ class UserController(
                         schema = Schema(implementation = UserResponse::class),
                     ),
                 ],
-            ), ApiResponse(
+            ),
+            ApiResponse(
                 responseCode = "400",
                 description = "Invalid input",
                 content = [Content()],
@@ -77,7 +78,18 @@ class UserController(
                         schema = Schema(implementation = String::class),
                     ),
                 ],
-            ), ApiResponse(
+            ),
+            ApiResponse(
+                responseCode = "403",
+                description = "Verification token is invalid or expired",
+                content = [
+                    Content(
+                        mediaType = MediaType.TEXT_HTML_VALUE,
+                        schema = Schema(implementation = String::class),
+                    ),
+                ],
+            ),
+            ApiResponse(
                 responseCode = "404",
                 description = "Verification token not found",
                 content = [Content()],
@@ -85,25 +97,27 @@ class UserController(
         ],
     )
     fun verify(
-        @PathVariable
-        @Valid
-        @NotBlank
-        verificationToken: String,
+        @PathVariable @Valid @NotBlank verificationToken: String,
     ): ResponseEntity<String> {
-        userRepository.findUserByEmailVerificationToken(verificationToken)?.let {
-            userService.verifyUserEmail(it)
+        val user =
+            userRepository.findUserByEmailVerificationToken(verificationToken) ?: throw ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Verification token not found",
+            )
 
-            val context = Context(it.getUserLocale())
+        val context = Context(user.getUserLocale())
 
-            val htmlContent = templateEngine.process("email-verified.html", context)
+        if (!user.isEmailVerificationTokenValid()) {
+            val htmlContent = templateEngine.process("email-verification-token-inavlid.html", context)
 
-            return ResponseEntity
-                .ok()
-                .contentType(MediaType.TEXT_HTML)
-                .body(htmlContent)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(htmlContent)
         }
 
-        throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        userService.verifyUserEmail(user)
+
+        val htmlContent = templateEngine.process("email-verified.html", context)
+
+        return ResponseEntity.ok().contentType(MediaType.TEXT_HTML).body(htmlContent)
     }
 
     @PostMapping("/resend-verification-email")
@@ -113,7 +127,8 @@ class UserController(
             ApiResponse(
                 responseCode = "204",
                 description = "Verification email successfully resent",
-            ), ApiResponse(
+            ),
+            ApiResponse(
                 responseCode = "400",
                 description = "Invalid E-Mail or email already verified",
                 content = [Content()],
@@ -145,27 +160,20 @@ const val EXAMPLE_PASSWORD = "CLIq123!"
 
 @Schema
 data class UserRegistrationParams(
-    @field:Schema(example = EMAIL_EXAMPLE)
-    @field:Email
-    @field:NotEmpty
-    @field:EmailOccupiedConstraint
-    val email: String,
-    @field:Schema(example = EXAMPLE_PASSWORD)
-    @field:NotEmpty
-    @field:Size(min = MIN_PASSWORD_LENGTH, max = MAX_PASSWORD_LENGTH)
-    val password: String,
-    @field:Schema(description = "An arbitrary username. Can be the user's full name", example = "John Doe")
-    @field:NotEmpty
-    val username: String,
-    @field:Schema(example = DEFAULT_LOCALE, defaultValue = DEFAULT_LOCALE)
-    val locale: String = DEFAULT_LOCALE,
+    @field:Schema(example = EMAIL_EXAMPLE) @field:Email @field:NotEmpty @field:EmailOccupiedConstraint val email:
+        String,
+    @field:Schema(example = EXAMPLE_PASSWORD) @field:NotEmpty @field:Size(
+        min = MIN_PASSWORD_LENGTH,
+        max = MAX_PASSWORD_LENGTH,
+    ) val password: String,
+    @field:Schema(
+        description = "An arbitrary username. Can be the user's full name",
+        example = "John Doe",
+    ) @field:NotEmpty val username: String,
+    @field:Schema(example = DEFAULT_LOCALE, defaultValue = DEFAULT_LOCALE) val locale: String = DEFAULT_LOCALE,
 )
 
 @Schema
 data class ResendVerificationEmailParams(
-    @field:Schema(example = EMAIL_EXAMPLE)
-    @field:Email
-    @field:NotEmpty
-    @field:EmailOccupiedConstraint
-    val email: String,
+    @field:Schema(example = EMAIL_EXAMPLE) @field:Email @field:NotEmpty val email: String,
 )

@@ -9,6 +9,7 @@ import java.time.OffsetDateTime
 import java.util.Locale
 
 const val DEFAULT_LOCALE = "en"
+const val UNVERIFIED_USER_INTERVAL_MINUTES = 60L * 24L // 1 day
 
 @Entity
 @Table(
@@ -19,27 +20,26 @@ const val DEFAULT_LOCALE = "en"
     ],
 )
 class User(
-    @Id
-    var id: Long = 0,
-    @Column(nullable = false, unique = true)
-    var email: String,
-    @Column(nullable = false)
-    var name: String,
-    @Column(nullable = false)
-    var locale: String = DEFAULT_LOCALE,
-    @Column(nullable = false)
-    var password: String,
+    @Id var id: Long = 0,
+    @Column(nullable = false, unique = true) var email: String,
+    @Column(nullable = false) var name: String,
+    @Column(nullable = false) var locale: String = DEFAULT_LOCALE,
+    @Column(nullable = false) var password: String,
     var resetToken: String? = null,
     var resetSentAt: OffsetDateTime? = null,
     var emailVerificationToken: String? = null,
     var emailVerificationSentAt: OffsetDateTime? = null,
     var emailVerifiedAt: OffsetDateTime? = null,
-    @Column(nullable = false)
-    var createdAt: OffsetDateTime,
-    @Column(nullable = false)
-    var updatedAt: OffsetDateTime,
+    @Column(nullable = false) var createdAt: OffsetDateTime,
+    @Column(nullable = false) var updatedAt: OffsetDateTime,
 ) {
     fun isEmailVerified(): Boolean = null != emailVerifiedAt
 
     fun getUserLocale(): Locale = Locale.forLanguageTag(locale)
+
+    fun isEmailVerificationTokenValid(): Boolean =
+        emailVerificationToken != null && emailVerificationSentAt != null &&
+            emailVerificationSentAt!!.isAfter(
+                OffsetDateTime.now().minusMinutes(UNVERIFIED_USER_INTERVAL_MINUTES),
+            )
 }

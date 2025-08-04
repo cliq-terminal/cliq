@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}">
+<head>
+    <meta charset="UTF-8">
+    <title>Invalid Verification Token</title>
+    <style>
+        .container {
+            text-align: center;
+            margin-top: 50px;
+            font-family: Arial, sans-serif;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .action {
+            color: #007bff;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="error-message">
+        <span th:text="#{web.verification.token.invalid}"/>
+    </div>
+    <div class="info">
+        <span th:text="#{web.verification.token.expired}"/>
+    </div>
+    <div class="action">
+        <span th:text="#{web.verification.resend.instruction}"/>
+    </div>
+</div>
+</body>
+</html>

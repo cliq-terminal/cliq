@@ -72,5 +72,5 @@ class UserService(
         password: String,
     ): Boolean = passwordEncoder.matches(password, user.password)
 
-    private fun buildVerificationUrl(token: String): String = "${appProperties.externalUrl}/api/v1/users/verify/$token"
+    private fun buildVerificationUrl(token: String): String = "${appProperties.externalUrl}/api/v1/user/verify/$token"
 }
