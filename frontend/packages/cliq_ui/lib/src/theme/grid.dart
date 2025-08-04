@@ -1,6 +1,8 @@
 final class CliqGrid {
   final int cols;
-  final int gutter;
+  final int gutterSize;
 
-  const CliqGrid({this.cols = 12, this.gutter = 48});
+  const CliqGrid({this.cols = 12, this.gutterSize = 48});
+
+  double get oneColumnRatio => 1.0 / cols;
 }

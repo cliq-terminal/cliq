@@ -1,36 +1,51 @@
-import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'package:cliq_ui/cliq_ui.dart';
+
+/// An implementation of the bootstrap grid col in flutter.
+/// Inspired by the flutter_bootstrap package.
 class CliqGridColumn extends StatelessWidget {
-  final Map<CliqScreenSize, int> spans;
   final Widget child;
+  final FlexFit fit;
+  late final BreakpointMap sizes;
+  final List<Breakpoint> invisible;
+  final bool absoluteSizes;
 
-  CliqGridColumn({super.key, required this.spans, required this.child})
-    : assert(spans.isNotEmpty);
-
-  int _currentSpan(CliqScreenSize size) {
-    CliqScreenSize? best;
-    for (var bp in spans.keys) {
-      if (bp.index <= size.index) {
-        if (best == null || bp.index > best.index) best = bp;
-      }
-    }
-    return spans[best] ?? 12;
-  }
+  CliqGridColumn({
+    super.key,
+    required this.child,
+    this.fit = FlexFit.loose,
+    this.absoluteSizes = true,
+    BreakpointMap sizes = const {},
+    this.invisible = const [],
+  }) : sizes = sizes.cascadeUp();
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final screenSize = context.theme.breakpoints.getScreenSize(width);
-    final span = _currentSpan(screenSize);
-    final gutter = context.theme.grid.gutter.toDouble();
+    final grid = context.theme.grid;
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final breakpoint = context.theme.breakpoints.getBreakpoint(
+          absoluteSizes
+              ? MediaQuery.of(context).size.width
+              : constraints.maxWidth,
+        );
 
-    return Expanded(
-      flex: span,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: gutter / 2),
-        child: child,
-      ),
+        if (invisible.contains(breakpoint)) {
+          return SizedBox.shrink();
+        }
+
+        return SizedBox(
+          width:
+              sizes[breakpoint]! * constraints.maxWidth * grid.oneColumnRatio,
+          child: Padding(
+            padding: grid.gutterSize == 0.0
+                ? EdgeInsets.zero
+                : EdgeInsets.symmetric(horizontal: grid.gutterSize / 2),
+            child: child,
+          ),
+        );
+      },
     );
   }
 }

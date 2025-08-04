@@ -1,33 +1,39 @@
-import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'package:cliq_ui/cliq_ui.dart';
+
+/// An implementation of the bootstrap grid row in flutter.
+/// Inspired by the flutter_bootstrap package.
 class CliqGridRow extends StatelessWidget {
-  final List<Widget> children;
-  final MainAxisAlignment mainAxisAlignment;
-  final CrossAxisAlignment crossAxisAlignment;
+  final List<CliqGridColumn> children;
+  final double? height;
+  final BoxDecoration? decoration;
 
   const CliqGridRow({
     super.key,
     required this.children,
-    this.mainAxisAlignment = MainAxisAlignment.start,
-    this.crossAxisAlignment = CrossAxisAlignment.start,
+    this.decoration,
+    this.height,
   });
 
   @override
   Widget build(BuildContext context) {
-    final gutter = context.theme.grid.gutter;
-
-    return Row(
-      mainAxisAlignment: mainAxisAlignment,
-      crossAxisAlignment: crossAxisAlignment,
-      children: children
-          .map(
-            (child) => Padding(
-              padding: EdgeInsets.symmetric(horizontal: gutter / 2),
-              child: child,
-            ),
-          )
-          .toList(),
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Container(
+          constraints: BoxConstraints(
+            minHeight: height ?? 0.0,
+            minWidth: constraints.maxWidth,
+            maxWidth: constraints.maxWidth,
+          ),
+          decoration: decoration,
+          child: Wrap(
+            alignment: WrapAlignment.start,
+            direction: Axis.horizontal,
+            children: children,
+          ),
+        );
+      },
     );
   }
 }

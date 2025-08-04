@@ -1,32 +1,41 @@
 import 'package:cliq_ui/cliq_ui.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
+/// An implementation of the bootstrap grid container in flutter.
+/// Inspired by the flutter_bootstrap package.
 class CliqGridContainer extends StatelessWidget {
+  final List<Widget> children;
+  final bool fluid;
   final BoxDecoration? decoration;
   final EdgeInsetsGeometry? padding;
-  final List<Widget> children;
 
   const CliqGridContainer({
     super.key,
+    required this.children,
+    this.fluid = false,
     this.decoration,
     this.padding,
-    required this.children,
   });
 
   @override
   Widget build(BuildContext context) {
+    final breakpoints = context.theme.breakpoints;
     return LayoutBuilder(
-      builder: (context, constraints) {
+      builder: (BuildContext context, BoxConstraints constraints) {
         return Align(
           alignment: Alignment.topCenter,
-          child: Container(
-            width: context.theme.breakpoints.getMaxWidth(constraints.maxWidth),
-            decoration: decoration,
-            padding: padding,
-            child: Wrap(
-              alignment: WrapAlignment.start,
-              direction: Axis.horizontal,
-              children: children,
+          child: Padding(
+            padding: padding ?? EdgeInsets.zero,
+            child: Container(
+              width: fluid
+                  ? constraints.maxWidth
+                  : breakpoints.getNonFluidWidth(constraints.maxWidth),
+              decoration: decoration,
+              child: Wrap(
+                alignment: WrapAlignment.start,
+                direction: Axis.horizontal,
+                children: children,
+              ),
             ),
           ),
         );
