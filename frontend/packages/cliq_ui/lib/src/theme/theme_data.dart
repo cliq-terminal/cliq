@@ -1,7 +1,9 @@
 import 'package:cliq_ui/cliq_ui.dart';
+import 'package:cliq_ui/src/theme/grid.dart';
 
 final class CliqThemeData {
   final CliqBreakpoints breakpoints;
+  final CliqGrid grid;
   final CliqColorScheme colorScheme;
   final CliqTypography typography;
   final CliqStyle style;
@@ -15,6 +17,7 @@ final class CliqThemeData {
 
   const CliqThemeData({
     required this.breakpoints,
+    required this.grid,
     required this.colorScheme,
     this.typography = const CliqTypography(),
     required this.style,
@@ -29,6 +32,7 @@ final class CliqThemeData {
   factory CliqThemeData.inherit({
     required CliqColorScheme colorScheme,
     CliqBreakpoints? breakpoints,
+    CliqGrid? grid,
     CliqTypography? typography,
     CliqStyle? style,
   }) {
@@ -38,7 +42,8 @@ final class CliqThemeData {
       typography: typography,
     );
     return CliqThemeData(
-      breakpoints: breakpoints ?? const CliqBreakpoints(),
+      breakpoints: breakpoints ?? CliqBreakpoints(),
+      grid: grid ?? const CliqGrid(),
       colorScheme: colorScheme,
       typography: typography,
       style: style,
