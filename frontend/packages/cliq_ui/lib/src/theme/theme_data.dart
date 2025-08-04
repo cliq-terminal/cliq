@@ -1,5 +1,4 @@
 import 'package:cliq_ui/cliq_ui.dart';
-import 'package:cliq_ui/src/theme/grid.dart';
 
 final class CliqThemeData {
   final CliqBreakpoints breakpoints;
