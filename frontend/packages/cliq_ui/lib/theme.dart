@@ -1,5 +1,3 @@
-library pokedex_ui.theme;
-
 export 'src/theme/breakpoints.dart';
 export 'src/theme/color_scheme.dart';
 export 'src/theme/style.dart';

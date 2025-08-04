@@ -1,5 +1,5 @@
 import 'package:cliq/routing/router.provider.dart';
-import 'package:cliq/shared/store.dart';
+import 'package:cliq/data/store.dart';
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +22,11 @@ void main() async {
 void _initLogger() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
-    print(
-      '${record.loggerName} [${record.level.name}] [${record.time.toIso8601String()}]: ${record.message}',
-    );
+    if (kDebugMode) {
+      print(
+        '${record.loggerName} [${record.level.name}] [${record.time.toIso8601String()}]: ${record.message}',
+      );
+    }
   });
 }
 

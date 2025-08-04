@@ -1,5 +1,4 @@
 import 'package:cliq_ui/cliq_ui.dart';
-import 'package:cliq_ui/src/widgets/blur_background.dart';
 
 final class CliqThemeData {
   final CliqBreakpoints breakpoints;
@@ -9,7 +8,8 @@ final class CliqThemeData {
 
   final CliqBottomNavigationBarStyle bottomNavigationBarStyle;
   final CliqAppBarStyle appBarStyle;
-  final CliqBlurBackgroundStyle blurBackgroundStyle;
+  final CliqBlurContainerStyle blurContainerStyle;
+  final CliqCardStyle cardStyle;
   final CliqIconButtonStyle iconButtonStyle;
   final CliqScaffoldStyle scaffoldStyle;
 
@@ -20,7 +20,8 @@ final class CliqThemeData {
     required this.style,
     required this.bottomNavigationBarStyle,
     required this.appBarStyle,
-    required this.blurBackgroundStyle,
+    required this.blurContainerStyle,
+    required this.cardStyle,
     required this.iconButtonStyle,
     required this.scaffoldStyle,
   });
@@ -48,10 +49,11 @@ final class CliqThemeData {
         style: style,
         colorScheme: colorScheme,
       ),
-      blurBackgroundStyle: CliqBlurBackgroundStyle.inherit(
+      blurContainerStyle: CliqBlurContainerStyle.inherit(
         style: style,
         colorScheme: colorScheme,
       ),
+      cardStyle: CliqCardStyle.inherit(style: style, colorScheme: colorScheme),
       iconButtonStyle: CliqIconButtonStyle.inherit(
         style: style,
         colorScheme: colorScheme,

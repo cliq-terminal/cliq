@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
-/// Provides onTap and onLongTap interactions with a scale effect.
 class CliqInteractable extends StatefulWidget {
   final Widget child;
   final double begin, end;
   final Duration beginDuration, endDuration, longTapRepeatDuration;
-  final Function()? onTap, onLongTap;
+  final Function()? onTap, onLongTap, onTapDown;
 
   final bool enableLongTapRepeatEvent;
 
@@ -15,6 +14,8 @@ class CliqInteractable extends StatefulWidget {
     super.key,
     required this.child,
     this.onTap,
+    this.onTapDown,
+    this.onLongTap,
     this.begin = 1.0,
     this.end = 0.93,
     this.beginDuration = const Duration(milliseconds: 20),
@@ -22,7 +23,6 @@ class CliqInteractable extends StatefulWidget {
     this.longTapRepeatDuration = const Duration(milliseconds: 100),
     this.beginCurve = Curves.decelerate,
     this.endCurve = Curves.fastOutSlowIn,
-    this.onLongTap,
     this.enableLongTapRepeatEvent = false,
   });
 

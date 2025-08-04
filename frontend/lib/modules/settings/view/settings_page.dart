@@ -1,8 +1,11 @@
+import 'package:cliq/modules/settings/model/settings_module.dart';
+import 'package:cliq/routing/router.extension.dart';
 import 'package:cliq_ui/cliq_ui.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide LicensePage;
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'license_page.dart';
 import '../../../routing/page_path.dart';
 
 class SettingsPage extends StatefulHookConsumerWidget {
@@ -15,6 +18,8 @@ class SettingsPage extends StatefulHookConsumerWidget {
 }
 
 class _DashboardPageState extends ConsumerState<SettingsPage> {
+  final List<SettingsModule> _modules = [];
+
   @override
   Widget build(BuildContext context) {
     return CliqScaffold(
@@ -26,8 +31,15 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
             onTap: () => context.pop(),
           ),
         ],
+        right: [
+          CliqIconButton(
+            icon: Icon(Icons.library_books_outlined),
+            label: Text('Licenses'),
+            onTap: () => context.pushPath(LicensePage.pagePath.build()),
+          ),
+        ],
       ),
-      body: ListView(children: [Text('TODO: Settings')]),
+      body: ListView(children: []),
     );
   }
 }

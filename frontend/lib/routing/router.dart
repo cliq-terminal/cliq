@@ -1,4 +1,5 @@
 import 'package:cliq/modules/hosts/view/hosts_page.dart';
+import 'package:cliq/modules/settings/view/license_page.dart';
 import 'package:cliq/modules/settings/view/settings_page.dart';
 import 'package:cliq/routing/ui/navbar_shell.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,7 +23,8 @@ class AppRouter {
     navigatorKey: rootNavigatorKey,
     routes: [
       ..._noShellRoutes(),
-      StatefulShellRoute.indexedStack(builder: (_, _, shell) => NavigationShell(shell: shell),
+      StatefulShellRoute.indexedStack(
+        builder: (_, _, shell) => NavigationShell(shell: shell),
         branches: [
           StatefulShellBranch(
             navigatorKey: shellNavigatorKey,
@@ -44,6 +46,12 @@ class AppRouter {
       GoRoute(
         path: SettingsPage.pagePath.path,
         pageBuilder: _defaultPageBuilder(const SettingsPage()),
+        routes: [
+          GoRoute(
+            path: LicensePage.pagePath.path,
+            pageBuilder: _defaultPageBuilder(const LicensePage()),
+          ),
+        ],
       ),
     ];
   }

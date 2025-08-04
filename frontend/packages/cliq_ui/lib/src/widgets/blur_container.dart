@@ -3,12 +3,12 @@ import 'dart:ui';
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/cupertino.dart';
 
-class CliqBlurBackground extends StatelessWidget {
+class CliqBlurContainer extends StatelessWidget {
   final Widget? child;
   final BorderRadiusGeometry? borderRadius;
-  final CliqBlurBackgroundStyle? style;
+  final CliqBlurContainerStyle? style;
 
-  const CliqBlurBackground({
+  const CliqBlurContainer({
     super.key,
     this.child,
     this.borderRadius,
@@ -17,7 +17,7 @@ class CliqBlurBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style ?? context.theme.blurBackgroundStyle;
+    final style = this.style ?? context.theme.blurContainerStyle;
 
     return ClipRRect(
       borderRadius: borderRadius ?? style.borderRadius,
@@ -29,22 +29,22 @@ class CliqBlurBackground extends StatelessWidget {
   }
 }
 
-final class CliqBlurBackgroundStyle {
+final class CliqBlurContainerStyle {
   final Color color;
   final double blur;
   final BorderRadiusGeometry borderRadius;
 
-  const CliqBlurBackgroundStyle({
+  const CliqBlurContainerStyle({
     required this.color,
     required this.blur,
     required this.borderRadius,
   });
 
-  factory CliqBlurBackgroundStyle.inherit({
+  factory CliqBlurContainerStyle.inherit({
     required CliqStyle style,
     required CliqColorScheme colorScheme,
   }) {
-    return CliqBlurBackgroundStyle(
+    return CliqBlurContainerStyle(
       color: colorScheme.secondaryBackground.withValues(alpha: .5),
       blur: 7.0,
       borderRadius: BorderRadius.circular(25),

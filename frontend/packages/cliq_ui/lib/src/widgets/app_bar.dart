@@ -1,4 +1,3 @@
-import 'package:cliq_ui/src/widgets/blur_background.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -32,7 +31,7 @@ class CliqAppBar extends StatelessWidget {
           if (left != null)
             Row(spacing: 8, mainAxisSize: MainAxisSize.min, children: left!),
           if (title != null)
-            CliqBlurBackground(
+            CliqBlurContainer(
               child: DefaultTextStyle.merge(
                 style: textStyle.xl.copyWith(
                   fontFamily: CliqFontFamily.secondary.fontFamily,

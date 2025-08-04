@@ -1,5 +1,4 @@
 import 'package:cliq_ui/cliq_ui.dart';
-import 'package:cliq_ui/src/widgets/blur_background.dart';
 import 'package:flutter/material.dart';
 
 class CliqBottomNavigationBar extends StatelessWidget {
@@ -60,7 +59,7 @@ class CliqBottomNavigationBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
-          child: CliqBlurBackground(
+          child: CliqBlurContainer(
             borderRadius: BorderRadius.zero,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
