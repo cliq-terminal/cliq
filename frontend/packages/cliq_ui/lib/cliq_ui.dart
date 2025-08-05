@@ -1,12 +1,14 @@
 library;
 
-export 'theme.dart';
+export 'theme.export.dart';
 
-export 'widgets/blur_container.dart';
-export 'widgets/bottom_navigation_bar.dart';
-export 'widgets/card.dart';
-export 'widgets/grid.dart';
-export 'widgets/header.dart';
-export 'widgets/icon_button.dart';
-export 'widgets/scaffold.dart';
-export 'widgets/interactable.dart';
+export 'hooks/use_breakpoint.export.dart';
+
+export 'widgets/blur_container.export.dart';
+export 'widgets/bottom_navigation_bar.export.dart';
+export 'widgets/card.export.dart';
+export 'widgets/grid.export.dart';
+export 'widgets/header.export.dart';
+export 'widgets/icon_button.export.dart';
+export 'widgets/scaffold.export.dart';
+export 'widgets/interactable.export.dart';
