@@ -20,11 +20,7 @@ class LicensePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CliqScaffold(
       extendBehindAppBar: true,
-      header: CliqHeader(
-        left: [
-          Commons.backButton(context)
-        ],
-      ),
+      header: CliqHeader(left: [Commons.backButton(context)]),
       body: FutureWrapper(
         future: LicenseRegistry.licenses.toList(),
         onSuccess: (ctx, snap) {
@@ -43,9 +39,9 @@ class LicensePage extends ConsumerWidget {
           }
 
           return ListView.separated(
-            padding: const EdgeInsets.only(top: 100),
+            // TODO: add header padding
             itemCount: licensesMap.length,
-            separatorBuilder: (ctx, index) => const SizedBox(height: 20),
+            separatorBuilder: (ctx, index) => const SizedBox(height: 16),
             itemBuilder: (ctx, index) {
               final MapEntry<String, List<LicenseEntry>> license = licensesMap
                   .entries
@@ -59,23 +55,22 @@ class LicensePage extends ConsumerWidget {
                       CliqGridColumn(
                         child: StatefulBuilder(
                           builder: (ctx, setState) {
+                            toggle() => setState(() {
+                              isExpanded = !isExpanded;
+                            });
                             return GestureDetector(
-                              onTap: () =>
-                                  setState(() => isExpanded = !isExpanded),
+                              onTap: toggle,
                               child: CliqCard(
                                 title: Text(license.key),
-                                subtitle: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        '${license.value.length} license(s)',
-                                      ),
-                                    ),
-                                    isExpanded
-                                        ? Icon(Icons.arrow_upward)
-                                        : Icon(Icons.arrow_downward),
-                                  ],
+                                subtitle: Text(
+                                  '${license.value.length} license(s)',
                                 ),
+                                trailing: isExpanded
+                                    ? null
+                                    : CliqIconButton(
+                                        onTap: toggle,
+                                        icon: Icon(Icons.arrow_downward),
+                                      ),
                                 child: isExpanded
                                     ? Column(
                                         children: [

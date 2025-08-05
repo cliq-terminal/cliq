@@ -26,9 +26,7 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
     return CliqScaffold.grid(
       extendBehindAppBar: true,
       header: CliqHeader(
-        left: [
-          Commons.backButton(context)
-        ],
+        left: [Commons.backButton(context)],
         right: [
           CliqIconButton(
             icon: Icon(Icons.library_books_outlined),

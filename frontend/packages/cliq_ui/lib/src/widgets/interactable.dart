@@ -68,6 +68,12 @@ class _CliqInteractableState extends State<CliqInteractable>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.onTap == null &&
+        widget.onLongTap == null &&
+        widget.onTapDown == null) {
+      return widget.child;
+    }
+
     Future<void> onLongPress() async {
       await _controller?.forward();
       await widget.onLongTap?.call();
