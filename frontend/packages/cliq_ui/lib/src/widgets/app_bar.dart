@@ -17,34 +17,49 @@ class CliqAppBar extends StatelessWidget {
     final textStyle = context.theme.typography;
 
     return Padding(
-      padding: EdgeInsets.only(
-        top: style.pagePadding.vertical,
-        left: style.pagePadding.horizontal,
-        right: style.pagePadding.horizontal,
-      ),
-      child: Row(
-        mainAxisAlignment: (left != null && left!.isNotEmpty) || title != null
-            ? MainAxisAlignment.spaceBetween
-            : MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      padding: EdgeInsets.only(top: style.verticalPagePadding),
+      child: CliqGridContainer(
         children: [
-          if (left != null)
-            Row(spacing: 8, mainAxisSize: MainAxisSize.min, children: left!),
-          if (title != null)
-            CliqBlurContainer(
-              child: DefaultTextStyle.merge(
-                style: textStyle.xl.copyWith(
-                  fontFamily: CliqFontFamily.secondary.fontFamily,
-                  color: style.textColor,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: title ?? const SizedBox.shrink(),
+          CliqGridRow(
+            children: [
+              CliqGridColumn(
+                child: Row(
+                  mainAxisAlignment:
+                      (left != null && left!.isNotEmpty) || title != null
+                      ? MainAxisAlignment.spaceBetween
+                      : MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (left != null)
+                      Row(
+                        spacing: 8,
+                        mainAxisSize: MainAxisSize.min,
+                        children: left!,
+                      ),
+                    if (title != null)
+                      CliqBlurContainer(
+                        child: DefaultTextStyle.merge(
+                          style: textStyle.xl.copyWith(
+                            fontFamily: CliqFontFamily.secondary.fontFamily,
+                            color: style.textColor,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 32),
+                            child: title ?? const SizedBox.shrink(),
+                          ),
+                        ),
+                      ),
+                    if (right != null)
+                      Row(
+                        spacing: 8,
+                        mainAxisSize: MainAxisSize.min,
+                        children: right!,
+                      ),
+                  ],
                 ),
               ),
-            ),
-          if (right != null)
-            Row(spacing: 8, mainAxisSize: MainAxisSize.min, children: right!),
+            ],
+          ),
         ],
       ),
     );
@@ -53,9 +68,12 @@ class CliqAppBar extends StatelessWidget {
 
 final class CliqAppBarStyle {
   final Color textColor;
-  final EdgeInsetsGeometry pagePadding;
+  final double verticalPagePadding;
 
-  const CliqAppBarStyle({required this.textColor, required this.pagePadding});
+  const CliqAppBarStyle({
+    required this.textColor,
+    required this.verticalPagePadding,
+  });
 
   factory CliqAppBarStyle.inherit({
     required CliqStyle style,
@@ -63,7 +81,7 @@ final class CliqAppBarStyle {
   }) {
     return CliqAppBarStyle(
       textColor: colorScheme.onSecondaryBackground,
-      pagePadding: style.pagePadding,
+      verticalPagePadding: style.verticalPagePadding,
     );
   }
 }

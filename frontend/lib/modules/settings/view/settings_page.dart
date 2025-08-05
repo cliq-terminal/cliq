@@ -22,7 +22,7 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CliqScaffold(
+    return CliqGridScaffold(
       extendBehindAppBar: true,
       header: CliqAppBar(
         left: [
@@ -39,7 +39,7 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
           ),
         ],
       ),
-      body: ListView(children: []),
+      body: Container(height: 20, color: Colors.green),
     );
   }
 }

@@ -4,12 +4,12 @@ import 'package:flutter/cupertino.dart';
 final class CliqStyle {
   final BorderRadius borderRadius;
   final double borderWidth;
-  final EdgeInsets pagePadding;
+  final double verticalPagePadding;
 
   const CliqStyle({
     this.borderRadius = const BorderRadius.all(Radius.circular(8)),
     this.borderWidth = 1,
-    this.pagePadding = const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    this.verticalPagePadding = 8.0,
   });
 
   CliqStyle.inherit({
