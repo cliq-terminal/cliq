@@ -1,23 +1,14 @@
-import 'package:cliq_ui/cliq_ui.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+part of 'scaffold.dart';
 
-class CliqGridScaffold extends StatelessWidget {
-  final Widget body;
-  final Widget? header;
-  final Widget? footer;
-  final bool extendBehindAppBar;
-  final bool safeAreaTop;
-  final CliqScaffoldStyle? style;
-
-  const CliqGridScaffold({
+class _CliqGridScaffold extends CliqScaffold {
+  const _CliqGridScaffold({
     super.key,
-    required this.body,
-    this.header,
-    this.footer,
-    this.extendBehindAppBar = false,
-    this.safeAreaTop = false,
-    this.style,
+    required super.body,
+    super.header,
+    super.footer,
+    super.extendBehindAppBar = false,
+    super.safeAreaTop = false,
+    super.style,
   });
 
   @override

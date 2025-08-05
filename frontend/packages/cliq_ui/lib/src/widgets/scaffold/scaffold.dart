@@ -2,6 +2,8 @@ import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+part 'grid_scaffold.dart';
+
 class CliqScaffold extends StatelessWidget {
   final Widget body;
   final Widget? header;
@@ -19,6 +21,16 @@ class CliqScaffold extends StatelessWidget {
     this.safeAreaTop = false,
     this.style,
   });
+
+  const factory CliqScaffold.grid({
+    Key? key,
+    required Widget body,
+    Widget? header,
+    Widget? footer,
+    bool extendBehindAppBar,
+    bool safeAreaTop,
+    CliqScaffoldStyle? style,
+  }) = _CliqGridScaffold;
 
   @override
   Widget build(BuildContext context) {
