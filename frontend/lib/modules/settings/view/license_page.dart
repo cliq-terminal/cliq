@@ -1,8 +1,8 @@
 import 'package:cliq/modules/settings/view/settings_page.dart';
+import 'package:cliq/shared/ui/commons.dart';
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../routing/page_path.dart';
@@ -22,10 +22,7 @@ class LicensePage extends ConsumerWidget {
       extendBehindAppBar: true,
       header: CliqHeader(
         left: [
-          CliqIconButton(
-            icon: Icon(Icons.arrow_back_rounded),
-            onTap: () => context.pop(),
-          ),
+          Commons.backButton(context)
         ],
       ),
       body: FutureWrapper(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart' hide LicensePage;
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../shared/ui/commons.dart';
 import 'license_page.dart';
 import '../../../routing/page_path.dart';
 
@@ -26,10 +27,7 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
       extendBehindAppBar: true,
       header: CliqHeader(
         left: [
-          CliqIconButton(
-            icon: Icon(Icons.arrow_back_rounded),
-            onTap: () => context.pop(),
-          ),
+          Commons.backButton(context)
         ],
         right: [
           CliqIconButton(
