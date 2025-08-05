@@ -19,11 +19,11 @@ class _CliqGridScaffold extends CliqScaffold {
       extendBehindAppBar: extendBehindAppBar,
       safeAreaTop: safeAreaTop,
       body: SingleChildScrollView(
-        child: CliqGridContainer(children: [
-          CliqGridRow(children: [
-            CliqGridColumn(child: body)
-          ])
-        ]),
+        child: CliqGridContainer(
+          children: [
+            CliqGridRow(children: [CliqGridColumn(child: body)]),
+          ],
+        ),
       ),
     );
   }

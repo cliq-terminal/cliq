@@ -6,5 +6,7 @@ Breakpoint useBreakpoint() {
   final context = useContext();
   final width = MediaQuery.of(context).size.width;
 
-  return useMemoized(() => context.theme.breakpoints.getBreakpoint(width), [width]);
+  return useMemoized(() => context.theme.breakpoints.getBreakpoint(width), [
+    width,
+  ]);
 }

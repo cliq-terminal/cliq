@@ -19,6 +19,7 @@ class LicensePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CliqScaffold(
+      extendBehindAppBar: true,
       header: CliqHeader(
         left: [
           CliqIconButton(
@@ -45,7 +46,7 @@ class LicensePage extends ConsumerWidget {
           }
 
           return ListView.separated(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 100),
             itemCount: licensesMap.length,
             separatorBuilder: (ctx, index) => const SizedBox(height: 20),
             itemBuilder: (ctx, index) {
@@ -54,38 +55,53 @@ class LicensePage extends ConsumerWidget {
                   .elementAt(index);
 
               bool isExpanded = false;
-              return StatefulBuilder(
-                builder: (ctx, setState) {
-                  return GestureDetector(
-                    onTap: () => setState(() => isExpanded = !isExpanded),
-                    child: CliqCard(
-                      title: Text(license.key),
-                      subtitle: Row(
-                        children: [
-                          Expanded(
-                            child: Text('${license.value.length} license(s)'),
-                          ),
-                          isExpanded
-                              ? Icon(Icons.arrow_upward)
-                              : Icon(Icons.arrow_downward),
-                        ],
-                      ),
-                      child: isExpanded
-                          ? Column(
-                              children: [
-                                for (final entry in license.value) ...[
-                                  for (final paragraph in entry.paragraphs) ...[
-                                    Text(paragraph.text),
-                                    const SizedBox(height: 10),
+              return CliqGridContainer(
+                children: [
+                  CliqGridRow(
+                    children: [
+                      CliqGridColumn(
+                        child: StatefulBuilder(
+                          builder: (ctx, setState) {
+                            return GestureDetector(
+                              onTap: () =>
+                                  setState(() => isExpanded = !isExpanded),
+                              child: CliqCard(
+                                title: Text(license.key),
+                                subtitle: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        '${license.value.length} license(s)',
+                                      ),
+                                    ),
+                                    isExpanded
+                                        ? Icon(Icons.arrow_upward)
+                                        : Icon(Icons.arrow_downward),
                                   ],
-                                  const Divider(),
-                                ],
-                              ],
-                            )
-                          : null,
-                    ),
-                  );
-                },
+                                ),
+                                child: isExpanded
+                                    ? Column(
+                                        children: [
+                                          for (final entry
+                                              in license.value) ...[
+                                            for (final paragraph
+                                                in entry.paragraphs) ...[
+                                              Text(paragraph.text),
+                                              const SizedBox(height: 10),
+                                            ],
+                                            const Divider(),
+                                          ],
+                                        ],
+                                      )
+                                    : null,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               );
             },
           );
