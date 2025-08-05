@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 import 'package:cliq_ui/cliq_ui.dart';
 
-class CliqAppBar extends StatelessWidget {
+class CliqHeader extends StatelessWidget {
   final Widget? title;
   final List<Widget>? left;
   final List<Widget>? right;
   final CliqAppBarStyle? style;
 
-  const CliqAppBar({super.key, this.title, this.left, this.right, this.style});
+  const CliqHeader({super.key, this.title, this.left, this.right, this.style});
 
   @override
   Widget build(BuildContext context) {

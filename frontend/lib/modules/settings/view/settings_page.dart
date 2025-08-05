@@ -24,7 +24,7 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
   Widget build(BuildContext context) {
     return CliqScaffold.grid(
       extendBehindAppBar: true,
-      header: CliqAppBar(
+      header: CliqHeader(
         left: [
           CliqIconButton(
             icon: Icon(Icons.arrow_back_rounded),

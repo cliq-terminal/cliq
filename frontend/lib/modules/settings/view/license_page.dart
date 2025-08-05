@@ -19,7 +19,7 @@ class LicensePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CliqScaffold(
-      header: CliqAppBar(
+      header: CliqHeader(
         left: [
           CliqIconButton(
             icon: Icon(Icons.arrow_back_rounded),

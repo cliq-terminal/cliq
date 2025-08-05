@@ -23,7 +23,7 @@ class NavigationShellState extends ConsumerState<NavigationShell> {
     return CliqScaffold(
       extendBehindAppBar: true,
       body: widget.shell,
-      header: CliqAppBar(
+      header: CliqHeader(
         right: [
           CliqIconButton(icon: Icon(Icons.search)),
           CliqIconButton(
