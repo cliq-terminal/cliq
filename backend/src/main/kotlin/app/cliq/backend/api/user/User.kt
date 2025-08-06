@@ -6,7 +6,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
 import java.time.OffsetDateTime
-import java.util.*
+import java.util.Locale
 
 const val DEFAULT_LOCALE = "en"
 const val UNVERIFIED_USER_INTERVAL_MINUTES = 60L * 24L // 1 day

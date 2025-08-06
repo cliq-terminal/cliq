@@ -3,7 +3,8 @@ package app.cliq.backend.service
 import app.cliq.backend.api.instance.InstanceHandler
 import org.springframework.stereotype.Service
 import java.security.SecureRandom
-import java.util.*
+import java.util.Base64
+import java.util.UUID
 
 const val RANDOM_BYTES_LENGTH = 32
 const val EMAIL_VERIFICATION_TOKEN_LENGTH: UShort = 32U

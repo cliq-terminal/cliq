@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.Clock
 import java.time.OffsetDateTime
-import java.util.*
+import java.util.Locale
 
 @Service
 class UserService(
@@ -74,10 +74,11 @@ class UserService(
         userRepository.save(user)
 
         val locale = Locale.forLanguageTag(user.locale)
-        val context = mapOf<String, Any>(
-            "name" to user.name,
-            "resetUrl" to buildResetUrl(user.resetToken!!),
-        )
+        val context =
+            mapOf<String, Any>(
+                "name" to user.name,
+                "resetUrl" to buildResetUrl(user.resetToken!!),
+            )
 
         try {
             emailService.sendEmail(
@@ -104,7 +105,5 @@ class UserService(
 
     private fun buildVerificationUrl(token: String): String = "${appProperties.externalUrl}/api/v1/user/verify/$token"
 
-    private fun buildResetUrl(token: String): String {
-        return "${appProperties.externalUrl}/api/v1/user/reset-password/$token"
-    }
+    private fun buildResetUrl(token: String): String = "${appProperties.externalUrl}/api/v1/user/reset-password/$token"
 }

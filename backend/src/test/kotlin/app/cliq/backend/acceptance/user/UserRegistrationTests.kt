@@ -264,5 +264,5 @@ class UserRegistrationTests(
         TODO()
     }
 
-    //TODO: password reset tests
+    // TODO: password reset tests
 }

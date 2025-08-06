@@ -198,7 +198,9 @@ class UserController(
             ),
         ],
     )
-    fun resetPassword(@Valid @RequestBody params: ResetPasswordParams): ResponseEntity<Void> {
+    fun resetPassword(
+        @Valid @RequestBody params: ResetPasswordParams,
+    ): ResponseEntity<Void> {
         val user = userRepository.findUserByResetToken(params.resetToken) ?: throw PasswordResetTokenNotFound()
         if (!user.isPasswordResetTokenValid()) {
             throw PasswordResetTokenExpired()
@@ -217,7 +219,7 @@ const val EXAMPLE_PASSWORD = "CLIq123!"
 @Schema
 data class UserRegistrationParams(
     @field:Schema(example = EMAIL_EXAMPLE) @field:Email @field:NotEmpty @field:EmailOccupiedConstraint val email:
-    String,
+        String,
     @field:Schema(example = EXAMPLE_PASSWORD) @field:NotEmpty @field:Size(
         min = MIN_PASSWORD_LENGTH,
         max = MAX_PASSWORD_LENGTH,
