@@ -1,6 +1,9 @@
 package app.cliq.backend.api.user
 
 import EmailOccupiedConstraint
+import app.cliq.backend.api.error.exception.EmailNotFoundOrValidException
+import app.cliq.backend.api.error.exception.PasswordResetTokenExpired
+import app.cliq.backend.api.error.exception.PasswordResetTokenNotFound
 import app.cliq.backend.api.user.view.UserResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -150,6 +153,59 @@ class UserController(
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build()
     }
+
+    @PostMapping("/init-reset-password")
+    @Operation(summary = "Start the reset password process")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "204",
+                description = "Reset password email successfully sent",
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid E-Mail or email not verified",
+                content = [Content()],
+            ),
+        ],
+    )
+    fun startResetPasswordProcess(
+        @Valid @RequestBody params: StartResetPasswordProcessParams,
+    ): ResponseEntity<Void> {
+        val user = userRepository.findUserByEmail(params.email) ?: throw EmailNotFoundOrValidException()
+
+        if (!user.isEmailVerified()) {
+            throw EmailNotFoundOrValidException()
+        }
+
+        userService.sendResetPasswordEmail(user)
+
+        return ResponseEntity.noContent().build()
+    }
+
+    @PostMapping("/reset-password")
+    @Operation(summary = "Reset a users password")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Password successfully reset",
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Invalid reset token or password",
+                content = [Content()],
+            ),
+        ],
+    )
+    fun resetPassword(@Valid @RequestBody params: ResetPasswordParams): ResponseEntity<Void> {
+        val user = userRepository.findUserByResetToken(params.resetToken) ?: throw PasswordResetTokenNotFound()
+        if (!user.isPasswordResetTokenValid()) {
+            throw PasswordResetTokenExpired()
+        }
+
+        TODO()
+    }
 }
 
 const val MIN_PASSWORD_LENGTH = 8
@@ -161,7 +217,7 @@ const val EXAMPLE_PASSWORD = "CLIq123!"
 @Schema
 data class UserRegistrationParams(
     @field:Schema(example = EMAIL_EXAMPLE) @field:Email @field:NotEmpty @field:EmailOccupiedConstraint val email:
-        String,
+    String,
     @field:Schema(example = EXAMPLE_PASSWORD) @field:NotEmpty @field:Size(
         min = MIN_PASSWORD_LENGTH,
         max = MAX_PASSWORD_LENGTH,
@@ -176,4 +232,18 @@ data class UserRegistrationParams(
 @Schema
 data class ResendVerificationEmailParams(
     @field:Schema(example = EMAIL_EXAMPLE) @field:Email @field:NotEmpty val email: String,
+)
+
+@Schema
+data class StartResetPasswordProcessParams(
+    @field:Schema(example = EMAIL_EXAMPLE) @field:Email @field:NotEmpty val email: String,
+)
+
+@Schema
+data class ResetPasswordParams(
+    @field:Schema(example = EXAMPLE_PASSWORD) @field:NotEmpty @field:Size(
+        min = MIN_PASSWORD_LENGTH,
+        max = MAX_PASSWORD_LENGTH,
+    ) val password: String,
+    @field:Schema(example = "reset-token") @field:NotBlank val resetToken: String,
 )

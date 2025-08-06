@@ -6,10 +6,11 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
 import java.time.OffsetDateTime
-import java.util.Locale
+import java.util.*
 
 const val DEFAULT_LOCALE = "en"
 const val UNVERIFIED_USER_INTERVAL_MINUTES = 60L * 24L // 1 day
+const val PASSWORD_RESET_TOKEN_INTERVAL_MINUTES = 30L // 30 minutes
 
 @Entity
 @Table(
@@ -42,4 +43,8 @@ class User(
             emailVerificationSentAt!!.isAfter(
                 OffsetDateTime.now().minusMinutes(UNVERIFIED_USER_INTERVAL_MINUTES),
             )
+
+    fun isPasswordResetTokenValid(): Boolean =
+        resetToken != null && resetSentAt != null &&
+            resetSentAt!!.isAfter(OffsetDateTime.now().minusMinutes(PASSWORD_RESET_TOKEN_INTERVAL_MINUTES))
 }

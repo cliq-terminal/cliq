@@ -3,11 +3,11 @@ package app.cliq.backend.service
 import app.cliq.backend.api.instance.InstanceHandler
 import org.springframework.stereotype.Service
 import java.security.SecureRandom
-import java.util.Base64
-import java.util.UUID
+import java.util.*
 
 const val RANDOM_BYTES_LENGTH = 32
 const val EMAIL_VERIFICATION_TOKEN_LENGTH: UShort = 32U
+const val RESET_PASSWORD_TOKEN_LENGTH: UShort = 16U
 const val AUTH_VERIFICATION_TOKEN_LENGTH: UShort = 64U
 
 @Service
@@ -36,6 +36,8 @@ class TokenGenerator(
     }
 
     fun generateEmailVerificationToken(): String = generateToken(EMAIL_VERIFICATION_TOKEN_LENGTH)
+
+    fun generatePasswordResetToken(): String = generateToken(RESET_PASSWORD_TOKEN_LENGTH)
 
     fun generateAuthVerificationToken(): String = generateToken(AUTH_VERIFICATION_TOKEN_LENGTH)
 }

@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.Clock
 import java.time.OffsetDateTime
-import java.util.Locale
+import java.util.*
 
 @Service
 class UserService(
@@ -67,10 +67,44 @@ class UserService(
         }
     }
 
+    fun sendResetPasswordEmail(user: User) {
+        user.resetToken = tokenGenerator.generatePasswordResetToken()
+        user.resetSentAt = OffsetDateTime.now(clock)
+
+        userRepository.save(user)
+
+        val locale = Locale.forLanguageTag(user.locale)
+        val context = mapOf<String, Any>(
+            "name" to user.name,
+            "resetUrl" to buildResetUrl(user.resetToken!!),
+        )
+
+        try {
+            emailService.sendEmail(
+                user.email,
+                messageSource.getMessage("email.password_reset.subject", null, locale),
+                context,
+                locale,
+                "password-reset-email",
+            )
+        } catch (e: Throwable) {
+            user.resetSentAt = null
+            userRepository.save(user)
+
+            logger.error("Failed to send password reset email to user ${user.id} (${user.email})", e)
+
+            throw e
+        }
+    }
+
     fun isPasswordValid(
         user: User,
         password: String,
     ): Boolean = passwordEncoder.matches(password, user.password)
 
     private fun buildVerificationUrl(token: String): String = "${appProperties.externalUrl}/api/v1/user/verify/$token"
+
+    private fun buildResetUrl(token: String): String {
+        return "${appProperties.externalUrl}/api/v1/user/reset-password/$token"
+    }
 }

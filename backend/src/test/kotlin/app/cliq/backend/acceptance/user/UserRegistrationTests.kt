@@ -5,6 +5,7 @@ import app.cliq.backend.acceptance.AcceptanceTester
 import app.cliq.backend.api.user.UserRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.mail2.jakarta.util.MimeMessageParser
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import kotlin.test.assertContains
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @AcceptanceTest
@@ -55,7 +57,7 @@ class UserRegistrationTests(
         assertTrue(user != null)
 
         assertTrue(user.emailVerificationToken != null)
-        assertTrue(user.emailVerifiedAt == null)
+        assertEquals(user.emailVerifiedAt, null)
         assertTrue(user.emailVerificationSentAt != null)
 
         assertContains(parser.htmlContent, user.emailVerificationToken!!)
@@ -71,7 +73,7 @@ class UserRegistrationTests(
 
         assertTrue(user.isEmailVerified())
         assertTrue(user.emailVerifiedAt != null)
-        assertTrue(user.emailVerificationToken == null)
+        assertEquals(user.emailVerificationToken, null)
     }
 
     @Test
@@ -179,7 +181,7 @@ class UserRegistrationTests(
 
         assertTrue(user.isEmailVerified())
         assertTrue(user.emailVerifiedAt != null)
-        assertTrue(user.emailVerificationToken == null)
+        assertEquals(user.emailVerificationToken, null)
         assertTrue(user.emailVerificationSentAt != null)
     }
 
@@ -255,4 +257,12 @@ class UserRegistrationTests(
         assertTrue(parser.hasHtmlContent())
         assertTrue(parser.hasPlainContent())
     }
+
+    @Test
+    @Disabled
+    fun `test resend verfication email directly after it's expired`() {
+        TODO()
+    }
+
+    //TODO: password reset tests
 }
