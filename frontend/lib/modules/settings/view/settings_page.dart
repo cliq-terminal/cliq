@@ -1,11 +1,13 @@
 import 'package:cliq/modules/settings/model/settings_module.dart';
+import 'package:cliq/modules/settings/model/theme_module.dart';
 import 'package:cliq/routing/router.extension.dart';
+import 'package:cliq_icons/cliq_icons.dart';
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/material.dart' hide LicensePage;
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../shared/ui/commons.dart';
+import '../model/sync_module.dart';
 import 'license_page.dart';
 import '../../../routing/page_path.dart';
 
@@ -19,7 +21,10 @@ class SettingsPage extends StatefulHookConsumerWidget {
 }
 
 class _DashboardPageState extends ConsumerState<SettingsPage> {
-  final List<SettingsModule> _modules = [];
+  final List<(GlobalKey, SettingsModule)> _modules = [
+    (GlobalKey(), SyncModule()),
+    (GlobalKey(), ThemeModule()),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +32,56 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
       extendBehindAppBar: true,
       header: CliqHeader(
         left: [Commons.backButton(context)],
-        right: [
-          CliqIconButton(
-            icon: Icon(Icons.library_books_outlined),
-            label: Text('Licenses'),
-            onTap: () => context.pushPath(LicensePage.pagePath.build()),
-          ),
-        ],
       ),
-      body: Container(height: 20, color: Colors.green),
+      body: Container(
+        padding: EdgeInsets.only(top: 80),
+        child: Column(
+          spacing: 16,
+          children: [
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                spacing: 8,
+                children: [
+                  for (var (key, module) in _modules)
+                    CliqChip(
+                      onTap: () => Scrollable.ensureVisible(
+                          key.currentContext!,
+                          duration: const Duration(milliseconds: 500)
+                      ),
+                      title: Text(module.title),
+                      leading: Icon(module.iconData)
+                    )
+                ],
+              ),
+            ),
+            for (var (key, module) in _modules)
+              CliqCard(
+                key: key,
+                title: Text(module.title),
+                subtitle: module.description != null ? Text(module.description!) : null,
+                child: module.build(context),
+              ),
+            SizedBox(
+              width: double.infinity,
+              child: CliqIconButton(
+                icon: Icon(LucideIcons.scale),
+                label: Text('Licenses'),
+                onTap: () => context.pushPath(LicensePage.pagePath.build()),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: CliqIconButton(
+                icon: Icon(LucideIcons.github),
+                label: Text('GitHub'),
+              ),
+            ),
+            Text('v0.0.0')
+          ],
+        ),
+      ),
     );
   }
 }

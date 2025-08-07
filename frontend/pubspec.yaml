@@ -14,6 +14,9 @@ dependencies:
     path: packages/cliq_terminal
   cliq_ui:
     path: packages/cliq_ui
+  cliq_icons:
+    git:
+      url: https://github.com/cliq-terminal/cliq_icons
   go_router: ^16.0.0
   flutter_hooks: ^0.21.2
   shared_preferences: ^2.5.3

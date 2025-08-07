@@ -48,6 +48,7 @@ class CliqIconButton extends StatelessWidget {
               return Row(
                 spacing: 8,
                 mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: reverse ? items.reversed.toList() : items,
               );
             },

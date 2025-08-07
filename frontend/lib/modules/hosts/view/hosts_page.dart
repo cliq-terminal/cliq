@@ -16,13 +16,8 @@ class HostsPage extends StatefulHookConsumerWidget {
 class _HostsPageState extends ConsumerState<HostsPage> {
   @override
   Widget build(BuildContext context) {
-    final breakpoint = useBreakpoint();
     return CliqScaffold.grid(
-      body: Container(
-        height: 20,
-        color: Colors.red,
-        child: Text(breakpoint.name),
-      ),
+      body: Container(),
     );
   }
 }

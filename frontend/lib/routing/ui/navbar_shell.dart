@@ -1,5 +1,6 @@
 import 'package:cliq/modules/settings/view/settings_page.dart';
 import 'package:cliq/routing/router.extension.dart';
+import 'package:cliq_icons/cliq_icons.dart';
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -25,9 +26,9 @@ class NavigationShellState extends ConsumerState<NavigationShell> {
       body: widget.shell,
       header: CliqHeader(
         right: [
-          CliqIconButton(icon: Icon(Icons.search)),
+          CliqIconButton(icon: Icon(LucideIcons.search)),
           CliqIconButton(
-            icon: Icon(Icons.settings),
+            icon: Icon(LucideIcons.settings),
             onTap: () => context.pushPath(SettingsPage.pagePath.build()),
           ),
         ],

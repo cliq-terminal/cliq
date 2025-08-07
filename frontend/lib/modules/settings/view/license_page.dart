@@ -1,5 +1,6 @@
 import 'package:cliq/modules/settings/view/settings_page.dart';
 import 'package:cliq/shared/ui/commons.dart';
+import 'package:cliq_icons/cliq_icons.dart';
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,6 @@ class LicensePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CliqScaffold(
-      extendBehindAppBar: true,
       header: CliqHeader(left: [Commons.backButton(context)]),
       body: FutureWrapper(
         future: LicenseRegistry.licenses.toList(),
@@ -39,7 +39,6 @@ class LicensePage extends ConsumerWidget {
           }
 
           return ListView.separated(
-            // TODO: add header padding
             itemCount: licensesMap.length,
             separatorBuilder: (ctx, index) => const SizedBox(height: 16),
             itemBuilder: (ctx, index) {
@@ -69,7 +68,7 @@ class LicensePage extends ConsumerWidget {
                                     ? null
                                     : CliqIconButton(
                                         onTap: toggle,
-                                        icon: Icon(Icons.arrow_downward),
+                                        icon: Icon(LucideIcons.chevronDown),
                                       ),
                                 child: isExpanded
                                     ? Column(
