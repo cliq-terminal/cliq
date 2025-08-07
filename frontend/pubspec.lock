@@ -38,10 +38,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: a6564cd2ea79648fbdda9bf81f8fa3048643004e
+      resolved-ref: "661fcda794e305b84e73557cd7ee1b15991286f1"
       url: "https://github.com/cliq-terminal/cliq_icons"
     source: git
-    version: "0.536.0"
+    version: "1.1.0"
   cliq_terminal:
     dependency: "direct main"
     description:
