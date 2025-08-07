@@ -1,5 +1,5 @@
 import 'package:cliq/modules/settings/model/settings_module.dart';
-import 'package:cliq_icons/cliq_icons.dart';
+import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:flutter/material.dart';
 
 final class SyncModule extends SettingsModule {

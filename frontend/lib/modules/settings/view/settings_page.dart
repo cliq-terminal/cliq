@@ -1,7 +1,7 @@
 import 'package:cliq/modules/settings/model/settings_module.dart';
 import 'package:cliq/modules/settings/model/theme_module.dart';
 import 'package:cliq/routing/router.extension.dart';
-import 'package:cliq_icons/cliq_icons.dart';
+import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/material.dart' hide LicensePage;
 import 'package:hooks_riverpod/hooks_riverpod.dart';

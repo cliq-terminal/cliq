@@ -1,6 +1,6 @@
 import 'package:cliq/modules/settings/view/settings_page.dart';
 import 'package:cliq/shared/ui/commons.dart';
-import 'package:cliq_icons/cliq_icons.dart';
+import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +38,7 @@ class LicensePage extends ConsumerWidget {
             }
           }
 
+          LucideIcons.aArrowDown;
           return ListView.separated(
             itemCount: licensesMap.length,
             separatorBuilder: (ctx, index) => const SizedBox(height: 16),

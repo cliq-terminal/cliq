@@ -1,6 +1,6 @@
 import 'package:cliq/modules/settings/view/settings_page.dart';
 import 'package:cliq/routing/router.extension.dart';
-import 'package:cliq_icons/cliq_icons.dart';
+import 'package:lucide_flutter/lucide_flutter.dart';
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
