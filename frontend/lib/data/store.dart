@@ -4,8 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 enum StoreKey<T> {
   /// Whether or not the syncing mechanism is enabled.
-  hostUrl<bool>('sync_enabled', type: bool),
-  ;
+  hostUrl<bool>('sync_enabled', type: bool);
 
   final String key;
   final Type type;
@@ -15,13 +14,13 @@ enum StoreKey<T> {
   final String? Function(T?)? toValue;
 
   const StoreKey(
-      this.key, {
-        required this.type,
-        this.defaultValue,
-        this.defaultFactory,
-        this.fromValue,
-        this.toValue,
-      }) : assert(defaultValue == null || defaultFactory == null);
+    this.key, {
+    required this.type,
+    this.defaultValue,
+    this.defaultFactory,
+    this.fromValue,
+    this.toValue,
+  }) : assert(defaultValue == null || defaultFactory == null);
 
   T? readSync() => KeyValueStore._instance.readSync(this);
   String? readAsStringSync() => KeyValueStore._instance.readAsStringSync(this);
@@ -93,10 +92,10 @@ class KeyValueStore {
 
   /// Writes the value to the local cache and the storage.
   Future<void> write<T>(
-      StoreKey<T> key,
-      T value, {
-        bool storeLocal = true,
-      }) async {
+    StoreKey<T> key,
+    T value, {
+    bool storeLocal = true,
+  }) async {
     _checkInitialized();
     // simplify enums to strings
     if (storeLocal) {
@@ -111,8 +110,7 @@ class KeyValueStore {
       (int value) => _preferences.setInt(key.key, value),
       (bool value) => _preferences.setBool(key.key, value),
       (double value) => _preferences.setDouble(key.key, value),
-      _ =>
-      throw StateError(
+      _ => throw StateError(
         'Invalid value for key ${key.key}! Got: ${effectiveValue.runtimeType}, Expected either String, int, bool or double',
       ),
     };

@@ -1,88 +1,40 @@
-import 'dart:async';
-
-import 'package:flutter/foundation.dart';
+import 'package:cliq/modules/settings/view/settings_page.dart';
+import 'package:cliq/routing/router.extension.dart';
+import 'package:lucide_flutter/lucide_flutter.dart';
+import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'nav_destination.dart';
-import 'navigation_bar.dart';
-import 'navigation_rail.dart';
 
 class NavigationShell extends StatefulHookConsumerWidget {
-  final StatefulNavigationShell navigationShell;
+  final StatefulNavigationShell shell;
 
-  const NavigationShell({super.key, required this.navigationShell});
+  const NavigationShell({super.key, required this.shell});
 
-  static ScaffoldNavBarShellState? maybeOf(BuildContext context) =>
-      context.findAncestorStateOfType<ScaffoldNavBarShellState>();
+  static NavigationShellState? maybeOf(BuildContext context) =>
+      context.findAncestorStateOfType<NavigationShellState>();
 
   @override
-  ConsumerState<NavigationShell> createState() =>
-      ScaffoldNavBarShellState();
+  ConsumerState<NavigationShell> createState() => NavigationShellState();
 }
 
-class ScaffoldNavBarShellState extends ConsumerState<NavigationShell> {
-  bool _isHovered = false;
-  Timer? _hoverTimer;
-
+class NavigationShellState extends ConsumerState<NavigationShell> {
   @override
   Widget build(BuildContext context) {
-    // final theme = ref.watch(themeProvider);
-
-    // final isMobile = context.isMobile;
-    final isMobile = true;
-    final Widget shell =
-        kIsWeb
-            ? SelectionArea(child: widget.navigationShell)
-            : widget.navigationShell;
-    return Scaffold(
-        body:
-            isMobile
-                ? shell
-                : Row(
-                  children: [
-                    StatefulBuilder(
-                      builder: (context, setState) {
-                        return MouseRegion(
-                          onEnter:
-                              (event) =>
-                                  _hoverTimer = Timer(
-                                    const Duration(milliseconds: 1000),
-                                    () => setState(() => _isHovered = true),
-                                  ),
-                          onExit: (event) {
-                            _hoverTimer?.cancel();
-                            setState(() => _isHovered = false);
-                          },
-                          child: AppNavigationRail(
-                            destinations: _getDestinations(),
-                            // extended: context.isWidescreen || _isHovered,
-                            extended: true,
-                            onDestinationSelected: (index) => goToBranch(index),
-                            selectedIndex: widget.navigationShell.currentIndex,
-                          ),
-                        );
-                      },
-                    ),
-                    Expanded(child: Container(child: shell)),
-                  ],
-                ),
-        bottomNavigationBar:
-            isMobile
-                ? AppNavigationBar(
-                  onDestinationSelected: (index) => goToBranch(index),
-                  selectedIndex: widget.navigationShell.currentIndex,
-                  destinations: _getDestinations(),
-                )
-                : null,
+    return CliqScaffold(
+      extendBehindAppBar: true,
+      body: widget.shell,
+      header: CliqHeader(
+        right: [
+          CliqIconButton(icon: Icon(LucideIcons.search)),
+          CliqIconButton(
+            icon: Icon(LucideIcons.settings),
+            onTap: () => context.pushPath(SettingsPage.pagePath.build()),
+          ),
+        ],
+      ),
     );
   }
-
-  List<NavDestination> _getDestinations() => [
-    NavDestination(iconData: Icons.dashboard, label: 'Hosts'),
-    NavDestination(iconData: Icons.access_time_outlined, label: 'History'),
-    NavDestination(iconData: Icons.settings, label: 'Settings'),
-  ];
 
   void refresh() => setState(() {});
 
@@ -95,19 +47,19 @@ class ScaffoldNavBarShellState extends ConsumerState<NavigationShell> {
         2;
   }
 
-  // Resets the current branch. Useful for popping an unknown amount of pages.
+  /// Resets the current branch. Useful for popping an unknown amount of pages.
   void resetLocation({int? index}) {
-    widget.navigationShell.goBranch(
-      index ?? widget.navigationShell.currentIndex,
+    widget.shell.goBranch(
+      index ?? widget.shell.currentIndex,
       initialLocation: true,
     );
   }
 
   /// Jumps to the corresponding [StatefulShellBranch], based on the specified index.
   void goToBranch(int index) {
-    widget.navigationShell.goBranch(
+    widget.shell.goBranch(
       index,
-      initialLocation: widget.navigationShell.currentIndex == index,
+      initialLocation: widget.shell.currentIndex == index,
     );
   }
 }
