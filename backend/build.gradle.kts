@@ -69,7 +69,7 @@ buildscript {
     }
 }
 
-val greenmailVersion = "2.1.4"
+val greenmailVersion = "2.1.5"
 
 dependencies {
     // Web Framework
