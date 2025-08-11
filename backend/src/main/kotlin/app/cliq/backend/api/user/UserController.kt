@@ -2,6 +2,9 @@ package app.cliq.backend.api.user
 
 import EmailOccupiedConstraint
 import app.cliq.backend.api.error.exception.EmailNotFoundOrValidException
+import app.cliq.backend.api.error.exception.ExpiredEmailVerificationTokenException
+import app.cliq.backend.api.error.exception.InternalServerErrorException
+import app.cliq.backend.api.error.exception.InvalidVerifyParamsException
 import app.cliq.backend.api.error.exception.PasswordResetTokenExpired
 import app.cliq.backend.api.error.exception.PasswordResetTokenNotFound
 import app.cliq.backend.api.user.view.UserResponse
@@ -16,18 +19,16 @@ import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Size
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.server.ResponseStatusException
 import org.thymeleaf.TemplateEngine
-import org.thymeleaf.context.Context
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -38,6 +39,8 @@ class UserController(
     private val userRepository: UserRepository,
     private val templateEngine: TemplateEngine,
 ) {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     @PostMapping("/register")
     @Operation(summary = "Register a new user")
     @ApiResponses(
@@ -68,7 +71,7 @@ class UserController(
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
 
-    @GetMapping("/verify/{verificationToken}")
+    @GetMapping("/verify")
     @Operation(summary = "Verify a users email address")
     @ApiResponses(
         value = [
@@ -77,8 +80,8 @@ class UserController(
                 description = "Email successfully verified",
                 content = [
                     Content(
-                        mediaType = MediaType.TEXT_HTML_VALUE,
-                        schema = Schema(implementation = String::class),
+                        mediaType = MediaType.APPLICATION_JSON_VALUE,
+                        schema = Schema(implementation = String::class), // TODO send user details
                     ),
                 ],
             ),
@@ -86,41 +89,31 @@ class UserController(
                 responseCode = "403",
                 description = "Verification token is invalid or expired",
                 content = [
-                    Content(
-                        mediaType = MediaType.TEXT_HTML_VALUE,
-                        schema = Schema(implementation = String::class),
-                    ),
+                    Content(),
                 ],
-            ),
-            ApiResponse(
-                responseCode = "404",
-                description = "Verification token not found",
-                content = [Content()],
             ),
         ],
     )
     fun verify(
-        @PathVariable @Valid @NotBlank verificationToken: String,
+        @RequestBody @Valid verifyParams: VerifyParams
     ): ResponseEntity<String> {
         val user =
-            userRepository.findUserByEmailVerificationToken(verificationToken) ?: throw ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Verification token not found",
-            )
+            userRepository.findUserByEmailVerificationTokenAndEmail(verifyParams.verificationToken, verifyParams.email)
+                ?: throw InvalidVerifyParamsException()
 
-        val context = Context(user.getUserLocale())
+        if (user.isEmailVerificationTokenExpired()) {
+            throw ExpiredEmailVerificationTokenException()
+        }
 
         if (!user.isEmailVerificationTokenValid()) {
-            val htmlContent = templateEngine.process("email-verification-token-inavlid.html", context)
+            logger.error("E-Mail verification token of user {} should be valid but is invalid.", user.id)
 
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(htmlContent)
+            throw InternalServerErrorException()
         }
 
         userService.verifyUserEmail(user)
 
-        val htmlContent = templateEngine.process("email-verified.html", context)
-
-        return ResponseEntity.ok().contentType(MediaType.TEXT_HTML).body(htmlContent)
+        return ResponseEntity.status(HttpStatus.OK).body("TODO") // TODO add user details
     }
 
     @PostMapping("/resend-verification-email")
@@ -218,8 +211,7 @@ const val EXAMPLE_PASSWORD = "CLIq123!"
 
 @Schema
 data class UserRegistrationParams(
-    @field:Schema(example = EMAIL_EXAMPLE) @field:Email @field:NotEmpty @field:EmailOccupiedConstraint val email:
-        String,
+    @field:Schema(example = EMAIL_EXAMPLE) @field:Email @field:NotEmpty @field:EmailOccupiedConstraint val email: String,
     @field:Schema(example = EXAMPLE_PASSWORD) @field:NotEmpty @field:Size(
         min = MIN_PASSWORD_LENGTH,
         max = MAX_PASSWORD_LENGTH,
@@ -229,6 +221,12 @@ data class UserRegistrationParams(
         example = "John Doe",
     ) @field:NotEmpty val username: String,
     @field:Schema(example = DEFAULT_LOCALE, defaultValue = DEFAULT_LOCALE) val locale: String = DEFAULT_LOCALE,
+)
+
+@Schema
+data class VerifyParams(
+    @field:Schema(example = EMAIL_EXAMPLE) @field:Email @field:NotEmpty val email: String,
+    @field:NotEmpty val verificationToken: String,
 )
 
 @Schema

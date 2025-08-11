@@ -63,10 +63,17 @@ class UserRegistrationTests(
         assertContains(parser.htmlContent, user.emailVerificationToken!!)
         assertContains(parser.plainContent, user.emailVerificationToken!!)
 
-        mockMvc
-            .perform(
-                MockMvcRequestBuilders.get("/api/v1/user/verify/{token}", user.emailVerificationToken!!),
-            ).andExpect(status().isOk)
+        val verifyContent = mapOf(
+            "email" to email,
+            "verificationToken" to user.emailVerificationToken
+        )
+
+        mockMvc.perform(
+            MockMvcRequestBuilders
+                .post("/api/v1/user/verify")
+                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(objectMapper.writeValueAsString(verifyContent)),
+        ).andExpect(status().isOk)
 
         user = userRepository.findUserByEmail(email)
         assertTrue(user != null)
