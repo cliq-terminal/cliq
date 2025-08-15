@@ -4,7 +4,7 @@ final class CliqThemeData {
   final CliqBreakpoints breakpoints;
   final CliqGrid grid;
   final CliqColorScheme colorScheme;
-  final CliqTypography typography;
+  final CliqTypographyData typography;
   final CliqStyle style;
 
   final CliqBottomNavigationBarStyle bottomNavigationBarStyle;
@@ -19,7 +19,7 @@ final class CliqThemeData {
     required this.breakpoints,
     required this.grid,
     required this.colorScheme,
-    this.typography = const CliqTypography(),
+    required this.typography,
     required this.style,
     required this.bottomNavigationBarStyle,
     required this.appBarStyle,
@@ -34,10 +34,10 @@ final class CliqThemeData {
     required CliqColorScheme colorScheme,
     CliqBreakpoints? breakpoints,
     CliqGrid? grid,
-    CliqTypography? typography,
+    CliqTypographyData? typography,
     CliqStyle? style,
   }) {
-    typography ??= CliqTypography.inherit(colorScheme: colorScheme);
+    typography ??= CliqTypographyData.inherit(colorScheme: colorScheme);
     style ??= CliqStyle.inherit(
       colorScheme: colorScheme,
       typography: typography,

@@ -38,11 +38,10 @@ class CliqHeader extends StatelessWidget {
                       ),
                     if (title != null)
                       CliqBlurContainer(
-                        child: DefaultTextStyle.merge(
-                          style: textStyle.xl.copyWith(
-                            fontFamily: CliqFontFamily.secondary.fontFamily,
-                            color: style.textColor,
-                          ),
+                        child: CliqDefaultTypography(
+                          size: textStyle.copyXL,
+                          color: style.textColor,
+                          secondaryFont: true,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 32),
                             child: title ?? const SizedBox.shrink(),

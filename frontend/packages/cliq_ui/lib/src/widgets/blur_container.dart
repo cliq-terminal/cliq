@@ -6,12 +6,14 @@ import 'package:flutter/cupertino.dart';
 class CliqBlurContainer extends StatelessWidget {
   final Widget? child;
   final BorderRadiusGeometry? borderRadius;
+  final EdgeInsetsGeometry? padding;
   final CliqBlurContainerStyle? style;
 
   const CliqBlurContainer({
     super.key,
     this.child,
     this.borderRadius,
+    this.padding,
     this.style,
   });
 
@@ -29,7 +31,7 @@ class CliqBlurContainer extends StatelessWidget {
             borderRadius: borderRadius ?? style.borderRadius,
             border: Border.all(color: style.outlineColor, width: 1),
           ),
-          child: child,
+          child: Container(padding: padding, child: child),
         ),
       ),
     );

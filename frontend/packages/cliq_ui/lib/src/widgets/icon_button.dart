@@ -36,11 +36,10 @@ class CliqIconButton extends StatelessWidget {
               final List<Widget> items = [
                 IconTheme(data: style.iconTheme, child: icon),
                 if (label != null)
-                  DefaultTextStyle.merge(
-                    style: textStyle.sm.copyWith(
-                      fontFamily: CliqFontFamily.secondary.fontFamily,
-                      color: style.iconTheme.color,
-                    ),
+                  CliqDefaultTypography(
+                    size: textStyle.copyS,
+                    color: style.iconTheme.color,
+                    secondaryFont: true,
                     child: label!,
                   ),
               ];
