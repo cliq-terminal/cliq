@@ -9,9 +9,7 @@ part 'chip.preview.dart';
 part 'header.preview.dart';
 part 'icon_button.preview.dart';
 
-Widget previewWrapper(Widget child) => CliqTheme(
-  data: CliqThemes.standard.light,
-  child: child,
-);
+Widget previewWrapper(Widget child) =>
+    CliqTheme(data: CliqThemes.standard.light, child: child);
 
 const Size previewSize = Size(400, 300);
