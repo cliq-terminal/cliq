@@ -26,9 +26,7 @@ final class CliqTypographyData {
     required this.copyXS,
   });
 
-  factory CliqTypographyData.inherit({
-    required CliqColorScheme colorScheme,
-  }) {
+  factory CliqTypographyData.inherit({required CliqColorScheme colorScheme}) {
     final baseStyle = TextStyle(
       fontFamily: CliqFontFamily.primary.fontFamily,
       color: colorScheme.onBackground,

@@ -5,10 +5,7 @@ typedef BreakpointMap<T> = Map<Breakpoint, T>;
 extension BreakpointMapExtension<T> on BreakpointMap<T> {
   BreakpointMap<T> cascadeUp({required T defaultValue}) {
     T last = defaultValue;
-    return {
-      for (var b in Breakpoint.values)
-        b: last = (this[b] ?? last),
-    };
+    return {for (var b in Breakpoint.values) b: last = (this[b] ?? last)};
   }
 }
 

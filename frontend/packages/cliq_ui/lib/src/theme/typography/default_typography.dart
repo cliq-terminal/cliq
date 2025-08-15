@@ -14,7 +14,7 @@ final class CliqDefaultTypography extends HookWidget {
     required this.size,
     required this.child,
     this.secondaryFont = false,
-    this.color
+    this.color,
   });
 
   @override
@@ -25,8 +25,8 @@ final class CliqDefaultTypography extends HookWidget {
       style: size[breakpoint]!.style.copyWith(
         color: color,
         fontFamily:
-        (secondaryFont ? CliqFontFamily.secondary : CliqFontFamily.primary)
-            .fontFamily,
+            (secondaryFont ? CliqFontFamily.secondary : CliqFontFamily.primary)
+                .fontFamily,
       ),
       child: child,
     );

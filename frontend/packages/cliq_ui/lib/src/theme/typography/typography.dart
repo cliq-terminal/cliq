@@ -23,7 +23,8 @@ final class CliqTypography extends HookWidget {
   final TextHeightBehavior? textHeightBehavior;
   final Color? selectionColor;
 
-  const CliqTypography(this.data, {
+  const CliqTypography(
+    this.data, {
     super.key,
     required this.size,
     this.secondaryFont = false,
