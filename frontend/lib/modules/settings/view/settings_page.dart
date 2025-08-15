@@ -30,9 +30,7 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
   Widget build(BuildContext context) {
     return CliqScaffold.grid(
       extendBehindAppBar: true,
-      header: CliqHeader(
-        left: [Commons.backButton(context)],
-      ),
+      header: CliqHeader(left: [Commons.backButton(context)]),
       body: Container(
         padding: EdgeInsets.only(top: 80),
         child: Column(
@@ -47,12 +45,12 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
                   for (var (key, module) in _modules)
                     CliqChip(
                       onTap: () => Scrollable.ensureVisible(
-                          key.currentContext!,
-                          duration: const Duration(milliseconds: 500)
+                        key.currentContext!,
+                        duration: const Duration(milliseconds: 500),
                       ),
                       title: Text(module.title),
-                      leading: Icon(module.iconData)
-                    )
+                      leading: Icon(module.iconData),
+                    ),
                 ],
               ),
             ),
@@ -60,7 +58,9 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
               CliqCard(
                 key: key,
                 title: Text(module.title),
-                subtitle: module.description != null ? Text(module.description!) : null,
+                subtitle: module.description != null
+                    ? Text(module.description!)
+                    : null,
                 child: module.build(context),
               ),
             SizedBox(
@@ -68,7 +68,7 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
               child: CliqIconButton(
                 icon: Icon(LucideIcons.scale),
                 label: Text('Licenses'),
-                onTap: () => context.pushPath(LicensePage.pagePath.build()),
+                onPressed: () => context.pushPath(LicensePage.pagePath.build()),
               ),
             ),
             SizedBox(
@@ -78,7 +78,7 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
                 label: Text('GitHub'),
               ),
             ),
-            Text('v0.0.0')
+            Text('v0.0.0'),
           ],
         ),
       ),

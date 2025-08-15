@@ -16,8 +16,6 @@ class HostsPage extends StatefulHookConsumerWidget {
 class _HostsPageState extends ConsumerState<HostsPage> {
   @override
   Widget build(BuildContext context) {
-    return CliqScaffold.grid(
-      body: Container(),
-    );
+    return CliqScaffold.grid(body: Container());
   }
 }

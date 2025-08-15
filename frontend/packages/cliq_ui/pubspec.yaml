@@ -4,13 +4,14 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: ^3.8.1
+  sdk: ^3.9.0
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_hooks: ^0.21.2
+  lucide_flutter: ^0.539.0
 
 dev_dependencies:
   flutter_test:
