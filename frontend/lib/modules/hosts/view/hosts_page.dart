@@ -38,7 +38,7 @@ class _HostsPageState extends ConsumerState<HostsPage> {
               textAlign: TextAlign.center,
               size: typography.copyS,
             ),
-            CliqIconButton(icon: Icon(LucideIcons.plus), label: Text('Add')),
+            CliqButton(label: Text('Add Host')),
           ],
         ),
       );

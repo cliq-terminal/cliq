@@ -10,6 +10,7 @@ final class CliqThemeData {
   final CliqBottomNavigationBarStyle bottomNavigationBarStyle;
   final CliqAppBarStyle appBarStyle;
   final CliqBlurContainerStyle blurContainerStyle;
+  final CliqButtonStyle buttonStyle;
   final CliqCardStyle cardStyle;
   final CliqChipStyle chipStyle;
   final CliqIconButtonStyle iconButtonStyle;
@@ -24,6 +25,7 @@ final class CliqThemeData {
     required this.bottomNavigationBarStyle,
     required this.appBarStyle,
     required this.blurContainerStyle,
+    required this.buttonStyle,
     required this.cardStyle,
     required this.chipStyle,
     required this.iconButtonStyle,
@@ -59,6 +61,7 @@ final class CliqThemeData {
         style: style,
         colorScheme: colorScheme,
       ),
+      buttonStyle: CliqButtonStyle.inherit(style: style, colorScheme: colorScheme),
       cardStyle: CliqCardStyle.inherit(style: style, colorScheme: colorScheme),
       chipStyle: CliqChipStyle.inherit(style: style, colorScheme: colorScheme),
       iconButtonStyle: CliqIconButtonStyle.inherit(
