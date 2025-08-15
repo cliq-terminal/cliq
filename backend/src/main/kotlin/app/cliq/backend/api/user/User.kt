@@ -38,15 +38,18 @@ class User(
 
     fun getUserLocale(): Locale = Locale.forLanguageTag(locale)
 
-    fun isEmailVerificationTokenValid(): Boolean =
-        emailVerificationToken != null && emailVerificationSentAt != null &&
-            !isEmailVerificationTokenExpired()
+    fun isEmailVerificationTokenValid(): Boolean = emailVerificationToken != null && !isEmailVerificationTokenExpired()
 
+    // TODO write unit tests
     fun isEmailVerificationTokenExpired(): Boolean =
-        emailVerificationSentAt != null && emailVerificationSentAt!!.isAfter(
-            OffsetDateTime.now().minusMinutes(UNVERIFIED_USER_INTERVAL_MINUTES),
+        !(
+            emailVerificationSentAt != null &&
+                emailVerificationSentAt!!.isAfter(
+                    OffsetDateTime.now().minusMinutes(UNVERIFIED_USER_INTERVAL_MINUTES),
+                )
         )
 
+    // TODO write unit tests
     fun isPasswordResetTokenValid(): Boolean =
         resetToken != null && resetSentAt != null &&
             resetSentAt!!.isAfter(OffsetDateTime.now().minusMinutes(PASSWORD_RESET_TOKEN_INTERVAL_MINUTES))

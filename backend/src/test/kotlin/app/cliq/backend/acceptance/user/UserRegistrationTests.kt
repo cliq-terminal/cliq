@@ -63,17 +63,19 @@ class UserRegistrationTests(
         assertContains(parser.htmlContent, user.emailVerificationToken!!)
         assertContains(parser.plainContent, user.emailVerificationToken!!)
 
-        val verifyContent = mapOf(
-            "email" to email,
-            "verificationToken" to user.emailVerificationToken
-        )
+        val verifyContent =
+            mapOf(
+                "email" to email,
+                "verificationToken" to user.emailVerificationToken,
+            )
 
-        mockMvc.perform(
-            MockMvcRequestBuilders
-                .post("/api/v1/user/verify")
-                .contentType(MediaType.APPLICATION_JSON)
-                .contentType(objectMapper.writeValueAsString(verifyContent)),
-        ).andExpect(status().isOk)
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/verify")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(verifyContent)),
+            ).andExpect(status().isOk)
 
         user = userRepository.findUserByEmail(email)
         assertTrue(user != null)
@@ -167,12 +169,18 @@ class UserRegistrationTests(
         var user = userRepository.findUserByEmail(email)
         assertTrue(user != null)
 
+        val verifyContent =
+            mapOf(
+                "email" to email,
+                "verificationToken" to user.emailVerificationToken,
+            )
+
         mockMvc
             .perform(
-                MockMvcRequestBuilders.get(
-                    "/api/v1/user/verify/{token}",
-                    user.emailVerificationToken!!,
-                ),
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/verify")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(verifyContent)),
             ).andExpect(status().isOk)
 
         mockMvc
@@ -221,9 +229,18 @@ class UserRegistrationTests(
         userRepository.save(user)
 
         // Try to verify with the expired token
+        val verifyContent =
+            mapOf(
+                "email" to email,
+                "verificationToken" to user.emailVerificationToken,
+            )
+
         mockMvc
             .perform(
-                MockMvcRequestBuilders.get("/api/v1/user/verify/{token}", user.emailVerificationToken!!),
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/verify")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(verifyContent)),
             ).andExpect(status().isForbidden)
     }
 
