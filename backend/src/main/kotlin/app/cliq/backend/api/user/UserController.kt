@@ -23,12 +23,10 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import org.thymeleaf.TemplateEngine
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -37,7 +35,6 @@ class UserController(
     private val userFactory: UserFactory,
     private val userService: UserService,
     private val userRepository: UserRepository,
-    private val templateEngine: TemplateEngine,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -71,7 +68,7 @@ class UserController(
         return ResponseEntity.status(HttpStatus.CREATED).body(response)
     }
 
-    @GetMapping("/verify")
+    @PostMapping("/verify")
     @Operation(summary = "Verify a users email address")
     @ApiResponses(
         value = [
@@ -81,13 +78,20 @@ class UserController(
                 content = [
                     Content(
                         mediaType = MediaType.APPLICATION_JSON_VALUE,
-                        schema = Schema(implementation = String::class), // TODO send user details
+                        schema = Schema(implementation = UserResponse::class),
                     ),
                 ],
             ),
             ApiResponse(
+                responseCode = "400",
+                description = "Verification params is invalid",
+                content = [
+                    Content(),
+                ],
+            ),
+            ApiResponse(
                 responseCode = "403",
-                description = "Verification token is invalid or expired",
+                description = "Verification token expired",
                 content = [
                     Content(),
                 ],
@@ -95,8 +99,8 @@ class UserController(
         ],
     )
     fun verify(
-        @RequestBody @Valid verifyParams: VerifyParams
-    ): ResponseEntity<String> {
+        @Valid @RequestBody verifyParams: VerifyParams,
+    ): ResponseEntity<UserResponse> {
         val user =
             userRepository.findUserByEmailVerificationTokenAndEmail(verifyParams.verificationToken, verifyParams.email)
                 ?: throw InvalidVerifyParamsException()
@@ -113,7 +117,7 @@ class UserController(
 
         userService.verifyUserEmail(user)
 
-        return ResponseEntity.status(HttpStatus.OK).body("TODO") // TODO add user details
+        return ResponseEntity.status(HttpStatus.OK).body(UserResponse.fromUser(user))
     }
 
     @PostMapping("/resend-verification-email")
@@ -211,7 +215,8 @@ const val EXAMPLE_PASSWORD = "CLIq123!"
 
 @Schema
 data class UserRegistrationParams(
-    @field:Schema(example = EMAIL_EXAMPLE) @field:Email @field:NotEmpty @field:EmailOccupiedConstraint val email: String,
+    @field:Schema(example = EMAIL_EXAMPLE) @field:Email @field:NotEmpty @field:EmailOccupiedConstraint val email:
+        String,
     @field:Schema(example = EXAMPLE_PASSWORD) @field:NotEmpty @field:Size(
         min = MIN_PASSWORD_LENGTH,
         max = MAX_PASSWORD_LENGTH,
