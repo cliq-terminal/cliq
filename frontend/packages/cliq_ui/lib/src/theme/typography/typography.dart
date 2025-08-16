@@ -8,6 +8,7 @@ final class CliqTypography extends HookWidget {
   final BreakpointMap<CliqTextStyle> size;
   final bool secondaryFont;
   final bool noPadding;
+  final TextStyle Function(TextStyle style)? styleModifier;
 
   final StrutStyle? strutStyle;
   final TextAlign? textAlign;
@@ -29,6 +30,7 @@ final class CliqTypography extends HookWidget {
     required this.size,
     this.secondaryFont = false,
     this.noPadding = false,
+    this.styleModifier,
     this.strutStyle,
     this.textAlign,
     this.textDirection,
@@ -49,18 +51,22 @@ final class CliqTypography extends HookWidget {
     final breakpoint = useBreakpoint();
     final style = size[breakpoint]!;
 
+    final textStyle =
+        (styleModifier == null ? style.style : styleModifier!.call(style.style))
+            .copyWith(
+              fontFamily:
+                  (secondaryFont
+                          ? CliqFontFamily.secondary
+                          : CliqFontFamily.primary)
+                      .fontFamily,
+            );
+
     return Padding(
       padding: noPadding ? EdgeInsets.zero : style.padding ?? EdgeInsets.zero,
       child: Text(
         data,
         key: key,
-        style: style.style.copyWith(
-          fontFamily:
-              (secondaryFont
-                      ? CliqFontFamily.secondary
-                      : CliqFontFamily.primary)
-                  .fontFamily,
-        ),
+        style: textStyle,
         strutStyle: strutStyle,
         textAlign: textAlign,
         textDirection: textDirection,

@@ -61,7 +61,10 @@ final class CliqThemeData {
         style: style,
         colorScheme: colorScheme,
       ),
-      buttonStyle: CliqButtonStyle.inherit(style: style, colorScheme: colorScheme),
+      buttonStyle: CliqButtonStyle.inherit(
+        style: style,
+        colorScheme: colorScheme,
+      ),
       cardStyle: CliqCardStyle.inherit(style: style, colorScheme: colorScheme),
       chipStyle: CliqChipStyle.inherit(style: style, colorScheme: colorScheme),
       iconButtonStyle: CliqIconButtonStyle.inherit(
