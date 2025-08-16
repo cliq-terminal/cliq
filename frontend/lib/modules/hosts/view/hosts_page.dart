@@ -27,18 +27,12 @@ class _HostsPageState extends ConsumerState<HostsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CliqTypography(
-              'No Hosts',
-              textAlign: TextAlign.center,
-              size: typography.h2,
-              secondaryFont: true,
-              noPadding: true,
-            ),
-            CliqTypography(
               'Add your first host by clicking the button below.',
               textAlign: TextAlign.center,
-              size: typography.copyS,
+              size: typography.copyM,
             ),
-            CliqButton(label: Text('Add Host')),
+            const SizedBox(height: 8),
+            CliqButton(icon: Icon(LucideIcons.plus), label: Text('Add Host')),
           ],
         ),
       );
