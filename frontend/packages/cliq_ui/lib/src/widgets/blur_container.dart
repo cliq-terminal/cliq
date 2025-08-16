@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 
 class CliqBlurContainer extends StatelessWidget {
   final Widget? child;
+  final Color? color;
+  final Color? outlineColor;
   final BorderRadiusGeometry? borderRadius;
   final EdgeInsetsGeometry? padding;
   final CliqBlurContainerStyle? style;
@@ -12,6 +14,8 @@ class CliqBlurContainer extends StatelessWidget {
   const CliqBlurContainer({
     super.key,
     this.child,
+    this.color,
+    this.outlineColor,
     this.borderRadius,
     this.padding,
     this.style,
@@ -27,9 +31,9 @@ class CliqBlurContainer extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: style.blur, sigmaY: style.blur),
         child: Container(
           decoration: BoxDecoration(
-            color: style.color,
+            color: color ?? style.color,
             borderRadius: borderRadius ?? style.borderRadius,
-            border: Border.all(color: style.outlineColor, width: 1),
+            border: Border.all(color: outlineColor ?? style.outlineColor, width: 1),
           ),
           child: Container(padding: padding, child: child),
         ),

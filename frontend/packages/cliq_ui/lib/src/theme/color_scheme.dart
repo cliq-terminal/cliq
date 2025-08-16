@@ -6,6 +6,8 @@ final class CliqColorScheme {
   final Color onBackground;
   final Color secondaryBackground;
   final Color onSecondaryBackground;
+  final Color primary;
+  final Color onPrimary;
 
   const CliqColorScheme({
     required this.brightness,
@@ -13,5 +15,7 @@ final class CliqColorScheme {
     required this.onBackground,
     required this.secondaryBackground,
     required this.onSecondaryBackground,
+    required this.primary,
+    required this.onPrimary,
   });
 }

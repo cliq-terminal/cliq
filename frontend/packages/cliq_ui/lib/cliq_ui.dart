@@ -6,6 +6,7 @@ export 'hooks/use_breakpoint.export.dart';
 
 export 'widgets/blur_container.export.dart';
 export 'widgets/bottom_navigation_bar.export.dart';
+export 'widgets/button.export.dart';
 export 'widgets/card.export.dart';
 export 'widgets/chip.export.dart';
 export 'widgets/grid.export.dart';
