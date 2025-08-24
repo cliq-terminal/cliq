@@ -31,6 +31,7 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
     final typography = context.theme.typography;
 
     return CliqScaffold.grid(
+      safeAreaTop: true,
       extendBehindAppBar: true,
       header: CliqHeader(left: [Commons.backButton(context)]),
       body: Container(

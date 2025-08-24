@@ -18,7 +18,7 @@ class CliqScaffold extends StatelessWidget {
     this.header,
     this.footer,
     this.extendBehindAppBar = false,
-    this.safeAreaTop = false,
+    this.safeAreaTop = true,
     this.style,
   });
 
@@ -34,6 +34,7 @@ class CliqScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typography = context.theme.typography;
     final style = this.style ?? context.theme.scaffoldStyle;
 
     buildDefaultLayout() {
@@ -56,19 +57,22 @@ class CliqScaffold extends StatelessWidget {
       ];
     }
 
-    return SafeArea(
-      top: safeAreaTop,
-      bottom: false,
-      left: false,
-      right: false,
-      child: ColoredBox(
-        color: style.backgroundColor,
-        child: Column(
-          children: [
-            ...(extendBehindAppBar
-                ? buildExtendedLayout()
-                : buildDefaultLayout()),
-          ],
+    return ColoredBox(
+      color: style.backgroundColor,
+      child: SafeArea(
+        top: safeAreaTop,
+        bottom: false,
+        left: false,
+        right: false,
+        child: IconTheme(
+          data: style.iconStyle,
+          child: Column(
+            children: [
+              ...(extendBehindAppBar
+                  ? buildExtendedLayout()
+                  : buildDefaultLayout()),
+            ],
+          ),
         ),
       ),
     );
@@ -77,10 +81,17 @@ class CliqScaffold extends StatelessWidget {
 
 final class CliqScaffoldStyle {
   final Color backgroundColor;
+  final IconThemeData iconStyle;
 
-  const CliqScaffoldStyle({required this.backgroundColor});
+  const CliqScaffoldStyle({
+    required this.backgroundColor,
+    required this.iconStyle,
+  });
 
   factory CliqScaffoldStyle.inherit({required CliqColorScheme colorScheme}) {
-    return CliqScaffoldStyle(backgroundColor: colorScheme.background);
+    return CliqScaffoldStyle(
+      backgroundColor: colorScheme.background,
+      iconStyle: IconThemeData(color: colorScheme.onBackground),
+    );
   }
 }

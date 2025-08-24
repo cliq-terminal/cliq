@@ -1,7 +1,10 @@
+import 'package:cliq_ui/src/widgets/progress_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cliq_ui/cliq_ui.dart';
+
+part 'progress_header.dart';
 
 class CliqHeader extends StatelessWidget {
   final Widget? title;
@@ -10,6 +13,14 @@ class CliqHeader extends StatelessWidget {
   final CliqAppBarStyle? style;
 
   const CliqHeader({super.key, this.title, this.left, this.right, this.style});
+
+  const factory CliqHeader.progress({
+    Key? key,
+    List<Widget>? left,
+    List<Widget>? right,
+    CliqAppBarStyle? style,
+    required double progress,
+  }) = _CliqProgressHeader;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +52,7 @@ class CliqHeader extends StatelessWidget {
                         child: CliqDefaultTypography(
                           size: textStyle.copyXL,
                           color: style.textColor,
-                          secondaryFont: true,
+                          fontFamily: CliqFontFamily.secondary,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 32),
                             child: title ?? const SizedBox.shrink(),

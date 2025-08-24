@@ -38,7 +38,7 @@ class CliqChip extends StatelessWidget {
                 CliqDefaultTypography(
                   size: context.theme.typography.copyS,
                   color: context.theme.colorScheme.onSecondaryBackground,
-                  secondaryFont: true,
+                  fontFamily: CliqFontFamily.secondary,
                   child: title!,
                 ),
               if (trailing != null)

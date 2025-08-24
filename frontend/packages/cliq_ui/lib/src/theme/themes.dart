@@ -1,12 +1,16 @@
 import 'dart:ui';
 
 import 'package:cliq_ui/cliq_ui.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 extension CliqThemes on Never {
   static final standard = (
     light: CliqThemeData.inherit(
-      colorScheme: const CliqColorScheme(
-        brightness: Brightness.dark,
+//      debug: kDebugMode,
+      colorScheme: CliqColorScheme(
+        brightness: Brightness.light,
+        systemUiOverlayStyle: SystemUiOverlayStyle.dark,
         background: Color(0xFFFFFFFF),
         onBackground: Color(0xFF000000),
         secondaryBackground: Color(0xFFCBCBCB),
@@ -16,8 +20,10 @@ extension CliqThemes on Never {
       ),
     ),
     dark: CliqThemeData.inherit(
-      colorScheme: const CliqColorScheme(
+//      debug: kDebugMode,
+      colorScheme: CliqColorScheme(
         brightness: Brightness.dark,
+        systemUiOverlayStyle: SystemUiOverlayStyle.light,
         background: Color(0xFF161616),
         onBackground: Color(0xFFFFFFFF),
         secondaryBackground: Color(0xFF292929),
