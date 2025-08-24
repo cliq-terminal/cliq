@@ -1,0 +1,14 @@
+CREATE TABLE keychain (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  description TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) AS Keychain;
+
+CREATE TABLE keychain_identity (
+  keychain_id INTEGER NOT NULL REFERENCES keychain(id) ON DELETE CASCADE,
+  identity_id INTEGER NOT NULL REFERENCES identity(id) ON DELETE CASCADE,
+  PRIMARY KEY (keychain_id, identity_id)
+);
+
+--- QUERIES

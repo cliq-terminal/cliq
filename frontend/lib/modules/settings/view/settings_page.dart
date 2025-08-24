@@ -28,7 +28,10 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final typography = context.theme.typography;
+
     return CliqScaffold.grid(
+      safeAreaTop: true,
       extendBehindAppBar: true,
       header: CliqHeader(left: [Commons.backButton(context)]),
       body: Container(
@@ -78,7 +81,7 @@ class _DashboardPageState extends ConsumerState<SettingsPage> {
                 label: Text('GitHub'),
               ),
             ),
-            Text('v0.0.0'),
+            CliqTypography('v0.0.0', size: typography.copyS),
           ],
         ),
       ),

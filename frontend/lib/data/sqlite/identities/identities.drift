@@ -1,0 +1,13 @@
+CREATE TABLE identity (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  label TEXT,
+  username TEXT,
+  public_key TEXT,
+  private_key BLOB,
+  passphrase_encrypted BLOB,
+  password_encrypted BLOB,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  last_used_at DATETIME
+) AS Identity;
+
+--- QUERIES
