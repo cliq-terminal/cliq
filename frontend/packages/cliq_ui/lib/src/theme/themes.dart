@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 extension CliqThemes on Never {
   static final standard = (
     light: CliqThemeData.inherit(
-//      debug: kDebugMode,
+      //      debug: kDebugMode,
       colorScheme: CliqColorScheme(
         brightness: Brightness.light,
         systemUiOverlayStyle: SystemUiOverlayStyle.dark,
@@ -20,7 +20,7 @@ extension CliqThemes on Never {
       ),
     ),
     dark: CliqThemeData.inherit(
-//      debug: kDebugMode,
+      //      debug: kDebugMode,
       colorScheme: CliqColorScheme(
         brightness: Brightness.dark,
         systemUiOverlayStyle: SystemUiOverlayStyle.light,

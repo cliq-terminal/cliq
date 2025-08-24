@@ -61,7 +61,7 @@ class CliqHeader extends StatelessWidget {
                     ),
                     align(
                       CliqDefaultTypography(
-                        size: textStyle.copyXL,
+                        size: textStyle.h4,
                         color: style.textColor,
                         fontFamily: CliqFontFamily.secondary,
                         child: title ?? const SizedBox.shrink(),

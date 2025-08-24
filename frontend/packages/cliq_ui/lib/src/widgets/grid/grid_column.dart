@@ -42,7 +42,9 @@ class CliqGridColumn extends StatelessWidget {
             invisible: invisible,
             child: SizedBox(
               width:
-                  sizes[breakpoint]! * constraints.maxWidth * grid.oneColumnRatio,
+                  sizes[breakpoint]! *
+                  constraints.maxWidth *
+                  grid.oneColumnRatio,
               child: Padding(
                 padding: grid.gutterSize == 0.0
                     ? EdgeInsets.zero

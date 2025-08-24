@@ -6,10 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../routing/page_path.dart';
 import '../../../shared/ui/commons.dart';
 
-enum _AddHostStep { host, auth, finish }
-
 class AddHostsPage extends StatefulHookConsumerWidget {
-  static const PagePathBuilder pagePath = PagePathBuilder('/host-setup');
+  static const PagePathBuilder pagePath = PagePathBuilder('/hosts');
 
   const AddHostsPage({super.key});
 
@@ -20,24 +18,20 @@ class AddHostsPage extends StatefulHookConsumerWidget {
 class _AddHostsPageState extends ConsumerState<AddHostsPage> {
   @override
   Widget build(BuildContext context) {
-    final step = useState(_AddHostStep.auth);
-
-    advanceStep() => step.value = _AddHostStep
-        .values[(step.value.index + 1) % _AddHostStep.values.length];
-
     return CliqScaffold(
       extendBehindAppBar: true,
-      header: CliqHeader.progress(
-        progress: (step.value.index + 1) / _AddHostStep.values.length,
+      header: CliqHeader(
+        title: Text('Add Host'),
         left: [Commons.backButton(context)],
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 100),
-        child: Row(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 80),
+        child: CliqGridContainer(
           children: [
-            CliqButton(
-              label: Text('Advance'),
-              onPressed: advanceStep,
+            CliqGridRow(
+              children: [
+                CliqGridColumn(child: CliqButton(label: Text('Save Host'))),
+              ],
             ),
           ],
         ),

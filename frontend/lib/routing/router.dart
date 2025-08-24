@@ -1,4 +1,4 @@
-import 'package:cliq/modules/hosts/view/add_host_page.dart';
+import 'package:cliq/modules/add_host/view/add_host_page.dart';
 import 'package:cliq/modules/hosts/view/hosts_page.dart';
 import 'package:cliq/modules/settings/view/license_page.dart';
 import 'package:cliq/modules/settings/view/settings_page.dart';
@@ -20,7 +20,7 @@ class AppRouter {
   );
 
   late GoRouter goRouter = GoRouter(
-    initialLocation: '/hosts',
+    initialLocation: '/',
     navigatorKey: rootNavigatorKey,
     routes: [
       ..._noShellRoutes(),

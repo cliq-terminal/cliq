@@ -5,10 +5,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lucide_flutter/lucide_flutter.dart';
 
 import '../../../routing/page_path.dart';
-import 'add_host_page.dart';
+import '../../add_host/view/add_host_page.dart';
 
 class HostsPage extends StatefulHookConsumerWidget {
-  static const PagePathBuilder pagePath = PagePathBuilder('/hosts');
+  static const PagePathBuilder pagePath = PagePathBuilder('/');
 
   const HostsPage({super.key});
 
