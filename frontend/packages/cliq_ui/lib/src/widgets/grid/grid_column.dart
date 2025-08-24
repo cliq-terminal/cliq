@@ -38,18 +38,17 @@ class CliqGridColumn extends StatelessWidget {
                 : constraints.maxWidth,
           );
 
-          if (invisible.contains(breakpoint)) {
-            return SizedBox.shrink();
-          }
-
-          return SizedBox(
-            width:
-                sizes[breakpoint]! * constraints.maxWidth * grid.oneColumnRatio,
-            child: Padding(
-              padding: grid.gutterSize == 0.0
-                  ? EdgeInsets.zero
-                  : EdgeInsets.symmetric(horizontal: grid.gutterSize / 2),
-              child: child,
+          return CliqGridVisible(
+            invisible: invisible,
+            child: SizedBox(
+              width:
+                  sizes[breakpoint]! * constraints.maxWidth * grid.oneColumnRatio,
+              child: Padding(
+                padding: grid.gutterSize == 0.0
+                    ? EdgeInsets.zero
+                    : EdgeInsets.symmetric(horizontal: grid.gutterSize / 2),
+                child: child,
+              ),
             ),
           );
         },

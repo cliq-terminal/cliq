@@ -22,6 +22,9 @@ class _AddHostsPageState extends ConsumerState<AddHostsPage> {
   Widget build(BuildContext context) {
     final step = useState(_AddHostStep.auth);
 
+    advanceStep() => step.value = _AddHostStep
+        .values[(step.value.index + 1) % _AddHostStep.values.length];
+
     return CliqScaffold(
       extendBehindAppBar: true,
       header: CliqHeader.progress(
@@ -33,9 +36,8 @@ class _AddHostsPageState extends ConsumerState<AddHostsPage> {
         child: Row(
           children: [
             CliqButton(
-              label: Text('debug'),
-              onPressed: () => step.value = _AddHostStep
-                  .values[(step.value.index + 1) % _AddHostStep.values.length],
+              label: Text('Advance'),
+              onPressed: advanceStep,
             ),
           ],
         ),

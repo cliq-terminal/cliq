@@ -27,6 +27,15 @@ class CliqHeader extends StatelessWidget {
     final style = this.style ?? context.theme.appBarStyle;
     final textStyle = context.theme.typography;
 
+    align(Widget parent, Alignment align, bool isNull) {
+      return Expanded(
+        child: Align(
+          alignment: align,
+          child: isNull ? const SizedBox.shrink() : parent,
+        ),
+      );
+    }
+
     return Padding(
       padding: EdgeInsets.only(top: style.verticalPagePadding),
       child: CliqGridContainer(
@@ -41,30 +50,34 @@ class CliqHeader extends StatelessWidget {
                       : MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (left != null)
+                    align(
                       Row(
                         spacing: 8,
                         mainAxisSize: MainAxisSize.min,
-                        children: left!,
+                        children: left ?? [],
                       ),
-                    if (title != null)
-                      CliqBlurContainer(
-                        child: CliqDefaultTypography(
-                          size: textStyle.copyXL,
-                          color: style.textColor,
-                          fontFamily: CliqFontFamily.secondary,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 32),
-                            child: title ?? const SizedBox.shrink(),
-                          ),
-                        ),
+                      Alignment.centerLeft,
+                      left == null || left!.isEmpty,
+                    ),
+                    align(
+                      CliqDefaultTypography(
+                        size: textStyle.copyXL,
+                        color: style.textColor,
+                        fontFamily: CliqFontFamily.secondary,
+                        child: title ?? const SizedBox.shrink(),
                       ),
-                    if (right != null)
+                      Alignment.center,
+                      title == null,
+                    ),
+                    align(
                       Row(
                         spacing: 8,
                         mainAxisSize: MainAxisSize.min,
-                        children: right!,
+                        children: right ?? [],
                       ),
+                      Alignment.centerRight,
+                      right == null || right!.isEmpty,
+                    ),
                   ],
                 ),
               ),
