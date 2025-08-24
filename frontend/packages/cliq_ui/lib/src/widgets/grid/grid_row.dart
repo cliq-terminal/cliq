@@ -8,12 +8,16 @@ class CliqGridRow extends StatelessWidget {
   final List<CliqGridColumn> children;
   final double? height;
   final BoxDecoration? decoration;
+  final WrapAlignment alignment;
+  final double? spacing;
 
   const CliqGridRow({
     super.key,
     required this.children,
     this.decoration,
     this.height,
+    this.alignment = WrapAlignment.start,
+    this.spacing,
   });
 
   @override
@@ -28,8 +32,9 @@ class CliqGridRow extends StatelessWidget {
           ),
           decoration: decoration,
           child: Wrap(
-            alignment: WrapAlignment.start,
+            alignment: alignment,
             direction: Axis.horizontal,
+            spacing: spacing ?? 0.0,
             children: children,
           ),
         );

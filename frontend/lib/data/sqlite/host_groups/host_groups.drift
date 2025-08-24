@@ -1,0 +1,14 @@
+CREATE TABLE host_group (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  description TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) AS HostGroup;
+
+CREATE TABLE host_group_member (
+  host_id INTEGER NOT NULL REFERENCES host(id) ON DELETE CASCADE,
+  group_id INTEGER NOT NULL REFERENCES host_group(id) ON DELETE CASCADE,
+  PRIMARY KEY (host_id, group_id)
+);
+
+--- QUERIES
