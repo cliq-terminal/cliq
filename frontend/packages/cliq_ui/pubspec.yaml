@@ -23,8 +23,8 @@ flutter:
   fonts:
     - family: Inter
       fonts:
-        - asset: assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf
-        - asset: assets/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf
+        - asset: assets/fonts/Inter/Inter-VariableFont_opsz_wght.ttf
+        - asset: assets/fonts/Inter/Inter-Italic-VariableFont_opsz_wght.ttf
           style: italic
 
     - family: IBMPlexMono

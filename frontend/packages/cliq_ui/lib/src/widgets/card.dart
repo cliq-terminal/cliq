@@ -49,7 +49,6 @@ class CliqCard extends StatelessWidget {
                         color: colorScheme.onSecondaryBackground,
                         child: title!,
                       ),
-
                     if (subtitle != null)
                       CliqDefaultTypography(
                         size: typography.copyS,
