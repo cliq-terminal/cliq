@@ -11,14 +11,15 @@ interface UserRepository : JpaRepository<User, Long> {
 
     fun findUserByEmail(email: String): User?
 
-    fun findUserByEmailVerificationToken(token: String): User?
-
     fun findUserByEmailVerificationTokenAndEmail(
         emailVerificationToken: String,
         email: String,
     ): User?
 
-    fun findUserByResetToken(resetToken: String): User?
+    fun findUserByResetTokenAndEmail(
+        resetToken: String,
+        email: String,
+    ): User?
 
     @Modifying
     @Query("DELETE FROM User u WHERE u.emailVerifiedAt IS NULL AND u.emailVerificationSentAt < :cutoffTime")

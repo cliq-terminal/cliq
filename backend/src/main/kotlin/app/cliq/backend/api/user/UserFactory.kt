@@ -16,6 +16,23 @@ class UserFactory(
     private val eventPublisher: ApplicationEventPublisher,
     private val userRepository: UserRepository,
 ) {
+    fun updateUserPassword(
+        user: User,
+        newPassword: String,
+    ): User {
+        val hashedPassword = passwordEncoder.encode(newPassword)
+
+        user.resetToken = null
+        user.resetSentAt = null
+        user.password = hashedPassword
+        user.updatedAt = OffsetDateTime.now(clock)
+
+        val newUser = userRepository.save(user)
+        userRepository.flush()
+
+        return newUser
+    }
+
     fun createFromRegistrationParams(registrationParams: UserRegistrationParams): User {
         val hashedPassword = passwordEncoder.encode(registrationParams.password)
 

@@ -23,12 +23,14 @@ class UserService(
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    fun verifyUserEmail(user: User) {
+    fun verifyUserEmail(user: User): User {
         user.emailVerifiedAt = OffsetDateTime.now(clock)
         user.emailVerificationToken = null
 
-        userRepository.save(user)
+        val updatedUser = userRepository.save(user)
         userRepository.flush()
+
+        return updatedUser
     }
 
     fun sendVerificationEmail(user: User) {

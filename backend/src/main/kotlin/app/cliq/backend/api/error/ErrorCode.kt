@@ -23,6 +23,7 @@ data class ErrorCode private constructor(
         val PASSWORD_RESET_TOKEN_EXPIRED = of(2005U, "Password reset token is expired")
         val INVALID_VERIFY_PARAMS = of(2006U, "Invalid email or verification token")
         val EMAIL_VERIFICATION_TOKEN_EXPIRED = of(2007U, "Email verification token is expired")
+        val INVALID_RESET_PARAMS = of(2008U, "Invalid email or reset token")
 
         // Authentication errors
         val AUTH_TOKEN_MISSING = of(2100U, "Authentication token is missing")
