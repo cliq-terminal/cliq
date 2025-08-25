@@ -6,7 +6,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
 import java.time.OffsetDateTime
-import java.util.Locale
 
 const val DEFAULT_LOCALE = "en"
 const val UNVERIFIED_USER_INTERVAL_MINUTES = 60L * 24L // 1 day
@@ -36,8 +35,6 @@ class User(
 ) {
     fun isEmailVerified(): Boolean = null != emailVerifiedAt
 
-    fun getUserLocale(): Locale = Locale.forLanguageTag(locale)
-
     fun isEmailVerificationTokenValid(): Boolean = emailVerificationToken != null && !isEmailVerificationTokenExpired()
 
     // TODO write unit tests
@@ -50,7 +47,7 @@ class User(
         )
 
     // TODO write unit tests
-    fun isPasswordResetTokenValid(): Boolean =
+    fun isPasswordResetTokenExpired(): Boolean =
         resetToken != null && resetSentAt != null &&
             resetSentAt!!.isAfter(OffsetDateTime.now().minusMinutes(PASSWORD_RESET_TOKEN_INTERVAL_MINUTES))
 }

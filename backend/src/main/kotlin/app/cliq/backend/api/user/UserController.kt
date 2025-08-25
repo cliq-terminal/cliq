@@ -4,9 +4,9 @@ import EmailOccupiedConstraint
 import app.cliq.backend.api.error.exception.EmailNotFoundOrValidException
 import app.cliq.backend.api.error.exception.ExpiredEmailVerificationTokenException
 import app.cliq.backend.api.error.exception.InternalServerErrorException
+import app.cliq.backend.api.error.exception.InvalidResetParamsException
 import app.cliq.backend.api.error.exception.InvalidVerifyParamsException
 import app.cliq.backend.api.error.exception.PasswordResetTokenExpired
-import app.cliq.backend.api.error.exception.PasswordResetTokenNotFound
 import app.cliq.backend.api.user.view.UserResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -197,13 +197,18 @@ class UserController(
     )
     fun resetPassword(
         @Valid @RequestBody params: ResetPasswordParams,
-    ): ResponseEntity<Void> {
-        val user = userRepository.findUserByResetToken(params.resetToken) ?: throw PasswordResetTokenNotFound()
-        if (!user.isPasswordResetTokenValid()) {
+    ): ResponseEntity<UserResponse> {
+        val user =
+            userRepository.findUserByResetTokenAndEmail(params.resetToken, params.email)
+                ?: throw InvalidResetParamsException()
+
+        if (!user.isPasswordResetTokenExpired()) {
             throw PasswordResetTokenExpired()
         }
 
-        TODO()
+        val newUser = userFactory.updateUserPassword(user, params.password)
+
+        return ResponseEntity.status(HttpStatus.OK).body(UserResponse.fromUser(newUser))
     }
 }
 
@@ -246,9 +251,10 @@ data class StartResetPasswordProcessParams(
 
 @Schema
 data class ResetPasswordParams(
+    @field:Schema(example = EMAIL_EXAMPLE) @field:Email @field:NotEmpty val email: String,
+    @field:Schema(example = "reset-token") @field:NotBlank val resetToken: String,
     @field:Schema(example = EXAMPLE_PASSWORD) @field:NotEmpty @field:Size(
         min = MIN_PASSWORD_LENGTH,
         max = MAX_PASSWORD_LENGTH,
     ) val password: String,
-    @field:Schema(example = "reset-token") @field:NotBlank val resetToken: String,
 )
