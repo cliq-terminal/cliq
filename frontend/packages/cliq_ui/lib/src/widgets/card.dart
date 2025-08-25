@@ -41,22 +41,18 @@ class CliqCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (title != null)
-                      DefaultTextStyle.merge(
-                        style: context.theme.typography.xl.copyWith(
-                          fontFamily: CliqFontFamily.secondary.fontFamily,
-                          color:
-                              context.theme.colorScheme.onSecondaryBackground,
-                        ),
+                      CliqDefaultTypography(
+                        size: context.theme.typography.copyXL,
+                        color: context.theme.colorScheme.onSecondaryBackground,
+                        secondaryFont: true,
                         child: title!,
                       ),
 
                     if (subtitle != null)
-                      DefaultTextStyle.merge(
-                        style: context.theme.typography.base.copyWith(
-                          fontFamily: CliqFontFamily.primary.fontFamily,
-                          color: context.theme.colorScheme.onSecondaryBackground
-                              .withValues(alpha: .7),
-                        ),
+                      CliqDefaultTypography(
+                        size: context.theme.typography.copyM,
+                        color: context.theme.colorScheme.onSecondaryBackground
+                            .withValues(alpha: .7),
                         child: subtitle!,
                       ),
                     if (child != null) ...[const SizedBox(height: 16), child!],

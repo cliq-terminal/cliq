@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 class CliqIconButton extends StatelessWidget {
   final Widget icon;
   final Widget? label;
-  final Function()? onTap;
+  final Function()? onPressed;
   final bool reverse;
   final CliqIconButtonStyle? style;
 
@@ -16,7 +16,7 @@ class CliqIconButton extends StatelessWidget {
     super.key,
     required this.icon,
     this.label,
-    this.onTap,
+    this.onPressed,
     this.reverse = false,
     this.style,
   });
@@ -27,7 +27,7 @@ class CliqIconButton extends StatelessWidget {
     final textStyle = context.theme.typography;
 
     return CliqInteractable(
-      onTap: onTap,
+      onTap: onPressed,
       child: CliqBlurContainer(
         child: Padding(
           padding: style.padding,
@@ -36,11 +36,10 @@ class CliqIconButton extends StatelessWidget {
               final List<Widget> items = [
                 IconTheme(data: style.iconTheme, child: icon),
                 if (label != null)
-                  DefaultTextStyle.merge(
-                    style: textStyle.sm.copyWith(
-                      fontFamily: CliqFontFamily.secondary.fontFamily,
-                      color: style.iconTheme.color,
-                    ),
+                  CliqDefaultTypography(
+                    size: textStyle.copyS,
+                    color: style.iconTheme.color,
+                    secondaryFont: true,
                     child: label!,
                   ),
               ];

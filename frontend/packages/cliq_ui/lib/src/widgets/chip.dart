@@ -35,11 +35,10 @@ class CliqChip extends StatelessWidget {
               if (leading != null)
                 IconTheme(data: style.iconStyle, child: leading!),
               if (title != null)
-                DefaultTextStyle.merge(
-                  style: context.theme.typography.sm.copyWith(
-                    fontFamily: CliqFontFamily.secondary.fontFamily,
-                    color: context.theme.colorScheme.onSecondaryBackground,
-                  ),
+                CliqDefaultTypography(
+                  size: context.theme.typography.copyXS,
+                  color: context.theme.colorScheme.onSecondaryBackground,
+                  secondaryFont: true,
                   child: title!,
                 ),
               if (trailing != null)

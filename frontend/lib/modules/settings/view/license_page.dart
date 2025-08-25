@@ -68,7 +68,7 @@ class LicensePage extends ConsumerWidget {
                                 trailing: isExpanded
                                     ? null
                                     : CliqIconButton(
-                                        onTap: toggle,
+                                        onPressed: toggle,
                                         icon: Icon(LucideIcons.chevronDown),
                                       ),
                                 child: isExpanded

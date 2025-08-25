@@ -9,6 +9,6 @@ class Commons {
 
   static Widget backButton(BuildContext ctx) => CliqIconButton(
     icon: Icon(Icons.arrow_back_rounded),
-    onTap: () => ctx.pop(),
+    onPressed: () => ctx.pop(),
   );
 }

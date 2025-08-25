@@ -63,8 +63,9 @@ class CliqBottomNavigationBar extends StatelessWidget {
             borderRadius: BorderRadius.zero,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: DefaultTextStyle(
-                style: textStyle.base.copyWith(color: style.textColor),
+              child: CliqDefaultTypography(
+                size: textStyle.copyM,
+                color: style.textColor,
                 child: Row(
                   spacing: 8,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

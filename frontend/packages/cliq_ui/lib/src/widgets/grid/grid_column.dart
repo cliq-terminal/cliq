@@ -7,7 +7,7 @@ import 'package:cliq_ui/cliq_ui.dart';
 class CliqGridColumn extends StatelessWidget {
   final Widget child;
   final FlexFit fit;
-  late final BreakpointMap sizes;
+  late final BreakpointMap<int> sizes;
   final List<Breakpoint> invisible;
   final bool absoluteSizes;
 
@@ -16,9 +16,9 @@ class CliqGridColumn extends StatelessWidget {
     required this.child,
     this.fit = FlexFit.loose,
     this.absoluteSizes = true,
-    BreakpointMap sizes = const {},
+    BreakpointMap<int> sizes = const {},
     this.invisible = const [],
-  }) : sizes = sizes.cascadeUp();
+  }) : sizes = sizes.cascadeUp(defaultValue: 12);
 
   @override
   Widget build(BuildContext context) {

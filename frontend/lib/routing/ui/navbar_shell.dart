@@ -29,7 +29,7 @@ class NavigationShellState extends ConsumerState<NavigationShell> {
           CliqIconButton(icon: Icon(LucideIcons.search)),
           CliqIconButton(
             icon: Icon(LucideIcons.settings),
-            onTap: () => context.pushPath(SettingsPage.pagePath.build()),
+            onPressed: () => context.pushPath(SettingsPage.pagePath.build()),
           ),
         ],
       ),

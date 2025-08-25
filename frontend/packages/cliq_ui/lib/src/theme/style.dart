@@ -14,6 +14,6 @@ final class CliqStyle {
 
   CliqStyle.inherit({
     required CliqColorScheme colorScheme,
-    required CliqTypography typography,
+    required CliqTypographyData typography,
   }) : this();
 }

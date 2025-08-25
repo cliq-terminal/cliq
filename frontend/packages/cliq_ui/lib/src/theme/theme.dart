@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 
 import 'package:cliq_ui/cliq_ui.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class CliqTheme extends StatelessWidget {
+class CliqTheme extends HookWidget {
   final CliqThemeData data;
 
   final TextDirection? textDirection;
@@ -22,20 +23,22 @@ class CliqTheme extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => _InheritedTheme(
-    data: data,
-    child: Directionality(
-      textDirection:
-          textDirection ?? Directionality.maybeOf(context) ?? TextDirection.ltr,
-      child: DefaultTextStyle(
-        style: data.typography.base.copyWith(
-          fontFamily: CliqFontFamily.primary.fontFamily,
-          color: data.colorScheme.onBackground,
+  Widget build(BuildContext context) {
+    final breakpoint = useBreakpoint();
+    return _InheritedTheme(
+      data: data,
+      child: Directionality(
+        textDirection:
+            textDirection ??
+            Directionality.maybeOf(context) ??
+            TextDirection.ltr,
+        child: DefaultTextStyle(
+          style: context.theme.typography.copyM[breakpoint]!.style,
+          child: child,
         ),
-        child: child,
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _InheritedTheme extends InheritedWidget {

@@ -1,17 +1,17 @@
 enum Breakpoint { sm, md, lg, xl, xxl }
 
-typedef BreakpointMap = Map<Breakpoint, int>;
+typedef BreakpointMap<T> = Map<Breakpoint, T>;
 
-extension BreakpointMapExtension on BreakpointMap {
-  BreakpointMap cascadeUp({int defaultValue = 12}) {
-    int last = defaultValue;
+extension BreakpointMapExtension<T> on BreakpointMap<T> {
+  BreakpointMap<T> cascadeUp({required T defaultValue}) {
+    T last = defaultValue;
     return {for (var b in Breakpoint.values) b: last = (this[b] ?? last)};
   }
 }
 
 final class CliqBreakpoints {
-  final BreakpointMap breakpointWidths;
-  final BreakpointMap nonFluidWidths;
+  final BreakpointMap<int> breakpointWidths;
+  final BreakpointMap<int> nonFluidWidths;
 
   const CliqBreakpoints({
     this.breakpointWidths = const {

@@ -6,14 +6,14 @@ plugins {
     kotlin("plugin.allopen") version "2.2.10"
 
     // Spring / Spring Boot
-    id("org.springframework.boot") version "3.5.4"
+    id("org.springframework.boot") version "3.5.5"
     id("io.spring.dependency-management") version "1.1.7"
 
     // Database Migrations
-    id("org.flywaydb.flyway") version "11.11.1"
+    id("org.flywaydb.flyway") version "11.11.2"
 
     // Linter and Formatter
-    id("org.jlleitschuh.gradle.ktlint") version "13.0.0"
+    id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
 }
 
 group = "app.cliq"
@@ -65,7 +65,7 @@ repositories {
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.11.1")
+        classpath("org.flywaydb:flyway-database-postgresql:11.11.2")
     }
 }
 
@@ -78,8 +78,8 @@ dependencies {
 
     // JPA/SQL
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.flywaydb:flyway-core:11.11.1")
-    implementation("org.flywaydb:flyway-database-postgresql:11.11.1")
+    implementation("org.flywaydb:flyway-core:11.11.2")
+    implementation("org.flywaydb:flyway-database-postgresql:11.11.2")
     runtimeOnly("org.postgresql:postgresql")
 
     // Security
@@ -95,7 +95,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
     // OpenAPI
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.11")
 
     // Annotations
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
