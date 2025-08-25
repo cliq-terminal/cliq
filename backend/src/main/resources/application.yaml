@@ -20,7 +20,6 @@ spring:
     url: jdbc:postgresql://\${POSTGRES_HOST}:\${POSTGRES_PORT}/\${POSTGRES_DB}
     username: \${POSTGRES_USER}
     password: \${POSTGRES_PASSWORD}
-    driver-class-name: org.postgresql.Driver
   flyway:
     enabled: true
     baseline-on-migrate: true
