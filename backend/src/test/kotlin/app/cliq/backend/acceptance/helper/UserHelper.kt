@@ -42,7 +42,7 @@ class UserHelper(
 
         // We need to wait for the `UserCreatedEvent` event to be finished processing to prevent data
         await.atMost(Duration.ofSeconds(5)).untilAsserted {
-            val refreshedUser = userRepository.findById(user.id).get()
+            val refreshedUser = userRepository.findById(user.id).orElseThrow()
             assert(
                 refreshedUser.isEmailVerified() || refreshedUser.emailVerificationSentAt != null,
             ) {
@@ -67,7 +67,8 @@ class UserHelper(
 
         val params = SessionCreationParams(email, password)
         val session = sessionFactory.createFromCreationParams(params, user)
+        val updatedSession = sessionRepository.saveAndFlush(session)
 
-        return sessionRepository.save(session)
+        return updatedSession
     }
 }

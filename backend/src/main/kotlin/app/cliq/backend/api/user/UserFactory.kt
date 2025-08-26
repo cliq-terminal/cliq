@@ -1,5 +1,6 @@
 package app.cliq.backend.api.user
 
+import app.cliq.backend.api.user.event.PasswordResetEvent
 import app.cliq.backend.api.user.event.UserCreatedEvent
 import app.cliq.backend.service.SnowflakeGenerator
 import org.springframework.context.ApplicationEventPublisher
@@ -29,6 +30,8 @@ class UserFactory(
 
         val newUser = userRepository.save(user)
         userRepository.flush()
+
+        eventPublisher.publishEvent(PasswordResetEvent(newUser.id))
 
         return newUser
     }
