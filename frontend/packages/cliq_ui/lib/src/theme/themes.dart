@@ -26,7 +26,7 @@ extension CliqThemes on Never {
         systemUiOverlayStyle: SystemUiOverlayStyle.light,
         background: Color(0xFF00001d),
         onBackground: Color(0xFFFFFFFF),
-        secondaryBackground: Color(0xFF292929),
+        secondaryBackground: Color(0xFF252529),
         onSecondaryBackground: Color(0xFFFFFFFF),
         primary: Color(0xFF007AFF),
         onPrimary: Color(0xFFFFFFFF),
