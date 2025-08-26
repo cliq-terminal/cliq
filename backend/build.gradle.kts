@@ -124,6 +124,7 @@ dependencies {
 
     // Kotlin specifics
     testImplementation("org.mockito.kotlin:mockito-kotlin:6.0.0")
+    testImplementation("org.awaitility:awaitility-kotlin:4.3.0")
 }
 
 kotlin {

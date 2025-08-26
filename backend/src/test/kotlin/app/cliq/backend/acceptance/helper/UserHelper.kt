@@ -7,13 +7,17 @@ import app.cliq.backend.api.session.SessionRepository
 import app.cliq.backend.api.user.User
 import app.cliq.backend.api.user.UserFactory
 import app.cliq.backend.api.user.UserRegistrationParams
+import app.cliq.backend.api.user.UserRepository
 import app.cliq.backend.api.user.UserService
+import org.awaitility.kotlin.await
 import org.springframework.boot.test.context.TestComponent
+import java.time.Duration
 import kotlin.random.Random
 
 @TestComponent
 class UserHelper(
     private val sessionRepository: SessionRepository,
+    private val userRepository: UserRepository,
     private val userFactory: UserFactory,
     private val userService: UserService,
     private val sessionFactory: SessionFactory,
@@ -36,7 +40,20 @@ class UserHelper(
     ): User {
         var user = createRandomNonVerifiedUser(email, password, username)
 
-        user = userService.verifyUserEmail(user)
+        // We need to wait for the `UserCreatedEvent` event to be finished processing to prevent data
+        await.atMost(Duration.ofSeconds(5)).untilAsserted {
+            val refreshedUser = userRepository.findById(user.id).get()
+            assert(
+                refreshedUser.isEmailVerified() || refreshedUser.emailVerificationSentAt != null,
+            ) {
+                "Neither email verified nor verification email sent"
+            }
+        }
+
+        user = userRepository.findById(user.id).get()
+        if (!user.isEmailVerified()) {
+            user = userService.verifyUserEmail(user)
+        }
 
         return user
     }
