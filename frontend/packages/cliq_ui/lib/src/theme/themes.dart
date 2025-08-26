@@ -24,7 +24,7 @@ extension CliqThemes on Never {
       colorScheme: CliqColorScheme(
         brightness: Brightness.dark,
         systemUiOverlayStyle: SystemUiOverlayStyle.light,
-        background: Color(0xFF161616),
+        background: Color(0xFF00001d),
         onBackground: Color(0xFFFFFFFF),
         secondaryBackground: Color(0xFF292929),
         onSecondaryBackground: Color(0xFFFFFFFF),
