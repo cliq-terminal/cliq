@@ -4,13 +4,12 @@ import app.cliq.backend.acceptance.AcceptanceTest
 import app.cliq.backend.acceptance.AcceptanceTester
 import app.cliq.backend.acceptance.helper.UserHelper
 import app.cliq.backend.api.session.SessionRepository
+import app.cliq.backend.api.user.PASSWORD_RESET_TOKEN_INTERVAL_MINUTES
 import app.cliq.backend.api.user.UNVERIFIED_USER_INTERVAL_MINUTES
 import app.cliq.backend.api.user.UserRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.mail2.jakarta.util.MimeMessageParser
 import org.awaitility.kotlin.await
-import org.hibernate.Hibernate
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.Duration
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 @AcceptanceTest
@@ -381,7 +381,7 @@ class UserRegistrationTests(
         assertTrue(parser.hasHtmlContent())
         assertTrue(parser.hasPlainContent())
 
-        var updatedUser = userRepository.findUserByEmail(user.email)
+        val updatedUser = userRepository.findUserByEmail(user.email)
         assertNotNull(updatedUser)
         assertNotNull(updatedUser.resetToken)
 
@@ -408,22 +408,226 @@ class UserRegistrationTests(
     }
 
     @Test
-    @Disabled
     fun `cannot reset password with wrong code`() {
+        val password = "Cliq123!!?"
+        val user = userHelper.createRandomVerifiedUser(password = password)
+
+        val startResetProcessParams =
+            mapOf(
+                "email" to user.email,
+            )
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/init-reset-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(startResetProcessParams)),
+            ).andExpect(status().isNoContent)
+
+        assertTrue(greenMail.waitForIncomingEmail(1))
+
+        val emailMessages = greenMail.receivedMessages[0]
+        val parser = MimeMessageParser(emailMessages).parse()
+        assertTrue(parser.hasHtmlContent())
+        assertTrue(parser.hasPlainContent())
+
+        val updatedUser = userRepository.findUserByEmail(user.email)
+        assertNotNull(updatedUser)
+        assertNotNull(updatedUser.resetToken)
+
+        val newPassword = "Password123!!!"
+        val resetPasswordParams =
+            mapOf(
+                "email" to updatedUser.email,
+                "resetToken" to "invalid-token",
+                "password" to newPassword,
+            )
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/reset-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(resetPasswordParams)),
+            ).andExpect(status().isBadRequest)
+
+        // Check that the old password is still working
+        val loginParams =
+            mapOf(
+                "email" to user.email,
+                "password" to password,
+            )
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/session")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(loginParams)),
+            ).andExpect(status().isCreated)
     }
 
     @Test
-    @Disabled
     fun `cannot reset password with expired code`() {
+        val password = "Cliq123!!?"
+        val user = userHelper.createRandomVerifiedUser(password = password)
+
+        val startResetProcessParams =
+            mapOf(
+                "email" to user.email,
+            )
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/init-reset-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(startResetProcessParams)),
+            ).andExpect(status().isNoContent)
+
+        assertTrue(greenMail.waitForIncomingEmail(1))
+
+        val emailMessages = greenMail.receivedMessages[0]
+        val parser = MimeMessageParser(emailMessages).parse()
+        assertTrue(parser.hasHtmlContent())
+        assertTrue(parser.hasPlainContent())
+
+        val updatedUser = userRepository.findUserByEmail(user.email)
+        assertNotNull(updatedUser)
+        assertNotNull(updatedUser.resetToken)
+
+        updatedUser.resetSentAt = updatedUser.resetSentAt!!.minusMinutes(PASSWORD_RESET_TOKEN_INTERVAL_MINUTES)
+        userRepository.saveAndFlush(updatedUser)
+
+        val newPassword = "Password123!!!"
+        val resetPasswordParams =
+            mapOf(
+                "email" to updatedUser.email,
+                "resetToken" to updatedUser.resetToken!!,
+                "password" to newPassword,
+            )
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/reset-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(resetPasswordParams)),
+            ).andExpect(status().isBadRequest)
+
+        // Check that the old password is still working
+        val loginParams =
+            mapOf(
+                "email" to user.email,
+                "password" to password,
+            )
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/session")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(loginParams)),
+            ).andExpect(status().isCreated)
     }
 
     @Test
-    @Disabled
     fun `resend password forgot mail`() {
+        val user = userHelper.createRandomVerifiedUser()
+
+        val params = mapOf("email" to user.email)
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/init-reset-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(params)),
+            ).andExpect(status().isNoContent)
+
+        assertTrue(greenMail.waitForIncomingEmail(1))
+        var updatedUser = userRepository.findUserByEmail(user.email)
+        assertNotNull(updatedUser)
+        assertNotNull(updatedUser.resetToken)
+        val oldResetToken = updatedUser.resetToken
+
+        // Resend
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/init-reset-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(params)),
+            ).andExpect(status().isNoContent)
+
+        assertTrue(greenMail.waitForIncomingEmail(1))
+        updatedUser = userRepository.findUserByEmail(user.email)
+        assertNotNull(updatedUser)
+        assertNotNull(updatedUser.resetToken)
+        val newResetToken = updatedUser.resetToken
+
+        assertNotEquals(oldResetToken, newResetToken)
+
+        val newPassword = "NewPassword123!!"
+        // Try to reset password with old token
+        val resetPasswordParamsOldToken =
+            mapOf(
+                "email" to updatedUser.email,
+                "resetToken" to oldResetToken!!,
+                "password" to newPassword,
+            )
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/reset-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(resetPasswordParamsOldToken)),
+            ).andExpect(status().isBadRequest)
+
+        // reset password with new token
+        val resetPasswordParamsNewToken =
+            mapOf(
+                "email" to updatedUser.email,
+                "resetToken" to newResetToken!!,
+                "password" to newPassword,
+            )
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/reset-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(resetPasswordParamsNewToken)),
+            ).andExpect(status().isOk)
+
+        // Login with new password
+
+        val loginParams =
+            mapOf(
+                "email" to user.email,
+                "password" to newPassword,
+            )
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/session")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(loginParams)),
+            ).andExpect(status().isCreated)
     }
 
     @Test
-    @Disabled
-    fun `start password reset should fail on unknown email`() {
+    fun `start password reset should not leak if emails are known`() {
+        val params = mapOf("email" to "unknown.email@cliq.internal")
+
+        mockMvc
+            .perform(
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/init-reset-password")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(params)),
+            ).andExpect(status().isNoContent)
     }
 }

@@ -169,7 +169,8 @@ class UserController(
     fun startResetPasswordProcess(
         @Valid @RequestBody params: StartResetPasswordProcessParams,
     ): ResponseEntity<Void> {
-        val user = userRepository.findUserByEmail(params.email) ?: throw EmailNotFoundOrValidException()
+        // Returning 204 even if the user does not exist is intentional to not leak
+        val user = userRepository.findUserByEmail(params.email) ?: return ResponseEntity.noContent().build()
 
         if (!user.isEmailVerified()) {
             throw EmailNotFoundOrValidException()
