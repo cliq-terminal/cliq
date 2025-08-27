@@ -31,47 +31,52 @@ class _AddHostsPageState extends ConsumerState<AddHostsPage> {
         child: CliqGridContainer(
           children: [
             CliqGridRow(
+              alignment: WrapAlignment.center,
               children: [
                 CliqGridColumn(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 24),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        spacing: 16,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CliqTextFormField(
-                            label: Text('Address'),
-                            hint: Text('127.0.0.1'),
-                          ),
-                          CliqTextFormField(
-                            label: Text('Port'),
-                            hint: Text('22'),
-                          ),
-                          CliqTextFormField(
-                            label: Text('Username'),
-                            hint: Text('root'),
-                          ),
-                          CliqTextFormField(
-                            label: Text('Private Key (PEM)'),
-                            hint: Text('-----BEGIN OPENSSH PRIVATE KEY-----'),
-                          ),
-                        ],
+                  sizes: {Breakpoint.lg: 8, Breakpoint.xl: 6},
+                  child: Column(
+                    spacing: 24,
+                    children: [
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          spacing: 16,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CliqTextFormField(
+                              label: Text('Address'),
+                              hint: Text('127.0.0.1'),
+                            ),
+                            CliqTextFormField(
+                              label: Text('Port'),
+                              hint: Text('22'),
+                            ),
+                            CliqTextFormField(
+                              label: Text('Username'),
+                              hint: Text('root'),
+                            ),
+                            CliqTextFormField(
+                              label: Text('Private Key (PEM)'),
+                              hint: Text('-----BEGIN OPENSSH PRIVATE KEY-----'),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                CliqGridColumn(
-                  child: CliqButton(
-                    label: Text('Save Host'),
-                    onPressed: () {
-                      if (!_formKey.currentState!.validate()) {
-                        return;
-                      }
+                      SizedBox(
+                        width: double.infinity,
+                        child: CliqButton(
+                          label: Text('Save Host'),
+                          onPressed: () {
+                            if (!_formKey.currentState!.validate()) {
+                              return;
+                            }
 
-                      // TODO: save in db
-                    },
+                            // TODO: save in db
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
