@@ -16,6 +16,8 @@ class AddHostsPage extends StatefulHookConsumerWidget {
 }
 
 class _AddHostsPageState extends ConsumerState<AddHostsPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return CliqScaffold(
@@ -33,18 +35,45 @@ class _AddHostsPageState extends ConsumerState<AddHostsPage> {
                 CliqGridColumn(
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CliqTextField(
-                          label: Text('Address'),
-                          hint: Text('127.0.0.1'),
-                        ),
-                      ],
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        spacing: 16,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CliqTextFormField(
+                            label: Text('Address'),
+                            hint: Text('127.0.0.1'),
+                          ),
+                          CliqTextFormField(
+                            label: Text('Port'),
+                            hint: Text('22'),
+                          ),
+                          CliqTextFormField(
+                            label: Text('Username'),
+                            hint: Text('root'),
+                          ),
+                          CliqTextFormField(
+                            label: Text('Private Key (PEM)'),
+                            hint: Text('-----BEGIN OPENSSH PRIVATE KEY-----'),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                CliqGridColumn(child: CliqButton(label: Text('Save Host'))),
+                CliqGridColumn(
+                  child: CliqButton(
+                    label: Text('Save Host'),
+                    onPressed: () {
+                      if (!_formKey.currentState!.validate()) {
+                        return;
+                      }
+
+                      // TODO: save in db
+                    },
+                  ),
+                ),
               ],
             ),
           ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class CliqTextField extends HookWidget {
+  final TextEditingController? controller;
   final Widget? label;
   final Widget? hint;
   final Widget? prefixIcon;
@@ -12,6 +13,7 @@ class CliqTextField extends HookWidget {
 
   const CliqTextField({
     super.key,
+    this.controller,
     this.label,
     this.hint,
     this.prefixIcon,
@@ -32,11 +34,9 @@ class CliqTextField extends HookWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (label != null)
-          CliqDefaultTypography(
-            size: typography.copyS,
-            child: label!,
-          ),
+          CliqDefaultTypography(size: typography.copyS, child: label!),
         CliqBlurContainer(
+          borderRadius: style.borderRadius,
           child: Material(
             color: Colors.transparent,
             child: Padding(
@@ -49,6 +49,7 @@ class CliqTextField extends HookWidget {
                   ),
                 ),
                 child: TextField(
+                  controller: controller,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     iconColor: style.iconStyle.color,
@@ -64,7 +65,7 @@ class CliqTextField extends HookWidget {
                         : null,
                   ),
                   obscureText: obscure,
-                  style: typography.copyS[breakpoint]!.style
+                  style: typography.copyS[breakpoint]!.style,
                 ),
               ),
             ),
