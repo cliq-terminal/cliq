@@ -11,6 +11,7 @@ final class CliqThemeData {
   final CliqStyle style;
 
   final CliqBottomNavigationBarStyle bottomNavigationBarStyle;
+  final CliqTextFieldStyle textFieldStyle;
   final CliqGridColumnStyle gridColumnStyle;
   final CliqAppBarStyle appBarStyle;
   final CliqBlurContainerStyle blurContainerStyle;
@@ -29,6 +30,7 @@ final class CliqThemeData {
     required this.typography,
     required this.style,
     required this.bottomNavigationBarStyle,
+    required this.textFieldStyle,
     required this.gridColumnStyle,
     required this.appBarStyle,
     required this.blurContainerStyle,
@@ -61,6 +63,10 @@ final class CliqThemeData {
       typography: typography,
       style: style,
       bottomNavigationBarStyle: CliqBottomNavigationBarStyle.inherit(
+        colorScheme: colorScheme,
+      ),
+      textFieldStyle: CliqTextFieldStyle.inherit(
+        style: style,
         colorScheme: colorScheme,
       ),
       gridColumnStyle: CliqGridColumnStyle.inherit(debug: debug),

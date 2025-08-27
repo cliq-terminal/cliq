@@ -10,7 +10,9 @@ final class CliqColorScheme {
   final Color onSecondaryBackground;
   final Color onSecondaryBackground70;
   final Color primary;
+  final Color primary30;
   final Color onPrimary;
+  final Color onPrimary50;
 
   CliqColorScheme({
     required this.brightness,
@@ -26,7 +28,9 @@ final class CliqColorScheme {
          onSecondaryBackground,
          secondaryBackground,
          .7,
-       );
+       ),
+       primary30 = _blend(primary, background, .3),
+       onPrimary50 = _blend(onPrimary, background, .5);
 
   static Color _blend(Color fg, Color bg, double opacity) {
     return Color.alphaBlend(fg.withValues(alpha: opacity), bg);

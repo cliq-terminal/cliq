@@ -30,6 +30,20 @@ class _AddHostsPageState extends ConsumerState<AddHostsPage> {
           children: [
             CliqGridRow(
               children: [
+                CliqGridColumn(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CliqTextField(
+                          label: Text('Address'),
+                          hint: Text('127.0.0.1'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 CliqGridColumn(child: CliqButton(label: Text('Save Host'))),
               ],
             ),
