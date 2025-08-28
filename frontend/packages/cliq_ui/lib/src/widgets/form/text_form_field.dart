@@ -11,6 +11,9 @@ class CliqTextFormField extends HookWidget {
   final bool obscure;
   final CliqTextFieldStyle? style;
 
+  final String? Function(Object?)? validator;
+  final AutovalidateMode? autovalidateMode;
+
   const CliqTextFormField({
     super.key,
     this.controller,
@@ -20,11 +23,15 @@ class CliqTextFormField extends HookWidget {
     this.suffixIcon,
     this.obscure = false,
     this.style,
+    this.validator,
+    this.autovalidateMode
   });
 
   @override
   Widget build(BuildContext context) {
     return FormField(
+      validator: validator,
+      autovalidateMode: autovalidateMode,
       builder: (state) {
         return CliqTextField(
           label: label,
