@@ -1,6 +1,5 @@
 package app.cliq.backend.api.user
 
-import app.cliq.backend.config.AppProperties
 import app.cliq.backend.service.EmailService
 import app.cliq.backend.service.TokenGenerator
 import org.slf4j.LoggerFactory
@@ -16,7 +15,6 @@ class UserService(
     private val userRepository: UserRepository,
     private val clock: Clock,
     private val tokenGenerator: TokenGenerator,
-    private val appProperties: AppProperties,
     private val emailService: EmailService,
     private val messageSource: MessageSource,
     private val passwordEncoder: PasswordEncoder,
@@ -48,7 +46,7 @@ class UserService(
         val context =
             mapOf(
                 "name" to user.name,
-                "verificationUrl" to buildVerificationUrl(token),
+                "emailVerificationToken" to token,
             )
 
         try {
@@ -70,7 +68,8 @@ class UserService(
     }
 
     fun sendResetPasswordEmail(user: User) {
-        user.resetToken = tokenGenerator.generatePasswordResetToken()
+        val token = tokenGenerator.generatePasswordResetToken()
+        user.resetToken = token
         user.resetSentAt = OffsetDateTime.now(clock)
 
         userRepository.save(user)
@@ -79,7 +78,7 @@ class UserService(
         val context =
             mapOf<String, Any>(
                 "name" to user.name,
-                "resetUrl" to buildResetUrl(user.resetToken!!),
+                "resetToken" to token,
             )
 
         try {
@@ -104,8 +103,4 @@ class UserService(
         user: User,
         password: String,
     ): Boolean = passwordEncoder.matches(password, user.password)
-
-    private fun buildVerificationUrl(token: String): String = "${appProperties.externalUrl}/api/v1/user/verify/$token"
-
-    private fun buildResetUrl(token: String): String = "${appProperties.externalUrl}/api/v1/user/reset-password/$token"
 }

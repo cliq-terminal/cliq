@@ -16,13 +16,35 @@
             padding: 20px;
         }
 
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
+        .token-container {
+            background-color: #f8f9fa;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .token {
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            background-color: white;
+            padding: 15px 20px;
             border-radius: 5px;
+            border: 1px solid #dee2e6;
+            display: inline-block;
+            letter-spacing: 2px;
+            user-select: all;
+        }
+
+        .token-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -31,9 +53,14 @@
 <div class="container">
     <h1 th:text="#{email.verification.header}"/>
     <p th:text="#{email.verification.greeting}"/>
-    <p th:utext="#{email.verification.html.message.before(${verificationUrl})}"/>
-    <a class="button" th:href="${verificationUrl}" th:text="#{email.verification.button}"/>
-    <p th:utext="#{email.verification.html.message.after(${verificationUrl})}"/>
+    <p th:text="#{email.verification.token.message}"/>
+
+    <div class="token-container">
+        <div class="token-label" th:text="#{email.verification.token.label}"/>
+        <div class="token" th:text="${emailVerificationToken}"/>
+    </div>
+
+    <p th:text="#{email.verification.token.instructions}"/>
     <p th:text="#{email.common.signature}"/>
 </div>
 </body>
