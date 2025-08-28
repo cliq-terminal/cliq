@@ -66,14 +66,14 @@ class CliqTextField extends HookWidget {
                     suffixIcon: suffixIcon,
                     error: error != null
                         ? Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: CliqDefaultTypography(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: CliqDefaultTypography(
                               size: typography.copyS,
                               color: style.errorColor,
                               fontFamily: CliqFontFamily.secondary,
                               child: error!,
                             ),
-                        )
+                          )
                         : null,
                     hint: hint != null
                         ? CliqDefaultTypography(

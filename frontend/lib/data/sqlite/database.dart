@@ -1,14 +1,17 @@
-import 'package:cliq/data/sqlite/hosts/host_repository.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'credentials/credential_type.dart';
+
 part 'database.g.dart';
 
-@DriftDatabase(include: {'hosts/hosts.drift'})
+@DriftDatabase(include: {
+  'connections/connections.drift',
+  'credentials/credentials.drift',
+  'identities/identities.drift'
+})
 final class CliqDatabase extends _$CliqDatabase {
-  static late HostRepository hostRepository;
-
   CliqDatabase([QueryExecutor? executor])
     : super(executor ?? _openConnection());
 
@@ -17,7 +20,6 @@ final class CliqDatabase extends _$CliqDatabase {
 
   static void init() {
     final db = CliqDatabase();
-    hostRepository = HostRepository(db);
   }
 
   static QueryExecutor _openConnection() {

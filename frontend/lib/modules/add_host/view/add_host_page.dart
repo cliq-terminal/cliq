@@ -1,9 +1,6 @@
-import 'package:cliq/data/sqlite/database.dart';
-import 'package:cliq/data/sqlite/hosts/host_repository.dart';
 import 'package:cliq/shared/validators.dart';
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../routing/page_path.dart';
@@ -91,26 +88,11 @@ class _AddHostsPageState extends ConsumerState<AddHostsPage> {
                                   AutovalidateMode.onUserInteraction,
                             ),
                             CliqTextFormField(
-                              label: Text('Username'),
+                              label: Text('Identity'),
                               hint: Text('root'),
                               controller: _usernameController,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
-                            ),
-                            CliqTextFormField(
-                              label: Text('Private Key (PEM)'),
-                              hint: Text('-----BEGIN OPENSSH PRIVATE KEY-----'),
-                              controller: _pemController,
-                              validator: Validators.pem,
-                              minLines: 1,
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                            ),
-                            CliqTextFormField(
-                              label: Text('Private Key Password'),
-                              hint: Text('secret'),
-                              controller: _pemPasswordController,
-                              obscure: true,
                             ),
                           ],
                         ),
@@ -124,15 +106,15 @@ class _AddHostsPageState extends ConsumerState<AddHostsPage> {
                               return;
                             }
 
-                            CliqDatabase.hostRepository.insert(
-                              HostsCompanion.insert(
-                                  label: _labelController.text.trim(),
-                                  address: _addressController.text.trim(),
-                                  port: int.parse(_portController.text.trim()),
-                                  username: _usernameController.text.trim(),
-                                  password: _pemPasswordController.text.trim(),
-                              )
-                            );
+                            //                            CliqDatabase.hostRepository.insert(
+                            //                              HostsCompanion.insert(
+                            //                                  label: _labelController.text.trim(),
+                            //                                  address: _addressController.text.trim(),
+                            //                                  port: int.parse(_portController.text.trim()),
+                            //                                  username: _usernameController.text.trim(),
+                            //                                  password: _pemPasswordController.text.trim(),
+                            //                              )
+                            //                            );
                           },
                         ),
                       ),
