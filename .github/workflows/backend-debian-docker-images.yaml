@@ -18,7 +18,7 @@ defaults:
     working-directory: ./backend  # Change the working directory to /backend
 
 env:
-  GHCR_REPO: ghcr.io/cliq-terminal/backend
+  GHCR_REPO: ghcr.io/cliq-ssh/backend
 
 jobs:
   build:
