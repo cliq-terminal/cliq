@@ -6,9 +6,13 @@ class CliqTextField extends HookWidget {
   final TextEditingController? controller;
   final Widget? label;
   final Widget? hint;
+  final Widget? error;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final bool obscure;
+  final int? minLines;
+  final int? maxLines;
+  final Function(String)? onChanged;
   final CliqTextFieldStyle? style;
 
   const CliqTextField({
@@ -16,9 +20,13 @@ class CliqTextField extends HookWidget {
     this.controller,
     this.label,
     this.hint,
+    this.error,
     this.prefixIcon,
     this.suffixIcon,
     this.obscure = false,
+    this.minLines,
+    this.maxLines,
+    this.onChanged,
     this.style,
   });
 
@@ -36,6 +44,7 @@ class CliqTextField extends HookWidget {
         if (label != null)
           CliqDefaultTypography(size: typography.copyS, child: label!),
         CliqBlurContainer(
+          color: error != null ? style.errorBackgroundColor : null,
           borderRadius: style.borderRadius,
           child: Material(
             color: Colors.transparent,
@@ -55,6 +64,17 @@ class CliqTextField extends HookWidget {
                     iconColor: style.iconStyle.color,
                     prefixIcon: prefixIcon,
                     suffixIcon: suffixIcon,
+                    error: error != null
+                        ? Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: CliqDefaultTypography(
+                              size: typography.copyS,
+                              color: style.errorColor,
+                              fontFamily: CliqFontFamily.secondary,
+                              child: error!,
+                            ),
+                        )
+                        : null,
                     hint: hint != null
                         ? CliqDefaultTypography(
                             size: typography.copyS,
@@ -65,6 +85,9 @@ class CliqTextField extends HookWidget {
                         : null,
                   ),
                   obscureText: obscure,
+                  minLines: minLines,
+                  maxLines: maxLines,
+                  onChanged: onChanged,
                   style: typography.copyS[breakpoint]!.style,
                 ),
               ),
@@ -81,6 +104,8 @@ final class CliqTextFieldStyle {
   final Color cursorColor;
   final Color selectionColor;
   final Color hintColor;
+  final Color errorColor;
+  final Color errorBackgroundColor;
   final BorderRadiusGeometry borderRadius;
   final EdgeInsetsGeometry padding;
 
@@ -89,6 +114,8 @@ final class CliqTextFieldStyle {
     required this.cursorColor,
     required this.selectionColor,
     required this.hintColor,
+    required this.errorColor,
+    required this.errorBackgroundColor,
     required this.borderRadius,
     required this.padding,
   });
@@ -105,6 +132,8 @@ final class CliqTextFieldStyle {
       cursorColor: colorScheme.primary,
       selectionColor: colorScheme.primary30,
       hintColor: colorScheme.onPrimary50,
+      errorColor: colorScheme.error,
+      errorBackgroundColor: colorScheme.error50,
       borderRadius: BorderRadius.circular(24),
       padding: const EdgeInsets.symmetric(horizontal: 16),
     );

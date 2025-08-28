@@ -1,47 +1,55 @@
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
-class CliqTextFormField extends HookWidget {
+class CliqTextFormField extends FormField<String> {
   final TextEditingController? controller;
   final Widget? label;
   final Widget? hint;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final bool obscure;
+  final int? minLines;
+  final int? maxLines;
+  final Function(String)? onChanged;
   final CliqTextFieldStyle? style;
 
-  final String? Function(Object?)? validator;
-  final AutovalidateMode? autovalidateMode;
-
-  const CliqTextFormField({
+  CliqTextFormField({
     super.key,
+    super.validator,
+    super.autovalidateMode,
+    super.errorBuilder = _defaultErrorBuilder,
     this.controller,
     this.label,
     this.hint,
     this.prefixIcon,
     this.suffixIcon,
     this.obscure = false,
+    this.minLines,
+    this.maxLines,
+    this.onChanged,
     this.style,
-    this.validator,
-    this.autovalidateMode
-  });
+  }) : super(
+         builder: (state) {
+           return CliqTextField(
+             label: label,
+             hint: hint,
+             error: state.hasError && errorBuilder != null
+                 ? errorBuilder(state.context, state.errorText!)
+                 : null,
+             prefixIcon: prefixIcon,
+             suffixIcon: suffixIcon,
+             obscure: obscure,
+             minLines: minLines,
+             maxLines: maxLines,
+             onChanged: (value) {
+               state.didChange(value);
+               onChanged?.call(value);
+             },
+             style: style,
+           );
+         },
+       );
 
-  @override
-  Widget build(BuildContext context) {
-    return FormField(
-      validator: validator,
-      autovalidateMode: autovalidateMode,
-      builder: (state) {
-        return CliqTextField(
-          label: label,
-          hint: hint,
-          prefixIcon: prefixIcon,
-          suffixIcon: suffixIcon,
-          obscure: obscure,
-          style: style,
-        );
-      },
-    );
-  }
+  static Widget _defaultErrorBuilder(BuildContext context, String value) =>
+      Text(value);
 }

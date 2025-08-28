@@ -17,6 +17,7 @@ extension CliqThemes on Never {
         onSecondaryBackground: Color(0xFF000000),
         primary: Color(0xFF007AFF),
         onPrimary: Color(0xFFFFFFFF),
+        error: Color(0xFFFF0000),
       ),
     ),
     dark: CliqThemeData.inherit(
@@ -30,6 +31,7 @@ extension CliqThemes on Never {
         onSecondaryBackground: Color(0xFFFFFFFF),
         primary: Color(0xFF007AFF),
         onPrimary: Color(0xFFFFFFFF),
+        error: Color(0xFFFF0000),
       ),
     ),
   );

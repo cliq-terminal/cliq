@@ -6,19 +6,19 @@ final class Validators {
   static String? address(Object? value) {
     String? nonEmptyError = nonEmpty(value);
     if (nonEmptyError != null) {
-      return null;
+      return nonEmptyError;
     }
-    if (value !is String) {
+    if (value is! String) {
       return 'Value must be a valid host string';
     }
-    final String input = value as String;
+    final String input = value;
 
     if (InternetAddress.tryParse(input) != null) {
       return null;
     }
 
     final hostnameRegex = RegExp(
-        r'^(?=.{1,253}$)(?!-)([A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,63}$'
+      r'^(?=.{1,253}$)(?!-)([A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,63}$',
     );
 
     if (hostnameRegex.hasMatch(input)) {
@@ -31,7 +31,7 @@ final class Validators {
   static String? pem(Object? value) {
     String? nonEmptyError = nonEmpty(value);
     if (nonEmptyError != null) {
-      return null;
+      return nonEmptyError;
     }
 
     final pemRegex = RegExp(
@@ -71,7 +71,7 @@ final class Validators {
       if (parsed == null) {
         return 'Value is not a valid integer';
       }
-    } else if (value !is int) {
+    } else if (value! is int) {
       return 'Value is not a valid integer';
     }
     return null;

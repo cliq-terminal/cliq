@@ -1,3 +1,5 @@
+import 'package:cliq/data/sqlite/database.dart';
+import 'package:cliq/data/sqlite/hosts/host_repository.dart';
 import 'package:cliq/shared/validators.dart';
 import 'package:cliq_ui/cliq_ui.dart';
 import 'package:flutter/material.dart';
@@ -18,17 +20,21 @@ class AddHostsPage extends StatefulHookConsumerWidget {
 
 class _AddHostsPageState extends ConsumerState<AddHostsPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _labelController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _portController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _pemController = TextEditingController();
+  final TextEditingController _pemPasswordController = TextEditingController();
 
   @override
   void dispose() {
+    _labelController.dispose();
     _addressController.dispose();
     _portController.dispose();
     _usernameController.dispose();
     _pemController.dispose();
+    _pemPasswordController.dispose();
     super.dispose();
   }
 
@@ -59,31 +65,52 @@ class _AddHostsPageState extends ConsumerState<AddHostsPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             CliqTextFormField(
+                              label: Text('Label'),
+                              hint: Text('My Host'),
+                              controller: _labelController,
+                            ),
+                            CliqTextFormField(
                               label: Text('Address'),
                               hint: Text('127.0.0.1'),
                               controller: _addressController,
                               validator: Validators.address,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              onChanged: (val) {
+                                if (_labelController.text.isEmpty) {
+                                  _labelController.text = val;
+                                }
+                              },
                             ),
                             CliqTextFormField(
                               label: Text('Port'),
                               hint: Text('22'),
                               controller: _portController,
                               validator: Validators.port,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                             ),
                             CliqTextFormField(
                               label: Text('Username'),
                               hint: Text('root'),
                               controller: _usernameController,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                             ),
                             CliqTextFormField(
                               label: Text('Private Key (PEM)'),
                               hint: Text('-----BEGIN OPENSSH PRIVATE KEY-----'),
                               controller: _pemController,
                               validator: Validators.pem,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              minLines: 1,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                            ),
+                            CliqTextFormField(
+                              label: Text('Private Key Password'),
+                              hint: Text('secret'),
+                              controller: _pemPasswordController,
+                              obscure: true,
                             ),
                           ],
                         ),
@@ -97,7 +124,15 @@ class _AddHostsPageState extends ConsumerState<AddHostsPage> {
                               return;
                             }
 
-                            // TODO: save in db
+                            CliqDatabase.hostRepository.insert(
+                              HostsCompanion.insert(
+                                  label: _labelController.text.trim(),
+                                  address: _addressController.text.trim(),
+                                  port: int.parse(_portController.text.trim()),
+                                  username: _usernameController.text.trim(),
+                                  password: _pemPasswordController.text.trim(),
+                              )
+                            );
                           },
                         ),
                       ),
