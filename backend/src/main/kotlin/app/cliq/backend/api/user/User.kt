@@ -37,7 +37,6 @@ class User(
 
     fun isEmailVerificationTokenValid(): Boolean = emailVerificationToken != null && !isEmailVerificationTokenExpired()
 
-    // TODO write unit tests
     fun isEmailVerificationTokenExpired(): Boolean =
         !(
             emailVerificationSentAt != null &&
@@ -46,7 +45,6 @@ class User(
                 )
         )
 
-    // TODO write unit tests
     fun isPasswordResetTokenExpired(): Boolean =
         resetToken != null && resetSentAt != null &&
             resetSentAt!!.isAfter(OffsetDateTime.now().minusMinutes(PASSWORD_RESET_TOKEN_INTERVAL_MINUTES))
