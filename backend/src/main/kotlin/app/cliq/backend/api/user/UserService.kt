@@ -46,7 +46,7 @@ class UserService(
         val context =
             mapOf(
                 "name" to user.name,
-                "emailVerificationToken" to token,
+                "verificationToken" to token,
             )
 
         try {
@@ -55,7 +55,7 @@ class UserService(
                 messageSource.getMessage("email.verification.subject", null, locale),
                 context,
                 locale,
-                "verification-email",
+                "emailVerificationMail",
             )
         } catch (e: Throwable) {
             user.emailVerificationSentAt = null
@@ -87,7 +87,7 @@ class UserService(
                 messageSource.getMessage("email.password_reset.subject", null, locale),
                 context,
                 locale,
-                "password-reset-email",
+                "passwordResetMail",
             )
         } catch (e: Throwable) {
             user.resetSentAt = null

@@ -89,7 +89,7 @@ dependencies {
 
     // E-Mail
     implementation("org.springframework.boot:spring-boot-starter-mail")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("io.pebbletemplates:pebble-spring-boot-starter:3.2.4")
 
     // Validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
