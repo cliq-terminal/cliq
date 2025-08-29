@@ -1,5 +1,17 @@
-[( #{email.verification.greeting} )]
+[[#{email.verification.header}]]
 
-[( #{email.verification.txt.message(${verificationUrl})} )]
+[[#{email.verification.greeting}]]
 
-[( #{email.common.signature} )]
+[[#{email.verification.token.message}]]
+
+==============================================
+[[#{email.verification.token.label}]]
+==============================================
+
+    [(${emailVerificationToken})]
+
+==============================================
+
+[[#{email.verification.token.instructions}]]
+
+[[#{email.common.signature}]]

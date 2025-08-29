@@ -124,6 +124,7 @@ dependencies {
 
     // Kotlin specifics
     testImplementation("org.mockito.kotlin:mockito-kotlin:6.0.0")
+    testImplementation("org.awaitility:awaitility-kotlin:4.3.0")
 }
 
 kotlin {
@@ -154,6 +155,14 @@ tasks.withType<Test> {
         events("passed", "skipped", "failed")
         showStandardStreams = false
     }
+}
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<Test> {
+    systemProperty("file.encoding", "UTF-8")
 }
 
 // tasks.withType<ProcessResources> {
