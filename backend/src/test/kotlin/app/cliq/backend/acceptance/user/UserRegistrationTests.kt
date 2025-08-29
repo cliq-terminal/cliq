@@ -190,11 +190,11 @@ class UserRegistrationTests(
 
         mockMvc
             .perform(
-                MockMvcRequestBuilders.get(
-                    "/api/v1/user/verify/{token}",
-                    user.emailVerificationToken!!,
-                ),
-            ).andExpect(status().isNotFound)
+                MockMvcRequestBuilders
+                    .post("/api/v1/user/verify")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(verifyContent)),
+            ).andExpect(status().isBadRequest)
 
         user = userRepository.findUserByEmail(email)
         assertTrue(user != null)

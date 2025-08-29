@@ -11,11 +11,6 @@ interface UserRepository : JpaRepository<User, Long> {
 
     fun findUserByEmail(email: String): User?
 
-    fun findUserByEmailVerificationTokenAndEmail(
-        emailVerificationToken: String,
-        email: String,
-    ): User?
-
     fun findUserByResetTokenAndEmail(
         resetToken: String,
         email: String,

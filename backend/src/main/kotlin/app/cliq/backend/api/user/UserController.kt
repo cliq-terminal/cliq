@@ -1,6 +1,7 @@
 package app.cliq.backend.api.user
 
 import EmailOccupiedConstraint
+import app.cliq.backend.api.error.exception.EmailAlreadyVerifiedException
 import app.cliq.backend.api.error.exception.EmailNotFoundOrValidException
 import app.cliq.backend.api.error.exception.ExpiredEmailVerificationTokenException
 import app.cliq.backend.api.error.exception.InternalServerErrorException
@@ -102,8 +103,11 @@ class UserController(
         @Valid @RequestBody verifyParams: VerifyParams,
     ): ResponseEntity<UserResponse> {
         val user =
-            userRepository.findUserByEmailVerificationTokenAndEmail(verifyParams.verificationToken, verifyParams.email)
-                ?: throw InvalidVerifyParamsException()
+            userRepository.findUserByEmail(verifyParams.email) ?: throw InvalidVerifyParamsException()
+
+        if (user.isEmailVerified()) {
+            throw EmailAlreadyVerifiedException()
+        }
 
         if (user.isEmailVerificationTokenExpired()) {
             throw ExpiredEmailVerificationTokenException()
