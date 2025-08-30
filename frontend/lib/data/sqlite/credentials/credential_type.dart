@@ -1,0 +1,4 @@
+enum CredentialType {
+  password,
+  privateKey
+}
